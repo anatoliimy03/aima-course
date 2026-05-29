@@ -376,6 +376,51 @@ h2.section-title {
   border-radius: 5px;
 }
 
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(15,25,34,0.6);
+  z-index: 100;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 24px 20px 40px;
+  width: 100%;
+  max-width: 440px;
+}
+.modal-handle { width: 36px; height: 4px; background: var(--border-strong); border-radius: 99px; margin: 0 auto 20px; }
+.modal h3 { font-family: var(--f-display); font-size: 20px; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 6px; }
+.modal p { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; font-family: var(--f-body); }
+.form-field { margin-bottom: 12px; }
+.form-label { font-family: var(--f-display); font-size: 12px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 5px; }
+.form-input {
+  width: 100%; padding: 12px 14px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-size: 15px; font-family: var(--f-body);
+  color: var(--text); background: var(--surface);
+  outline: none;
+}
+.form-input:focus { border-color: var(--blue); }
+.btn-submit {
+  width: 100%; padding: 15px;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--f-display); font-weight: 700; font-size: 15px;
+  letter-spacing: -0.01em; cursor: pointer; margin-top: 4px;
+}
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.form-note { font-size: 12px; color: var(--text-tertiary); text-align: center; margin-top: 10px; font-family: var(--f-body); }
+.form-success { text-align: center; padding: 20px 0; display: none; }
+.form-success .ti { font-size: 40px; color: var(--green); }
+.form-success h4 { font-family: var(--f-display); font-size: 18px; font-weight: 800; margin: 10px 0 6px; }
+.form-success p { font-size: 14px; color: var(--text-secondary); }
+
 /* FAQ */
 .faq-list {
   border: 0.5px solid var(--border);
@@ -430,7 +475,7 @@ h2.section-title {
         </div>
       </div>
     </div>
-    <button class="btn-cta">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+    <button class="btn-cta" onclick="openModal()">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
   </section>
 
   <!-- ДЛЯ КОГО -->
@@ -612,7 +657,7 @@ h2.section-title {
         <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">490 ₴</span><span class="price-old-dark">3490 ₴</span><span class="discount-badge">−86%</span></div></div>
         <div class="cta-spec-row"><i class="ti ti-brand-telegram"></i><div class="cta-spec-label">Доступ</div><div class="cta-spec-value">У Telegram, назавжди</div></div>
       </div>
-      <button class="btn-cta">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+      <button class="btn-cta" onclick="openModal()">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
     </div>
   </section>
 
@@ -635,7 +680,42 @@ h2.section-title {
 
 </div>
 
+<!-- MODAL ФОРМА -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div id="form-wrap">
+      <h3>Записатися на курс</h3>
+      <p>Залиш дані — ми надішлемо посилання на оплату</p>
+      <div class="form-field">
+        <label class="form-label">Ім'я</label>
+        <input class="form-input" type="text" id="f-name" placeholder="Олена Коваль" />
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="f-email" placeholder="olena@example.com" />
+      </div>
+      <div class="form-field">
+        <label class="form-label">Телефон</label>
+        <input class="form-input" type="tel" id="f-phone" placeholder="+380 XX XXX XX XX" />
+      </div>
+      <button class="btn-submit" id="btn-submit">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+      <p class="form-note">Після заявки отримаєш посилання на оплату на email</p>
+    </div>
+    <div class="form-success" id="form-success">
+      <i class="ti ti-circle-check"></i>
+      <h4>Заявку прийнято!</h4>
+      <p>Перевір email — надіслали посилання на оплату.</p>
+    </div>
+  </div>
+</div>
+
 <script>
+// Supabase
+var SUPABASE_URL = 'https://binylmnmfpecucosgmtv.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_oOuhWQ9Vg8N6dvdzRLKnEA_43JV-MBr';
+
+// Таймер
 (function(){
   var KEY = 'aima_timer_end';
   var DURATION_MS = 10 * 60 * 1000;
@@ -657,6 +737,56 @@ h2.section-title {
   tick();
   setInterval(tick, 1000);
 })();
+
+// Модальне вікно
+function openModal() {
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+document.getElementById('modal').addEventListener('click', function(e){
+  if (e.target === this) closeModal();
+});
+
+// Форма → Supabase
+document.getElementById('btn-submit').addEventListener('click', async function(){
+  var name = document.getElementById('f-name').value.trim();
+  var email = document.getElementById('f-email').value.trim();
+  var phone = document.getElementById('f-phone').value.trim();
+
+  if (!name || !email) {
+    alert("Заповни ім'я і email");
+    return;
+  }
+
+  this.disabled = true;
+  this.textContent = 'Відправляємо...';
+
+  try {
+    var res = await fetch(SUPABASE_URL + '/rest/v1/leads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ name: name, email: email, phone: phone, status: 'new' })
+    });
+
+    if (res.ok) {
+      document.getElementById('form-wrap').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    } else {
+      throw new Error('error');
+    }
+  } catch(e) {
+    alert('Щось пішло не так. Спробуй ще раз.');
+    this.disabled = false;
+    this.innerHTML = 'Записатися за 490 ₴ <i class="ti ti-arrow-right"></i>';
+  }
+});
 </script>
 </body>
 </html>
