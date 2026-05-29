@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aima — Запусти свій інтернет-магазин за 21 урок</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+:root {
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --surface-2: #F1EFE8;
+  --text: #1A1A1A;
+  --text-secondary: #6B6B6B;
+  --text-tertiary: #999999;
+  --border: rgba(0,0,0,0.1);
+  --border-strong: rgba(0,0,0,0.18);
+  --dark: #0A1628;
+  --accent: #7FB3FF;
+  --danger: #FF5C5C;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 380px; margin: 0 auto; padding: 0 16px; }
+section { padding: 12px 0; }
+h1, h2 { font-weight: 500; letter-spacing: -0.01em; }
+button { font-family: inherit; cursor: pointer; }
+ol { list-style: decimal; }
+
+.label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+/* HERO */
+.hero {
+  background: var(--dark);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  color: #fff;
+  margin: 16px 0;
+}
+.hero-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.logo { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.logo-mark { width: 26px; height: 26px; border-radius: 7px; background: #fff; color: var(--dark); display: flex; align-items: center; justify-content: center; font-weight: 500; }
+.btn-subscribe { background: #fff; color: var(--dark); border: none; padding: 8px 14px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+.hero h1 { font-size: 26px; line-height: 1.2; margin-bottom: 12px; color: #fff; }
+.hero h1 span { color: var(--accent); }
+.hero p { font-size: 15px; line-height: 1.5; margin-bottom: 24px; color: rgba(255,255,255,0.75); }
+.hero-photo { width: 100%; aspect-ratio: 4/3; border-radius: var(--radius-md); background: rgba(255,255,255,0.04) center/cover no-repeat; border: 0.5px solid rgba(255,255,255,0.12); margin-bottom: 12px; }
+.spec-card { background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.12); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 20px; }
+.spec-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.spec-grid > div > div:first-child { font-size: 10px; color: rgba(255,255,255,0.55); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+.spec-grid .price-old { font-size: 11px; color: rgba(255,255,255,0.4); text-decoration: line-through; }
+.btn-cta { width: 100%; padding: 14px; background: #fff; color: var(--dark); border: none; border-radius: var(--radius-md); font-weight: 500; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+h2.section-title { font-size: 24px; line-height: 1.2; margin-bottom: 20px; }
+
+/* Для кого */
+.audience-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 0.5px solid var(--border); }
+.audience-item:last-child { border-bottom: none; }
+.audience-num { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--surface-2); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.audience-title { font-weight: 500; font-size: 14px; }
+.audience-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.4; }
+
+/* Результати */
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.result-card { padding: 14px; border: 0.5px solid var(--border); border-radius: var(--radius-md); background: var(--surface); }
+.result-card .ti { font-size: 20px; }
+.result-card .text { font-size: 13px; font-weight: 500; margin-top: 10px; line-height: 1.3; }
+
+/* Як проходить */
+.how-card { border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px 20px; background: var(--surface); }
+.how-row { display: flex; gap: 12px; align-items: flex-start; padding-bottom: 14px; border-bottom: 0.5px solid var(--border); margin-bottom: 14px; }
+.how-row:last-child { padding-bottom: 0; border-bottom: none; margin-bottom: 0; }
+.how-icon { flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px; background: var(--surface-2); display: flex; align-items: center; justify-content: center; }
+.how-title { font-weight: 500; font-size: 14px; margin-bottom: 2px; }
+.how-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+/* Програма */
+.program-block { background: var(--surface-2); border-radius: var(--radius-lg); padding: 24px 20px; }
+.program-eyebrow { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.program-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text); }
+.program-eyebrow-text { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; }
+.program-block h2 { font-size: 30px; line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.02em; }
+.program-block > p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; }
+.program-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 24px; }
+.program-stat { padding: 12px 8px; background: var(--surface); border-radius: var(--radius-md); text-align: center; border: 0.5px solid var(--border); }
+.program-stat-num { font-size: 18px; font-weight: 500; }
+.program-stat-label { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
+.modules-list { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.modules-list details { border-bottom: 0.5px solid var(--border); }
+.modules-list details:last-child { border-bottom: none; }
+.modules-list summary { list-style: none; cursor: pointer; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+.modules-list summary::-webkit-details-marker { display: none; }
+.module-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px; background: var(--text); color: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; }
+.module-title { font-weight: 500; font-size: 14px; }
+.module-count { font-size: 11px; color: var(--text-secondary); }
+.modules-list .chev { font-size: 16px; color: var(--text-secondary); transition: transform 0.2s ease; }
+.modules-list details[open] .chev { transform: rotate(180deg); }
+.module-body { padding: 0 16px 14px 56px; font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.module-body ol { padding-left: 18px; line-height: 1.8; color: var(--text); }
+
+/* Спікер */
+.speaker-head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.speaker-photo { width: 72px; height: 72px; border-radius: 50%; background: var(--surface-2) center/cover no-repeat; flex-shrink: 0; border: 0.5px solid var(--border); }
+.speaker-name { font-size: 16px; font-weight: 500; line-height: 1.2; margin-bottom: 4px; }
+.speaker-role { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
+.speaker-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.speaker-stat { padding: 12px 10px; background: var(--surface-2); border-radius: var(--radius-md); text-align: center; }
+.speaker-stat-num { font-size: 18px; font-weight: 500; }
+.speaker-stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+.speaker-quote { padding: 14px 16px; border-left: 2px solid var(--text); background: var(--surface-2); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+.speaker-quote p { font-size: 14px; line-height: 1.6; font-family: var(--font-serif); font-style: italic; margin-bottom: 10px; }
+.speaker-quote p:last-child { margin-bottom: 0; }
+
+/* Кейси */
+.cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.case-card { border: 0.5px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--surface); }
+.case-image { aspect-ratio: 1/1; background: var(--surface-2) center/cover no-repeat; }
+.case-info { padding: 10px 12px; }
+.case-name { font-size: 13px; font-weight: 500; }
+.case-cat { font-size: 11px; color: var(--text-secondary); }
+
+/* Відгуки */
+.review { border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px 20px; margin-bottom: 10px; background: var(--surface); }
+.review:last-child { margin-bottom: 0; }
+.review-head { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+.review-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--surface-2); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; }
+.review-name { font-size: 13px; font-weight: 500; }
+.review-meta { font-size: 11px; color: var(--text-secondary); }
+.review-stars { margin-left: auto; display: flex; gap: 1px; color: #F5A524; }
+.review-stars .ti { font-size: 13px; }
+.review p { font-size: 13px; line-height: 1.55; }
+
+/* Бонуси */
+.bonuses-list { border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); }
+.bonus-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 0.5px solid var(--border); }
+.bonus-row:last-child { border-bottom: none; }
+.bonus-row .ti { font-size: 18px; color: var(--text-secondary); width: 20px; }
+.bonus-row > div { font-size: 13px; }
+
+/* Гарантія */
+.guarantee {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  background: var(--surface);
+}
+.guarantee-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 14px; }
+.guarantee-icon { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; background: var(--surface-2); display: flex; align-items: center; justify-content: center; }
+.guarantee-icon .ti { font-size: 22px; }
+.guarantee-title { font-weight: 500; font-size: 15px; margin-bottom: 4px; }
+.guarantee-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.guarantee-conditions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+.guarantee-condition { padding: 10px; background: var(--surface-2); border-radius: var(--radius-md); text-align: center; }
+.guarantee-condition .ti { font-size: 18px; }
+.guarantee-condition .text { font-size: 11px; color: var(--text-secondary); margin-top: 6px; line-height: 1.3; }
+
+/* CTA з таймером */
+.cta-final {
+  background: var(--dark);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  color: #fff;
+}
+.cta-live { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.cta-live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--danger); animation: pulse-dot 1.6s ease-in-out infinite; }
+.cta-live-text { font-size: 11px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.06em; }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.countdown { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; text-align: center; }
+.countdown-cell { padding: 14px 4px; background: rgba(255,255,255,0.06); border-radius: var(--radius-md); }
+.countdown-num { font-weight: 500; font-size: 24px; line-height: 1; font-variant-numeric: tabular-nums; }
+.countdown-label { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 6px; }
+.cta-final h2 { font-size: 22px; line-height: 1.2; margin-bottom: 8px; color: #fff; }
+.cta-final > p { font-size: 14px; line-height: 1.5; margin-bottom: 20px; color: rgba(255,255,255,0.7); }
+.cta-spec { margin-bottom: 20px; }
+.cta-spec-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 0.5px solid rgba(255,255,255,0.1); }
+.cta-spec-row:last-child { border-bottom: none; }
+.cta-spec-row .ti { font-size: 18px; color: rgba(255,255,255,0.55); width: 20px; }
+.cta-spec-label { flex: 1; font-size: 13px; color: rgba(255,255,255,0.7); }
+.cta-spec-value { font-size: 13px; font-weight: 500; }
+.price-block { display: flex; align-items: baseline; gap: 6px; }
+.price-new { font-size: 15px; font-weight: 500; }
+.price-old-dark { font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: line-through; }
+.discount-badge { font-size: 10px; padding: 2px 6px; background: var(--accent); color: var(--dark); border-radius: 4px; font-weight: 500; }
+
+/* FAQ */
+.faq-list { border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); }
+.faq-list details { border-bottom: 0.5px solid var(--border); }
+.faq-list details:last-child { border-bottom: none; }
+.faq-list summary { list-style: none; cursor: pointer; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-question { font-weight: 500; font-size: 14px; flex: 1; }
+.faq-list .chev { font-size: 16px; color: var(--text-secondary); transition: transform 0.2s ease; }
+.faq-list details[open] .chev { transform: rotate(180deg); }
+.faq-answer { padding: 0 16px 14px; font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-top">
+      <div class="logo"><div class="logo-mark">a</div><span>aima</span></div>
+      <button class="btn-subscribe">Підписатися</button>
+    </div>
+    <h1>Запусти свій<br>інтернет-магазин<br><span>за 21 урок</span> з нуля</h1>
+    <p>Практичний курс, де ти крок за кроком створиш свій інтернет-магазин.</p>
+    <div class="hero-photo" style="background-image: url('photo.jpg');"></div>
+    <div class="spec-card">
+      <div class="spec-grid">
+        <div><div>Спікер</div><div style="font-size:12px; font-weight:500; line-height:1.3;">Анатолій Маліновський</div></div>
+        <div><div>Ціна</div><div style="font-size:14px; font-weight:500;">490 ₴</div><div class="price-old">3490 ₴</div></div>
+        <div><div>Формат</div><div style="font-size:12px; font-weight:500; line-height:1.3;">21 урок<br><span style="font-weight:400; color:rgba(255,255,255,0.7); font-size:11px;">по 5–10 хв</span></div></div>
+      </div>
+    </div>
+    <button class="btn-cta">Записатися за 490 ₴</button>
+  </section>
+
+  <!-- ДЛЯ КОГО -->
+  <section>
+    <div class="label">Для кого</div>
+    <h2 class="section-title">Цей курс для тебе,<br>якщо ти</h2>
+    <div class="audience-item"><div class="audience-num">1</div><div><div class="audience-title">Новачок</div><div class="audience-desc">Хочеш запустити свій бізнес з нуля.</div></div></div>
+    <div class="audience-item"><div class="audience-num">2</div><div><div class="audience-title">Продаєш в Instagram</div><div class="audience-desc">Час масштабуватися у повноцінний магазин.</div></div></div>
+    <div class="audience-item"><div class="audience-num">3</div><div><div class="audience-title">Є ідея, але немає дії</div><div class="audience-desc">Постійно відкладаєш запуск.</div></div></div>
+    <div class="audience-item"><div class="audience-num">4</div><div><div class="audience-title">Вже пробував</div><div class="audience-desc">Запускав, але щось пішло не так.</div></div></div>
+    <div class="audience-item"><div class="audience-num">5</div><div><div class="audience-title">Малий бізнес або офлайн</div><div class="audience-desc">Готовий продавати онлайн.</div></div></div>
+    <div class="audience-item"><div class="audience-num">6</div><div><div class="audience-title">Шукаєш додатковий дохід</div><div class="audience-desc">Хочеш створити нове джерело.</div></div></div>
+  </section>
+
+  <!-- РЕЗУЛЬТАТИ -->
+  <section>
+    <div class="label">Результати</div>
+    <h2 class="section-title">Що ти зробиш<br>за 21 урок</h2>
+    <div class="results-grid">
+      <div class="result-card"><i class="ti ti-building-store"></i><div class="text">Запустиш магазин з нуля</div></div>
+      <div class="result-card"><i class="ti ti-package"></i><div class="text">Оформиш товари правильно</div></div>
+      <div class="result-card"><i class="ti ti-credit-card"></i><div class="text">Налаштуєш оплату і доставку</div></div>
+      <div class="result-card"><i class="ti ti-users"></i><div class="text">Залучиш перших клієнтів</div></div>
+      <div class="result-card"><i class="ti ti-chart-arrows"></i><div class="text">Зробиш систему масштабованою</div></div>
+      <div class="result-card"><i class="ti ti-target-arrow"></i><div class="text">Отримаєш план продажів</div></div>
+    </div>
+  </section>
+
+  <!-- ЯК ПРОХОДИТЬ -->
+  <section>
+    <div class="label">Як проходить</div>
+    <h2 class="section-title">Навчаєшся прямо<br>в Telegram</h2>
+    <div class="how-card">
+      <div class="how-row"><div class="how-icon"><i class="ti ti-brand-telegram" style="font-size:20px;"></i></div><div><div class="how-title">Доступ у Telegram-каналі</div><div class="how-desc">Усі уроки приходять одразу після оплати — дивися з телефону будь-коли.</div></div></div>
+      <div class="how-row"><div class="how-icon"><i class="ti ti-clock" style="font-size:20px;"></i></div><div><div class="how-title">5–10 хвилин на урок</div><div class="how-desc">Короткі практичні відео — без води, можна дивитися навіть у дорозі.</div></div></div>
+      <div class="how-row"><div class="how-icon"><i class="ti ti-infinity" style="font-size:20px;"></i></div><div><div class="how-title">Доступ назавжди</div><div class="how-desc">Без термінів і підписок — повертайся до уроків коли потрібно.</div></div></div>
+    </div>
+  </section>
+
+  <!-- ПРОГРАМА -->
+  <section>
+    <div class="program-block">
+      <div class="program-eyebrow"><div class="program-dot"></div><div class="program-eyebrow-text">Серце курсу</div></div>
+      <h2>21 урок<br>у 4 модулях</h2>
+      <p>Від першого входу в Aima до перших реальних продажів. Кожен урок — конкретна дія, яку ти зробиш одразу.</p>
+      <div class="program-stats">
+        <div class="program-stat"><div class="program-stat-num">4</div><div class="program-stat-label">модулі</div></div>
+        <div class="program-stat"><div class="program-stat-num">21</div><div class="program-stat-label">урок</div></div>
+        <div class="program-stat"><div class="program-stat-num">~3 год</div><div class="program-stat-label">матеріалу</div></div>
+      </div>
+      <div class="modules-list">
+        <details open>
+          <summary><div class="module-num">01</div><div style="flex:1;"><div class="module-title">Вступна частина</div><div class="module-count">5 уроків</div></div><i class="ti ti-chevron-down chev"></i></summary>
+          <ol class="module-body" style="padding-left: 74px;">
+            <li>Про автора курсу й організаційні моменти</li>
+            <li>Для якого бізнесу підходить інтернет-магазин</li>
+            <li>Які товари варто продавати початківцю</li>
+            <li>Що робити, якщо немає ні товару, ні досвіду</li>
+            <li>Про інтернет-магазин простими словами</li>
+          </ol>
+        </details>
+        <details>
+          <summary><div class="module-num">02</div><div style="flex:1;"><div class="module-title">Створюємо магазин</div><div class="module-count">6 уроків</div></div><i class="ti ti-chevron-down chev"></i></summary>
+          <div class="module-body">Реєстрація в Aima, оформлення магазину, додавання товарів, налаштування оплати й доставки, підключення домену.</div>
+        </details>
+        <details>
+          <summary><div class="module-num">03</div><div style="flex:1;"><div class="module-title">Трафік і перші продажі</div><div class="module-count">7 уроків</div></div><i class="ti ti-chevron-down chev"></i></summary>
+          <div class="module-body">Залучаємо клієнтів, запускаємо рекламу та отримуємо перші стабільні продажі.</div>
+        </details>
+        <details>
+          <summary><div class="module-num">04</div><div style="flex:1;"><div class="module-title">Підсумки і розвиток</div><div class="module-count">3 уроки</div></div><i class="ti ti-chevron-down chev"></i></summary>
+          <div class="module-body">Аналізуємо помилки магазинів, розбираємо приклади та формуємо план подальшого розвитку.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- СПІКЕР -->
+  <section>
+    <div class="label">Спікер</div>
+    <div class="speaker-head">
+      <div class="speaker-photo" style="background-image: url('speaker.jpg');"></div>
+      <div><div class="speaker-name">Анатолій Маліновський</div><div class="speaker-role">Co-founder & CEO Aima<br>Засновник Aima, Знаєш Agency, Tred</div></div>
+    </div>
+    <div class="speaker-stats">
+      <div class="speaker-stat"><div class="speaker-stat-num">14+</div><div class="speaker-stat-label">років у бізнесі</div></div>
+      <div class="speaker-stat"><div class="speaker-stat-num">20+</div><div class="speaker-stat-label">бізнесів з нуля</div></div>
+      <div class="speaker-stat"><div class="speaker-stat-num">$10М+</div><div class="speaker-stat-label">оборот клієнтів</div></div>
+    </div>
+    <div class="speaker-quote">
+      <p>Я пройшов шлях від запуску бізнесів з нуля до побудови систем, які приносять стабільний дохід.</p>
+      <p>У цьому курсі показую не теорію, а конкретні кроки, які використовую для запуску інтернет-магазинів своїх клієнтів.</p>
+      <p>Моє завдання — довести тебе до результату, навіть якщо ти починаєш з повного нуля.</p>
+    </div>
+  </section>
+
+  <!-- КЕЙСИ -->
+  <section>
+    <div class="label">Кейси</div>
+    <h2 class="section-title" style="margin-bottom: 6px;">Магазини на Aima</h2>
+    <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 20px;">Реальні приклади магазинів, створених на платформі.</p>
+    <div class="cases-grid">
+      <div class="case-card"><div class="case-image" style="background-image: url('case1.jpg');"></div><div class="case-info"><div class="case-name">Лягуміни</div><div class="case-cat">Здорове харчування</div></div></div>
+      <div class="case-card"><div class="case-image" style="background-image: url('case2.jpg');"></div><div class="case-info"><div class="case-name">Назва бренду</div><div class="case-cat">Одяг</div></div></div>
+      <div class="case-card"><div class="case-image" style="background-image: url('case3.jpg');"></div><div class="case-info"><div class="case-name">Назва бренду</div><div class="case-cat">Косметика</div></div></div>
+      <div class="case-card"><div class="case-image" style="background-image: url('case4.jpg');"></div><div class="case-info"><div class="case-name">Назва бренду</div><div class="case-cat">Аксесуари</div></div></div>
+    </div>
+  </section>
+
+  <!-- ВІДГУКИ -->
+  <section>
+    <div class="label">Відгуки</div>
+    <h2 class="section-title" style="margin-bottom: 6px;">Що кажуть власники<br>магазинів на Aima</h2>
+    <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 20px;">Без редагування — голос реальних людей.</p>
+
+    <div class="review">
+      <div class="review-head"><div class="review-avatar">ОК</div><div><div class="review-name">Оля К.</div><div class="review-meta">Магазин косметики · 8 міс. на Aima</div></div><div class="review-stars"><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i></div></div>
+      <p>До Aima я продавала через Direct і це був хаос. За три дні після курсу зробила магазин, налаштувала оплату й отримала першу автоматичну оплату на сайті — це окремий вид кайфу.</p>
+    </div>
+    <div class="review">
+      <div class="review-head"><div class="review-avatar">ДМ</div><div><div class="review-name">Дмитро М.</div><div class="review-meta">Магазин одягу · 1 рік на Aima</div></div><div class="review-stars"><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i></div></div>
+      <p>Платформа без програмістів. Сам додаю товари, бачу аналітику в телефоні, оновлюю акції за пару хвилин. Курс показав як правильно це все використовувати — без нього довго б тицяв сам.</p>
+    </div>
+    <div class="review">
+      <div class="review-head"><div class="review-avatar">ІП</div><div><div class="review-name">Ірина П.</div><div class="review-meta">Хендмейд · 5 міс. на Aima</div></div><div class="review-stars"><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i><i class="ti ti-star"></i></div></div>
+      <p>Найбільше зайшло, що все робиш з телефону. Купила курс, паралельно налаштувала магазин — і вже на третій день було перше замовлення з реклами. Анатолій пояснює без води.</p>
+    </div>
+  </section>
+
+  <!-- БОНУСИ -->
+  <section>
+    <div class="label">Бонуси</div>
+    <h2 class="section-title">8 бонусів у подарунок</h2>
+    <div class="bonuses-list">
+      <div class="bonus-row"><i class="ti ti-checklist"></i><div>Чек-лист налаштування магазину</div></div>
+      <div class="bonus-row"><i class="ti ti-chart-bar"></i><div>Інструкція Google Analytics</div></div>
+      <div class="bonus-row"><i class="ti ti-brand-facebook"></i><div>Інструкція Facebook Pixel</div></div>
+      <div class="bonus-row"><i class="ti ti-world"></i><div>Підключення домену</div></div>
+      <div class="bonus-row"><i class="ti ti-search"></i><div>Інструкція індексації сайту</div></div>
+      <div class="bonus-row"><i class="ti ti-brand-instagram"></i><div>Підключення Instagram Shopping</div></div>
+      <div class="bonus-row"><i class="ti ti-table"></i><div>Google-таблиці для аналітики</div></div>
+      <div class="bonus-row"><i class="ti ti-clipboard-list"></i><div>Google-таблиці для замовлень</div></div>
+    </div>
+  </section>
+
+  <!-- ГАРАНТІЯ -->
+  <section>
+    <div class="guarantee">
+      <div class="guarantee-head">
+        <div class="guarantee-icon"><i class="ti ti-shield-check"></i></div>
+        <div>
+          <div class="guarantee-title">Гарантія результату — 21 день</div>
+          <div class="guarantee-desc">Якщо ти пройдеш усі 21 урок, зробиш усі дії з курсу — і не отримаєш свого інтернет-магазину, повернемо гроші повністю.</div>
+        </div>
+      </div>
+      <div class="guarantee-conditions">
+        <div class="guarantee-condition"><i class="ti ti-checks"></i><div class="text">Пройшов усі уроки</div></div>
+        <div class="guarantee-condition"><i class="ti ti-tool"></i><div class="text">Виконав усі дії</div></div>
+        <div class="guarantee-condition"><i class="ti ti-coin"></i><div class="text">Повертаємо 100%</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA ФІНАЛЬНИЙ -->
+  <section>
+    <div class="cta-final">
+      <div class="cta-live"><div class="cta-live-dot"></div><div class="cta-live-text">Ціна 490 ₴ діє ще</div></div>
+      <div class="countdown">
+        <div class="countdown-cell"><div class="countdown-num" id="cd-hr">00</div><div class="countdown-label">годин</div></div>
+        <div class="countdown-cell"><div class="countdown-num" id="cd-min">10</div><div class="countdown-label">хвилин</div></div>
+        <div class="countdown-cell"><div class="countdown-num" id="cd-sec">00</div><div class="countdown-label">секунд</div></div>
+      </div>
+      <h2>Записатися на курс</h2>
+      <p>Спеціальна ціна доступна тільки протягом цієї сесії на сайті.</p>
+      <div class="cta-spec">
+        <div class="cta-spec-row"><i class="ti ti-school"></i><div class="cta-spec-label">Старт</div><div class="cta-spec-value">Одразу після оплати</div></div>
+        <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">490 ₴</span><span class="price-old-dark">3490 ₴</span><span class="discount-badge">−86%</span></div></div>
+        <div class="cta-spec-row"><i class="ti ti-brand-telegram"></i><div class="cta-spec-label">Доступ</div><div class="cta-spec-value">У Telegram, назавжди</div></div>
+      </div>
+      <button class="btn-cta">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <div class="label">FAQ</div>
+    <h2 class="section-title">Залишилися запитання?</h2>
+    <div class="faq-list">
+      <details open>
+        <summary><span class="faq-question">Що таке Aima?</span><i class="ti ti-chevron-down chev"></i></summary>
+        <div class="faq-answer">Aima — мобільний застосунок для власників товарного бізнесу. Створи магазин за кілька хвилин з телефону.</div>
+      </details>
+      <details><summary><span class="faq-question">Як почати?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Завантажте Aima з App Store або Google Play та зареєструйтеся за кілька кроків.</div></details>
+      <details><summary><span class="faq-question">Чи потрібна банківська картка?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Ні, для реєстрації не потрібно.</div></details>
+      <details><summary><span class="faq-question">Чи потрібні знання програмування?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Ні, все робиться з телефону.</div></details>
+      <details><summary><span class="faq-question">Чи можна підключити власний домен?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Так, інструкція є серед бонусів.</div></details>
+      <details><summary><span class="faq-question">Чи є підтримка після запуску?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Так, є чат підтримки в Aima.</div></details>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  // Сесійний таймер: зберігаємо момент закінчення у sessionStorage,
+  // щоб при перезавантаженні сторінки відлік не починався заново.
+  var KEY = 'aima_timer_end';
+  var DURATION_MS = 10 * 60 * 1000;
+  var end = parseInt(sessionStorage.getItem(KEY), 10);
+  if (!end || isNaN(end) || end < Date.now()) {
+    end = Date.now() + DURATION_MS;
+    sessionStorage.setItem(KEY, end);
+  }
+  var pad = function(n){ return String(n).padStart(2,'0'); };
+  function tick(){
+    var s = Math.max(0, Math.floor((end - Date.now())/1000));
+    var h = Math.floor(s/3600); s -= h*3600;
+    var m = Math.floor(s/60);
+    var sec = s - m*60;
+    document.getElementById('cd-hr').textContent = pad(h);
+    document.getElementById('cd-min').textContent = pad(m);
+    document.getElementById('cd-sec').textContent = pad(sec);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>
