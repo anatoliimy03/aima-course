@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0F1922"/>
+      <stop offset="0.55" stop-color="#153754"/>
+      <stop offset="1" stop-color="#185FA5"/>
+    </linearGradient>
+    <linearGradient id="cta" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F45B5A"/>
+      <stop offset="1" stop-color="#D9363E"/>
+    </linearGradient>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="26" stdDeviation="24" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+    <clipPath id="caseClip">
+      <rect x="0" y="0" width="300" height="394" rx="26"/>
+    </clipPath>
+    <style>
+      .display { font-family: Manrope, Arial, sans-serif; }
+      .body { font-family: Onest, Arial, sans-serif; }
+      .eyebrow { font-size: 30px; font-weight: 800; letter-spacing: 2.8px; }
+      .headline { font-size: 82px; font-weight: 800; letter-spacing: -3.4px; }
+      .sub { font-size: 36px; font-weight: 500; }
+      .small { font-size: 27px; font-weight: 500; }
+    </style>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <circle cx="910" cy="180" r="270" fill="#85B7EB" opacity="0.16"/>
+  <circle cx="70" cy="1510" r="330" fill="#85B7EB" opacity="0.12"/>
+
+  <g transform="translate(72 105)">
+    <rect x="0" y="0" width="352" height="74" rx="37" fill="#E6F1FB" opacity="0.14"/>
+    <text x="34" y="49" class="display eyebrow" fill="#85B7EB">ПРИКЛАДИ МАГАЗИНІВ</text>
+  </g>
+
+  <g transform="translate(72 260)">
+    <text x="0" y="0" class="display headline" fill="#FFFFFF">
+      <tspan x="0" dy="0">Instagram —</tspan>
+      <tspan x="0" dy="94">це старт.</tspan>
+    </text>
+    <text x="0" y="218" class="display headline" fill="#85B7EB">
+      <tspan x="0" dy="0">Магазин —</tspan>
+      <tspan x="0" dy="94">це система.</tspan>
+    </text>
+  </g>
+
+  <g transform="translate(70 735)" filter="url(#shadow)">
+    <g transform="translate(0 56) rotate(-5 150 197)">
+      <rect x="0" y="0" width="300" height="394" rx="28" fill="#FFFFFF"/>
+      <g clip-path="url(#caseClip)">
+        <image href="../online-shop-21-days/case1.jpg" x="0" y="0" width="300" height="394" preserveAspectRatio="xMidYMid slice"/>
+      </g>
+    </g>
+    <g transform="translate(330 0)">
+      <rect x="0" y="0" width="300" height="394" rx="28" fill="#FFFFFF"/>
+      <g clip-path="url(#caseClip)">
+        <image href="../online-shop-21-days/case2.jpg" x="0" y="0" width="300" height="394" preserveAspectRatio="xMidYMid slice"/>
+      </g>
+    </g>
+    <g transform="translate(656 52) rotate(5 150 197)">
+      <rect x="0" y="0" width="300" height="394" rx="28" fill="#FFFFFF"/>
+      <g clip-path="url(#caseClip)">
+        <image href="../online-shop-21-days/case3.jpg" x="0" y="0" width="300" height="394" preserveAspectRatio="xMidYMid slice"/>
+      </g>
+    </g>
+  </g>
+
+  <g transform="translate(72 1220)" filter="url(#shadow)">
+    <rect x="0" y="0" width="936" height="298" rx="36" fill="#FFFFFF"/>
+    <text x="46" y="78" class="body sub" fill="#0F1922">
+      <tspan x="46" dy="0">На курсі покажу, як зібрати</tspan>
+      <tspan x="46" dy="56">власний інтернет-магазин:</tspan>
+    </text>
+    <g transform="translate(46 184)">
+      <circle cx="18" cy="18" r="18" fill="#185FA5"/>
+      <text x="54" y="30" class="body small" fill="#0F1922">товари</text>
+      <circle cx="296" cy="18" r="18" fill="#185FA5"/>
+      <text x="332" y="30" class="body small" fill="#0F1922">оплата</text>
+      <circle cx="590" cy="18" r="18" fill="#185FA5"/>
+      <text x="626" y="30" class="body small" fill="#0F1922">доставка</text>
+    </g>
+  </g>
+
+  <g transform="translate(72 1615)">
+    <rect x="0" y="0" width="936" height="124" rx="24" fill="url(#cta)"/>
+    <text x="468" y="80" text-anchor="middle" class="display sub" fill="#FFFFFF" font-weight="800">Дізнатись більше</text>
+  </g>
+
+  <g transform="translate(72 1808)">
+    <text x="0" y="0" class="display small" fill="#85B7EB" font-weight="800">Aima</text>
+    <text x="88" y="0" class="body small" fill="#FFFFFF" opacity="0.66">21 урок без програмування</text>
+  </g>
+</svg>

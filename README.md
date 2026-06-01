@@ -14,8 +14,7 @@
 - **Фронтенд:** чистий HTML + CSS + JS
 - **Хостинг:** Netlify → https://aima-course.netlify.app
 - **Репозиторій:** GitHub → https://github.com/anatoliimy03/aima-course
-- **База даних:** Supabase → https://binylmnmfpecucosgmtv.supabase.co
-- **Оплата:** Wayforpay (ще не підключено)
+- **Оплата:** WayForPay через пряме платіжне посилання
 - **Telegram бот:** (ще не підключено)
 
 ---
@@ -64,34 +63,22 @@
 
 ---
 
-## Форма заявки
-- Відкривається модальним вікном знизу при кліку на будь-яку CTA кнопку
-- Поля: Ім'я, Email, Телефон
-- Дані зберігаються в Supabase таблиця `leads`
-- Після успішної відправки — показує екран подяки
-
-### Supabase таблиця leads
-```
-id — uuid (primary key)
-created_at — timestamp
-name — text
-email — text
-phone — text
-status — text (default: 'new')
-paid — boolean (default: false)
-telegram_sent — boolean (default: false)
-```
+## Оплата
+- Усі CTA кнопки ведуть напряму на WayForPay через функцію `goToPayment()`
+- Платіжне посилання задається в `online-shop-21-days/index.html` у змінній `WAYFORPAY_PAYMENT_URL`
+- Success/return URL у WayForPay: `https://malinovskyi.in.ua/online-shop-21-days/thank-you/`
+- Сторінка подяки: `online-shop-21-days/thank-you/index.html`
+- Посилання на Telegram-доступ після оплати задається на сторінці подяки у змінній `TELEGRAM_ACCESS_URL`
 
 ---
 
 ## Що ще не зроблено
-- [ ] Підключити Wayforpay — після форми редирект на оплату
+- [ ] Вставити реальне платіжне посилання WayForPay у `WAYFORPAY_PAYMENT_URL`
+- [ ] Вставити реальне посилання на Telegram-доступ у `TELEGRAM_ACCESS_URL`
 - [ ] Telegram бот — після оплати видає посилання на канал
 - [ ] Фото спікера (speaker.jpg)
 - [ ] Фото в hero (photo.jpg)
 - [ ] Фото кейсів (case1-4.jpg)
-- [ ] Стилізація модальної форми під дизайн-систему
-- [ ] Адмінка для перегляду заявок
 
 ---
 

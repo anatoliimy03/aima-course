@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Оплату прийнято — Курс Анатолія Маліновського</title>
+  <meta name="description" content="Дякую за оплату курсу Інтернет-магазин за 21 урок." />
+  <link rel="icon" type="image/png" href="../favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Onest:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --ink: #0F1922;
+      --blue: #185FA5;
+      --sky: #85B7EB;
+      --blue-light: #E6F1FB;
+      --danger: #E24B4A;
+      --bg: #F6F7F9;
+      --surface: #FFFFFF;
+      --surface-2: #EEEEF2;
+      --text: #0F1922;
+      --text-secondary: #65717D;
+      --border: rgba(15,25,34,0.1);
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --f-display: 'Manrope', sans-serif;
+      --f-body: 'Onest', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(133,183,235,0.22), transparent 28%),
+        radial-gradient(circle at 88% 82%, rgba(226,75,74,0.12), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--f-body);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .page {
+      width: min(100%, 760px);
+    }
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink);
+      color: #fff;
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 24px 70px rgba(15,25,34,0.2);
+    }
+    .card::before,
+    .card::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+    .card::before {
+      width: 240px;
+      height: 240px;
+      right: -96px;
+      top: -96px;
+      background: rgba(133,183,235,0.14);
+    }
+    .card::after {
+      width: 160px;
+      height: 160px;
+      left: -78px;
+      bottom: -78px;
+      background: rgba(226,75,74,0.14);
+    }
+    .content { position: relative; z-index: 1; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 42px;
+    }
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(133,183,235,0.75);
+      background: rgba(255,255,255,0.08);
+      flex: 0 0 auto;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .brand-name {
+      font-family: var(--f-display);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(99,153,34,0.14);
+      color: #B7EA82;
+      font-family: var(--f-display);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+    }
+    h1 {
+      max-width: 620px;
+      font-family: var(--f-display);
+      font-size: clamp(38px, 8vw, 68px);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      margin-bottom: 18px;
+    }
+    .lead {
+      max-width: 560px;
+      color: rgba(255,255,255,0.68);
+      font-size: 18px;
+      line-height: 1.55;
+      margin-bottom: 28px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .step {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+    .step i {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(133,183,235,0.16);
+      color: var(--sky);
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+    .step-title {
+      font-family: var(--f-display);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .step p {
+      color: rgba(255,255,255,0.58);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 50px;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      border: 0;
+      text-decoration: none;
+      font-family: var(--f-display);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, #F45B5A 0%, #D9363E 100%);
+      box-shadow: 0 10px 24px rgba(226,75,74,0.28);
+    }
+    .btn-telegram {
+      background: linear-gradient(135deg, #2AABEE 0%, #168ACF 100%);
+      box-shadow: 0 10px 24px rgba(42,171,238,0.26);
+    }
+    .btn-secondary {
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .note {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.48);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      color: #929DA8;
+      font-size: 13px;
+    }
+    @media (max-width: 720px) {
+      body { padding: 14px; align-items: flex-start; }
+      .card { padding: 22px; border-radius: 22px; }
+      .brand { margin-bottom: 34px; }
+      .steps { grid-template-columns: 1fr; }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="card" aria-labelledby="thank-you-title">
+      <div class="content">
+        <div class="brand">
+          <div class="avatar"><img src="../avatar.png" alt="Анатолій Маліновський"></div>
+          <div class="brand-name">Курс Анатолія Маліновського</div>
+        </div>
+
+        <div class="status"><i class="ti ti-circle-check-filled"></i> Оплата успішна</div>
+        <h1 id="thank-you-title">Перейди в Telegram</h1>
+        <p class="lead">Оплату прийнято. Тепер натисни кнопку нижче — у Telegram ти отримаєш доступ до курсу “Інтернет-магазин за 21 урок” та бонусних матеріалів.</p>
+
+        <div class="steps">
+          <div class="step">
+            <i class="ti ti-brand-telegram"></i>
+            <div class="step-title">Натисни кнопку</div>
+            <p>Відкрий Telegram з цієї сторінки, щоб перейти до доступу.</p>
+          </div>
+          <div class="step">
+            <i class="ti ti-lock-open"></i>
+            <div class="step-title">Отримай курс</div>
+            <p>У Telegram буде доступ до уроків, матеріалів і подальших інструкцій.</p>
+          </div>
+          <div class="step">
+            <i class="ti ti-receipt"></i>
+            <div class="step-title">Збережи чек</div>
+            <p>Він може знадобитись, якщо потрібно буде швидко знайти оплату.</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary btn-telegram" type="button" onclick="goToTelegramAccess()">Перейти в Telegram і отримати доступ <i class="ti ti-brand-telegram"></i></button>
+          <a class="btn btn-secondary" href="https://www.instagram.com/malinovskyi_anatolii" target="_blank" rel="noopener">Проблема з доступом? Написати <i class="ti ti-brand-instagram"></i></a>
+        </div>
+
+        <p class="note">Якщо Telegram не відкривається або доступ не з'явився, напиши мені в Instagram і додай email або скрін оплати.</p>
+      </div>
+    </section>
+    <div class="footer">© 2026 Усі права захищені</div>
+  </main>
+  <script>
+    var TELEGRAM_ACCESS_URL = 'https://t.me/REPLACE_WITH_TELEGRAM_ACCESS_LINK';
+    var ANALYTICS_CONFIG = {
+      clarityProjectId: '',
+      gaMeasurementId: '',
+      supabaseUrl: 'https://binylmnmfpecucosgmtv.supabase.co',
+      supabaseKey: 'sb_publishable_oOuhWQ9Vg8N6dvdzRLKnEA_43JV-MBr',
+      supabaseEventsTable: 'analytics_events',
+      supabaseEnabled: true,
+      debug: window.location.search.indexOf('debug_analytics=1') !== -1
+    };
+
+    var AIMA_ANALYTICS = (function(){
+      function makeId(prefix) {
+        var raw = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + '-' + Math.random().toString(16).slice(2);
+        return prefix + '_' + raw;
+      }
+      function getStorage(storage, key) {
+        try { return storage.getItem(key); } catch(e) { return null; }
+      }
+      function setStorage(storage, key, value) {
+        try { storage.setItem(key, value); } catch(e) {}
+      }
+      function getStoredId(storage, key, prefix) {
+        var value = getStorage(storage, key);
+        if (!value) {
+          value = makeId(prefix);
+          setStorage(storage, key, value);
+        }
+        return value;
+      }
+      function getUtm() {
+        try { return JSON.parse(getStorage(sessionStorage, 'aima_analytics_utm') || '{}') || {}; }
+        catch(e) { return {}; }
+      }
+      function initClarity() {
+        var projectId = ANALYTICS_CONFIG.clarityProjectId;
+        if (!projectId) return;
+        (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments);};
+          t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, 'clarity', 'script', projectId);
+      }
+      function initGa() {
+        var measurementId = ANALYTICS_CONFIG.gaMeasurementId;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function(){ dataLayer.push(arguments); };
+        if (!measurementId) return;
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+        document.head.appendChild(script);
+        gtag('js', new Date());
+        gtag('config', measurementId, { send_page_view: false });
+      }
+
+      var visitorId = getStoredId(localStorage, 'aima_analytics_visitor_id', 'visitor');
+      var sessionId = getStoredId(sessionStorage, 'aima_analytics_session_id', 'session');
+      var sessionStartedAt = getStorage(sessionStorage, 'aima_analytics_session_started_at') || new Date().toISOString();
+      var utm = getUtm();
+      setStorage(sessionStorage, 'aima_analytics_session_started_at', sessionStartedAt);
+      initClarity();
+      initGa();
+
+      function track(eventName, props) {
+        var payload = {
+          event_id: makeId('event'),
+          event_name: eventName,
+          visitor_id: visitorId,
+          session_id: sessionId,
+          page_path: window.location.pathname,
+          page_title: document.title,
+          referrer: document.referrer || null,
+          utm_source: utm.utm_source || null,
+          utm_medium: utm.utm_medium || null,
+          utm_campaign: utm.utm_campaign || null,
+          utm_content: utm.utm_content || null,
+          utm_term: utm.utm_term || null,
+          viewport_width: window.innerWidth || null,
+          viewport_height: window.innerHeight || null,
+          scroll_depth: 100,
+          payload: Object.assign({
+            url: window.location.origin + window.location.pathname + window.location.hash,
+            session_started_at: sessionStartedAt
+          }, props || {})
+        };
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(Object.assign({
+          event: eventName,
+          event_id: payload.event_id,
+          session_id: sessionId,
+          visitor_id: visitorId,
+          page_path: payload.page_path
+        }, props || {}));
+        if (typeof window.clarity === 'function') {
+          try {
+            window.clarity('event', eventName);
+            window.clarity('set', 'last_event', eventName);
+          } catch(e) {}
+        }
+        if (typeof window.gtag === 'function') {
+          try {
+            window.gtag('event', eventName, Object.assign({ page_path: window.location.pathname, event_category: 'aima_course' }, props || {}));
+          } catch(e) {}
+        }
+        if (ANALYTICS_CONFIG.debug && window.console) console.log('[analytics]', eventName, payload);
+        if (!ANALYTICS_CONFIG.supabaseEnabled) return payload;
+        fetch(ANALYTICS_CONFIG.supabaseUrl + '/rest/v1/' + ANALYTICS_CONFIG.supabaseEventsTable, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': ANALYTICS_CONFIG.supabaseKey,
+            'Authorization': 'Bearer ' + ANALYTICS_CONFIG.supabaseKey,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(function(){});
+        return payload;
+      }
+
+      return { track: track };
+    })();
+
+    function trackEvent(eventName, props) {
+      return AIMA_ANALYTICS.track(eventName, props);
+    }
+
+    trackEvent('page_view', { page_type: 'thank_you', title: document.title });
+    trackEvent('purchase_success', {
+      product: 'online_shop_21_lessons',
+      value: 490,
+      currency: 'UAH',
+      payment_provider: 'wayforpay'
+    });
+
+    function goToTelegramAccess() {
+      trackEvent('telegram_access_click', { location: 'thank_you' });
+      if (!TELEGRAM_ACCESS_URL || TELEGRAM_ACCESS_URL.indexOf('REPLACE_WITH_TELEGRAM_ACCESS_LINK') !== -1) {
+        trackEvent('telegram_access_link_missing', { location: 'thank_you' });
+        alert('Посилання на Telegram-доступ ще не додано. Надішли його, і я вставлю в сайт.');
+        return;
+      }
+      trackEvent('telegram_access_redirect', { location: 'thank_you' });
+      window.location.href = TELEGRAM_ACCESS_URL;
+    }
+
+    document.querySelectorAll('.actions a').forEach(function(link){
+      link.addEventListener('click', function(){
+        trackEvent('instagram_click', {
+          location: 'thank_you_support',
+          href: this.href
+        });
+      });
+    });
+  </script>
+</body>
+</html>

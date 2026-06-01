@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Бонус: Індексація сайту в Google</title>
+<style>
+:root {
+  --bg: #F6F7F9;
+  --surface: #FFFFFF;
+  --surface-2: #EEEEF2;
+  --ink: #0F1922;
+  --blue: #185FA5;
+  --sky: #85B7EB;
+  --blue-light: #E6F1FB;
+  --danger: #E24B4A;
+  --green: #639922;
+  --text-secondary: #5A6170;
+  --text-tertiary: #9399A6;
+  --border: rgba(15,25,34,0.1);
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --f-display: Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --f-body: Onest, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+@page {
+  size: A4;
+  margin: 8mm;
+}
+
+.page {
+  width: 194mm;
+  min-height: 281mm;
+  margin: 0 auto;
+  padding: 0;
+  background: var(--bg);
+  page-break-after: always;
+}
+
+.page:last-child { page-break-after: auto; }
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 281mm;
+  padding: 20mm 16mm 16mm;
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 88% 14%, rgba(133,183,235,0.24), transparent 28%),
+    radial-gradient(circle at 12% 84%, rgba(226,75,74,0.16), transparent 24%),
+    var(--ink);
+  color: #fff;
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(133,183,235,0.2);
+  border-radius: 26px;
+  transform: rotate(-12deg);
+}
+
+.hero::before {
+  width: 72mm;
+  height: 72mm;
+  right: -22mm;
+  top: 22mm;
+}
+
+.hero::after {
+  width: 42mm;
+  height: 42mm;
+  left: -14mm;
+  bottom: 24mm;
+}
+
+.brand {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 34mm;
+}
+
+.brand-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+.brand-title {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(133,183,235,0.14);
+  border: 1px solid rgba(133,183,235,0.26);
+  color: var(--sky);
+  font-family: var(--f-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1, h2, h3 {
+  font-family: var(--f-display);
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+.hero h1 {
+  position: relative;
+  z-index: 1;
+  max-width: 135mm;
+  margin: 8mm 0 7mm;
+  font-size: 46px;
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+.hero h1 span { color: var(--sky); }
+
+.hero-lead {
+  position: relative;
+  z-index: 1;
+  max-width: 120mm;
+  margin: 0;
+  color: rgba(255,255,255,0.72);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.hero-card {
+  position: absolute;
+  left: 16mm;
+  right: 16mm;
+  bottom: 16mm;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.hero-card div {
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.05);
+}
+
+.hero-card strong {
+  display: block;
+  color: #fff;
+  font-family: var(--f-display);
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.hero-card span {
+  display: block;
+  margin-top: 5px;
+  color: rgba(255,255,255,0.55);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sheet {
+  min-height: 281mm;
+  padding: 15mm;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.section-label {
+  margin-bottom: 7mm;
+  color: var(--danger);
+  font-family: var(--f-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sheet h2 {
+  margin-bottom: 5mm;
+  font-size: 31px;
+  line-height: 1.12;
+}
+
+.intro {
+  max-width: 145mm;
+  margin: 0 0 9mm;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 9mm 0;
+}
+
+.small-card {
+  min-height: 41mm;
+  padding: 11px;
+  border-radius: var(--radius-md);
+  background: var(--blue-light);
+}
+
+.small-card.red { background: rgba(226,75,74,0.1); }
+.small-card.green { background: rgba(99,153,34,0.12); }
+
+.small-card strong {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--f-display);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.small-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.note {
+  margin: 8mm 0;
+  padding: 13px 15px;
+  border-left: 4px solid var(--danger);
+  border-radius: var(--radius-md);
+  background: rgba(226,75,74,0.08);
+  color: var(--ink);
+}
+
+.note strong {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--f-display);
+}
+
+.steps {
+  display: grid;
+  gap: 7px;
+  margin-top: 8mm;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 11px;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.step h3 {
+  margin-bottom: 3px;
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.step p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  line-height: 1.48;
+}
+
+.checklist {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 9mm;
+}
+
+.check {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
+  min-height: 32px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  font-size: 12.5px;
+}
+
+.box {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 2px solid var(--blue);
+  background: #fff;
+}
+
+.mistakes {
+  display: grid;
+  gap: 7px;
+  margin-top: 8mm;
+}
+
+.mistake {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+
+.mistake-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: rgba(226,75,74,0.12);
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--f-display);
+  font-weight: 800;
+}
+
+.mistake strong {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--f-display);
+  font-size: 13px;
+}
+
+.mistake span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 9mm;
+}
+
+.day {
+  padding: 11px;
+  border-radius: var(--radius-md);
+  background: var(--ink);
+  color: #fff;
+}
+
+.day strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--sky);
+  font-family: var(--f-display);
+  font-size: 13px;
+}
+
+.day span {
+  color: rgba(255,255,255,0.68);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.mini-table {
+  width: 100%;
+  margin-top: 8mm;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 12.5px;
+}
+
+.mini-table th,
+.mini-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.mini-table th {
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--f-display);
+  font-size: 12px;
+}
+
+.mini-table tr:last-child td { border-bottom: none; }
+.mini-table td:first-child {
+  width: 41%;
+  font-family: var(--f-display);
+  font-weight: 700;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10mm;
+  padding-top: 7mm;
+  border-top: 1px solid var(--border);
+  color: var(--text-tertiary);
+  font-size: 11px;
+}
+
+.footer strong {
+  color: var(--ink);
+  font-family: var(--f-display);
+}
+
+.source-list {
+  margin: 9mm 0 0;
+  padding-left: 18px;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+}
+
+.source-list li { margin-bottom: 4px; }
+
+.url {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--blue);
+  word-break: break-all;
+}
+</style>
+</head>
+<body>
+  <main>
+    <section class="page">
+      <div class="hero">
+        <div class="brand">
+          <img class="brand-avatar" src="../online-shop-21-days/avatar.png" alt="Анатолій Маліновський">
+          <div class="brand-title">Курс Анатолія Маліновського</div>
+        </div>
+        <div class="badge">Бонусний матеріал</div>
+        <h1>Індексація сайту <span>в Google</span></h1>
+        <p class="hero-lead">
+          Практичний чеклист для власника інтернет-магазину: як допомогти Google знайти сайт,
+          зрозуміти важливі сторінки та швидше показувати їх у пошуку.
+        </p>
+        <div class="hero-card">
+          <div>
+            <strong>30–60 хв</strong>
+            <span>на первинне налаштування</span>
+          </div>
+          <div>
+            <strong>7 кроків</strong>
+            <span>без технічного хаосу</span>
+          </div>
+          <div>
+            <strong>1 чеклист</strong>
+            <span>перед запуском реклами</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="sheet">
+        <div class="section-label">01 · Що це означає</div>
+        <h2>Індексація — це не “сайт є в інтернеті”</h2>
+        <p class="intro">
+          Сайт може відкриватися за посиланням, але не показуватися в Google. Щоб сторінка
+          зʼявилася в пошуку, Google має пройти три етапи: знайти сторінку, просканувати її
+          та додати до індексу.
+        </p>
+
+        <div class="grid-3">
+          <div class="small-card">
+            <strong>1. Google знаходить</strong>
+            <p>Через посилання, sitemap або ручну перевірку в Google Search Console.</p>
+          </div>
+          <div class="small-card green">
+            <strong>2. Google читає</strong>
+            <p>Перевіряє, чи сторінка доступна, не закрита від роботів і має зрозумілий контент.</p>
+          </div>
+          <div class="small-card red">
+            <strong>3. Google індексує</strong>
+            <p>Додає сторінку до бази пошуку. Після цього вона може зʼявлятися за запитами.</p>
+          </div>
+        </div>
+
+        <div class="note">
+          <strong>Важливо</strong>
+          Індексація не гарантує перші позиції. Це лише вхід у гру. Позиції залежать від якості сторінки,
+          товарів, контенту, конкуренції, довіри до сайту та поведінки користувачів.
+        </div>
+
+        <div class="section-label">02 · Перед тим як просити Google індексувати сайт</div>
+        <h2>Швидка перевірка готовності</h2>
+        <p class="intro">
+          Не варто відправляти в індекс порожній або технічно сирий магазин. Спочатку переконайся,
+          що Google побачить нормальний сайт, а не чернетку.
+        </p>
+
+        <div class="checklist">
+          <div class="check"><span class="box"></span><span>Сайт відкривається по HTTPS без помилки сертифіката.</span></div>
+          <div class="check"><span class="box"></span><span>Головна, категорії та товари відкриваються для всіх користувачів.</span></div>
+          <div class="check"><span class="box"></span><span>Немає випадкового <strong>noindex</strong> на важливих сторінках.</span></div>
+          <div class="check"><span class="box"></span><span>Файл <strong>robots.txt</strong> не блокує головні розділи сайту.</span></div>
+          <div class="check"><span class="box"></span><span>Є зрозумілі назви сторінок: title, H1, описи категорій.</span></div>
+          <div class="check"><span class="box"></span><span>Товари мають назви, ціни, фото та хоча б короткий унікальний опис.</span></div>
+          <div class="check"><span class="box"></span><span>На сайті є сторінки “Доставка і оплата”, “Контакти”, “Про нас”.</span></div>
+          <div class="check"><span class="box"></span><span>З головної сторінки є посилання на ключові категорії й товари.</span></div>
+        </div>
+
+        <div class="footer">
+          <strong>Інтернет-магазин за 21 урок</strong>
+          <span>Бонус · Індексація сайту</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="sheet">
+        <div class="section-label">03 · Практичні кроки</div>
+        <h2>Як додати сайт у Google</h2>
+        <p class="intro">
+          Цей сценарій підходить для нового інтернет-магазину після запуску домену, базового наповнення
+          та перевірки, що сайт відкривається без помилок.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div>
+              <h3>Додай сайт у Google Search Console</h3>
+              <p>Перейди в Search Console і створи ресурс. Найкращий варіант — Domain property через DNS. Якщо складно, почни з URL-prefix для конкретної адреси сайту.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div>
+              <h3>Перевір головну сторінку через URL Inspection</h3>
+              <p>Встав адресу головної сторінки, наприклад <span class="url">https://yourdomain.com/</span>, і запусти перевірку live URL.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div>
+              <h3>Додай sitemap</h3>
+              <p>Якщо платформа генерує sitemap, додай його в розділі Sitemaps. Найчастіше це адреса на кшталт <span class="url">/sitemap.xml</span>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div>
+              <h3>Попроси індексацію важливих URL</h3>
+              <p>Спочатку відправ головну, 2–3 ключові категорії та кілька товарів, які реально готові до продажу.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div>
+              <h3>Перевір звіт Page indexing</h3>
+              <p>Через кілька днів подивись, які сторінки додані в індекс, а які мають статус “Discovered” або “Crawled, currently not indexed”.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">6</div>
+            <div>
+              <h3>Підсиль сторінки контентом</h3>
+              <p>Додай описи категорій, унікальні характеристики товарів, відповіді на часті питання та внутрішні посилання між сторінками.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">7</div>
+            <div>
+              <h3>Дай сайту перші зовнішні сигнали</h3>
+              <p>Додай посилання на сайт в Instagram, Telegram, Google Business Profile, маркетплейсах або партнерських сторінках, якщо це доречно.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <strong>Інтернет-магазин за 21 урок</strong>
+          <span>03 · Практичні кроки</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="sheet">
+        <div class="section-label">04 · Типові помилки</div>
+        <h2>Через що Google може не індексувати магазин</h2>
+        <p class="intro">
+          Якщо сайт новий, індексація може зайняти час. Але часто проблема не в Google, а в тому,
+          що сторінки слабкі, дублюються або закриті технічно.
+        </p>
+
+        <div class="mistakes">
+          <div class="mistake">
+            <div class="mistake-icon">!</div>
+            <div><strong>Сайт закритий від роботів</strong><span>Перевір robots.txt, meta noindex і налаштування видимості сайту.</span></div>
+          </div>
+          <div class="mistake">
+            <div class="mistake-icon">!</div>
+            <div><strong>Порожні або однакові сторінки</strong><span>Категорії без описів і товари з копіпастою Google часто відкладає “на потім”.</span></div>
+          </div>
+          <div class="mistake">
+            <div class="mistake-icon">!</div>
+            <div><strong>Немає внутрішніх посилань</strong><span>Якщо на товар не веде жодне нормальне посилання з сайту, Google важче зрозуміти його важливість.</span></div>
+          </div>
+          <div class="mistake">
+            <div class="mistake-icon">!</div>
+            <div><strong>Фільтри створюють сотні дублів</strong><span>Новому магазину краще індексувати головні категорії, а не всі комбінації фільтрів.</span></div>
+          </div>
+          <div class="mistake">
+            <div class="mistake-icon">!</div>
+            <div><strong>Немає сторінок довіри</strong><span>Доставка, оплата, контакти, повернення та “Про нас” допомагають і людям, і пошуковику.</span></div>
+          </div>
+          <div class="mistake">
+            <div class="mistake-icon">!</div>
+            <div><strong>Очікування миттєвого результату</strong><span>Новий сайт без історії може індексуватися поступово. Це нормально, якщо технічно все чисто.</span></div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top: 11mm;">05 · Міні-план</div>
+        <h2>Що зробити у перші 14 днів</h2>
+        <div class="timeline">
+          <div class="day">
+            <strong>День 1</strong>
+            <span>Додай сайт у Search Console, перевір HTTPS, sitemap, robots.txt.</span>
+          </div>
+          <div class="day">
+            <strong>Дні 2–3</strong>
+            <span>Відправ головну, категорії та перші товари через URL Inspection.</span>
+          </div>
+          <div class="day">
+            <strong>Дні 4–7</strong>
+            <span>Додай описи категорій, блоки питань і відповіді на часті заперечення.</span>
+          </div>
+          <div class="day">
+            <strong>Дні 8–14</strong>
+            <span>Перевір статуси, виправ проблемні URL і повторно відправ лише важливі сторінки.</span>
+          </div>
+        </div>
+
+        <div class="footer">
+          <strong>Інтернет-магазин за 21 урок</strong>
+          <span>04 · Типові помилки</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="sheet">
+        <div class="section-label">06 · Як читати статуси</div>
+        <h2>Міні-словник Search Console</h2>
+        <p class="intro">
+          Не всі статуси в Search Console означають проблему. Частина з них — нормальний етап для нового сайту.
+          Головне — дивитися на причину і на якість сторінки.
+        </p>
+
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Статус</th>
+              <th>Що означає і що робити</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>URL is on Google</td>
+              <td>Сторінка є в індексі. Далі працюй над контентом, товарами, швидкістю і довірою.</td>
+            </tr>
+            <tr>
+              <td>Discovered, currently not indexed</td>
+              <td>Google знає про сторінку, але ще не сканував її. Перевір внутрішні посилання і пріоритет сторінки.</td>
+            </tr>
+            <tr>
+              <td>Crawled, currently not indexed</td>
+              <td>Google прочитав сторінку, але не додав в індекс. Часто причина — слабкий або дубльований контент.</td>
+            </tr>
+            <tr>
+              <td>Blocked by robots.txt</td>
+              <td>Сторінка закрита правилами robots.txt. Виправ, якщо це важлива сторінка для пошуку.</td>
+            </tr>
+            <tr>
+              <td>Excluded by noindex</td>
+              <td>На сторінці є команда не індексувати її. Прибери noindex, якщо сторінка має бути в Google.</td>
+            </tr>
+            <tr>
+              <td>Alternate page with canonical</td>
+              <td>Google бачить сторінку як дубль іншої. Це нормально для технічних дублів, але не для важливих категорій.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="note">
+          <strong>Фокус для новачка</strong>
+          Спочатку добийся, щоб індексувалися головна сторінка, ключові категорії та кілька найважливіших товарів.
+          Не потрібно відразу гнати в індекс кожну дрібну сторінку.
+        </div>
+
+        <div class="section-label">07 · Корисні джерела</div>
+        <ul class="source-list">
+          <li>Google Search Central: сканування та індексація — <span class="url">developers.google.com/search/docs/crawling-indexing</span></li>
+          <li>Google Search Console Help: URL Inspection Tool — <span class="url">support.google.com/webmasters/answer/9012289</span></li>
+          <li>Google Search Central: sitemap — <span class="url">developers.google.com/search/docs/crawling-indexing/sitemaps/overview</span></li>
+          <li>Google Search Central: robots.txt — <span class="url">developers.google.com/search/docs/crawling-indexing/robots/intro</span></li>
+        </ul>
+
+        <div class="footer">
+          <strong>© 2026 Усі права захищені</strong>
+          <span>Курс Анатолія Маліновського</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

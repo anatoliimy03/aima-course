@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0F1922"/>
+      <stop offset="0.55" stop-color="#132B42"/>
+      <stop offset="1" stop-color="#185FA5"/>
+    </linearGradient>
+    <linearGradient id="cta" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F45B5A"/>
+      <stop offset="1" stop-color="#D9363E"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.24"/>
+    </filter>
+    <style>
+      .display { font-family: Manrope, Arial, sans-serif; }
+      .body { font-family: Onest, Arial, sans-serif; }
+      .small { font-size: 30px; font-weight: 700; letter-spacing: 3px; }
+      .headline { font-size: 93px; font-weight: 800; letter-spacing: -4px; }
+      .sub { font-size: 39px; font-weight: 500; }
+      .note { font-size: 30px; font-weight: 500; }
+    </style>
+  </defs>
+
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+
+  <circle cx="920" cy="180" r="260" fill="#85B7EB" opacity="0.18"/>
+  <circle cx="126" cy="1580" r="340" fill="#85B7EB" opacity="0.12"/>
+  <circle cx="918" cy="1470" r="170" fill="#FFFFFF" opacity="0.08"/>
+
+  <g transform="translate(72 104)">
+    <rect x="0" y="0" width="392" height="76" rx="38" fill="#E6F1FB" opacity="0.14"/>
+    <text x="34" y="49" class="display small" fill="#85B7EB">КУРС ДЛЯ ПРОДАВЦІВ</text>
+  </g>
+
+  <g transform="translate(72 255)">
+    <text x="0" y="0" class="display headline" fill="#FFFFFF">
+      <tspan x="0" dy="0">Продаєш</tspan>
+      <tspan x="0" dy="105">в Instagram?</tspan>
+    </text>
+    <text x="0" y="264" class="display headline" fill="#85B7EB">
+      <tspan x="0" dy="0">Запусти</tspan>
+      <tspan x="0" dy="105">інтернет-</tspan>
+      <tspan x="0" dy="105">магазин</tspan>
+    </text>
+  </g>
+
+  <g transform="translate(72 860)" filter="url(#softShadow)">
+    <rect x="0" y="0" width="936" height="520" rx="40" fill="#FFFFFF"/>
+    <g transform="translate(56 58)">
+      <rect x="0" y="0" width="316" height="56" rx="28" fill="#E6F1FB"/>
+      <text x="30" y="38" class="display note" fill="#185FA5">21 урок</text>
+
+      <text x="0" y="142" class="body sub" fill="#0F1922">
+        <tspan x="0" dy="0">Покроково створиш магазин</tspan>
+        <tspan x="0" dy="58">без програмування:</tspan>
+      </text>
+
+      <g transform="translate(0 254)">
+        <circle cx="18" cy="18" r="18" fill="#185FA5"/>
+        <text x="54" y="30" class="body note" fill="#0F1922">товари</text>
+
+        <circle cx="282" cy="18" r="18" fill="#185FA5"/>
+        <text x="336" y="30" class="body note" fill="#0F1922">оплата</text>
+
+        <circle cx="574" cy="18" r="18" fill="#185FA5"/>
+        <text x="628" y="30" class="body note" fill="#0F1922">доставка</text>
+      </g>
+
+      <g transform="translate(0 356)">
+        <rect x="0" y="0" width="824" height="84" rx="18" fill="#0F1922"/>
+        <text x="32" y="55" class="display note" fill="#FFFFFF">Для новачків та Instagram-магазинів</text>
+      </g>
+    </g>
+  </g>
+
+  <g transform="translate(72 1468)">
+    <rect x="0" y="0" width="936" height="128" rx="22" fill="url(#cta)"/>
+    <text x="468" y="82" text-anchor="middle" class="display sub" fill="#FFFFFF" font-weight="800">Дізнатись більше</text>
+  </g>
+
+  <g transform="translate(72 1670)">
+    <text x="0" y="0" class="body note" fill="#FFFFFF" opacity="0.72">
+      <tspan x="0" dy="0">Запусти інтернет-магазин за 21 урок</tspan>
+      <tspan x="0" dy="48">і переведи продажі в систему.</tspan>
+    </text>
+  </g>
+
+  <g transform="translate(72 1810)">
+    <text x="0" y="0" class="display note" fill="#85B7EB" font-weight="800">Aima</text>
+    <text x="96" y="0" class="body note" fill="#FFFFFF" opacity="0.62">курс Анатолія Маліновського</text>
+  </g>
+</svg>
