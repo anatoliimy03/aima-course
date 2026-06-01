@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aima — Запусти свій інтернет-магазин за 21 урок</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Onest:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+:root {
+  --bg: #F6F7F9;
+  --surface: #FFFFFF;
+  --surface-2: #EEEEF2;
+  --text: #0F1922;
+  --text-secondary: #5A6170;
+  --text-tertiary: #9399A6;
+  --border: rgba(15,25,34,0.09);
+  --border-strong: rgba(15,25,34,0.18);
+  --ink: #0F1922;
+  --blue: #185FA5;
+  --sky: #85B7EB;
+  --blue-light: #E6F1FB;
+  --green: #639922;
+  --danger: #E24B4A;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --f-display: 'Manrope', sans-serif;
+  --f-body: 'Onest', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--f-body);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+body.menu-open { overflow: hidden; }
+
+.container { position: relative; z-index: 1; max-width: 400px; margin: 0 auto; padding: 0 16px; }
+section { padding: 14px 0; }
+section[id] { scroll-margin-top: 12px; }
+button { font-family: var(--f-display); cursor: pointer; }
+ol { list-style: decimal; }
+
+.label {
+  font-family: var(--f-display);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  color: #fff;
+  margin: 16px 0;
+}
+.hero > *:not(.hero-decor) { position: relative; z-index: 1; }
+.hero-decor {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.hero-decor .ti {
+  position: absolute;
+  color: var(--sky);
+  opacity: 0.2;
+}
+.hero-decor-package { top: 126px; right: 14px; font-size: 40px; transform: rotate(12deg); }
+.hero-decor-chart { top: 206px; right: 16px; font-size: 31px; transform: rotate(-8deg); }
+.hero-decor-sparkle { bottom: 14px; left: 12px; font-size: 28px; transform: rotate(10deg); }
+.hero-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.logo { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand-avatar {
+  position: relative;
+  width: 30px; height: 30px; border-radius: 8px;
+  overflow: hidden; flex-shrink: 0;
+  background: var(--blue); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.brand-avatar img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.brand-avatar span { font-family: var(--f-display); font-weight: 800; font-size: 10px; }
+.logo-name {
+  max-width: 190px;
+  font-family: var(--f-display); font-weight: 700; font-size: 12px;
+  line-height: 1.25; letter-spacing: -0.01em;
+}
+.btn-menu {
+  width: 28px; height: 28px;
+  background: transparent;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.btn-menu:hover { color: var(--sky); transform: scale(1.08); }
+.btn-menu .ti { font-size: 22px; transition: transform 0.2s ease; }
+.btn-menu:hover .ti { transform: rotate(4deg); }
+.hero-badge {
+  position: absolute; top: 10px; right: 10px;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 7px;
+  border-radius: 5px;
+  background: var(--danger); color: #fff;
+  font-family: var(--f-display);
+  font-size: 8px; font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: online-badge-blink 2.2s ease-in-out infinite;
+}
+.hero-badge .ti { font-size: 11px; }
+@keyframes online-badge-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(226,75,74,0); }
+  50% { opacity: 0.66; box-shadow: 0 0 0 5px rgba(226,75,74,0.12); }
+}
+.hero h1 {
+  font-family: var(--f-display);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  color: #fff;
+}
+.hero h1 span { color: var(--sky); }
+.hero > p { font-size: 15px; line-height: 1.6; margin-bottom: 24px; color: rgba(255,255,255,0.65); font-family: var(--f-body); }
+.hero-photo {
+  position: relative;
+  width: 100%; aspect-ratio: 4/3;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.05) center/cover no-repeat;
+  border: 0.5px solid rgba(255,255,255,0.1);
+  margin-bottom: 14px;
+}
+.hero-screen-carousel {
+  position: absolute;
+  left: 52.75%; top: 56.45%;
+  width: 36.45%; height: 31.7%;
+  overflow: visible;
+}
+.hero-screen-plane {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  background: #fff;
+  transform-origin: 0 0;
+  box-shadow: inset 0 0 0 1px rgba(15,25,34,0.16);
+}
+.hero-screen-slide {
+  position: absolute; inset: 0;
+  background: #fff top center/cover no-repeat;
+  opacity: 0;
+  animation: hero-store-fade 25s ease-in-out infinite;
+}
+.hero-screen-slide:first-child { opacity: 1; }
+.hero-screen-slide:nth-child(1) { animation-delay: 0s; }
+.hero-screen-slide:nth-child(2) { animation-delay: 5s; }
+.hero-screen-slide:nth-child(3) { animation-delay: 10s; }
+.hero-screen-slide:nth-child(4) { animation-delay: 15s; }
+.hero-screen-slide:nth-child(5) { animation-delay: 20s; }
+@keyframes hero-store-fade {
+  0%, 13% { opacity: 1; }
+  17%, 96% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.spec-card {
+  background: rgba(255,255,255,0.06);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.spec-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.spec-grid > div { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center; }
+.spec-grid > div > div:first-child {
+  font-family: var(--f-display);
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.spec-grid .price-old { font-size: 11px; color: rgba(255,255,255,0.35); text-decoration: line-through; }
+.hero-price-meta { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 3px; }
+.hero-discount {
+  font-family: var(--f-display); font-size: 9px; font-weight: 800;
+  padding: 1px 5px; border-radius: 4px;
+  background: var(--danger); color: #fff;
+}
+.btn-cta {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, #F45B5A 0%, #D9363E 100%); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--f-display);
+  font-weight: 700; font-size: 15px;
+  letter-spacing: -0.01em;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  animation: cta-red-pulse 2.35s ease-in-out infinite;
+}
+.btn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(226,75,74,0.34); background: linear-gradient(135deg, #FB6A68 0%, #C92F39 100%); }
+.btn-cta-primary { background: linear-gradient(135deg, #F45B5A 0%, #D9363E 100%); color: #fff; }
+.btn-cta-primary:hover { background: linear-gradient(135deg, #FB6A68 0%, #C92F39 100%); }
+.btn-cta-final { animation: cta-red-pulse 2.35s ease-in-out infinite; }
+.btn-cta .ti, .btn-submit .ti, .menu-cta .ti { transition: transform 0.2s ease; }
+.btn-cta:hover .ti, .btn-submit:hover .ti, .menu-cta:hover .ti { transform: translateX(4px); }
+@keyframes cta-red-pulse {
+  0%, 62%, 100% { box-shadow: 0 0 0 0 rgba(226,75,74,0), 0 0 0 rgba(226,75,74,0); transform: scale(1); }
+  76% { box-shadow: 0 0 0 9px rgba(226,75,74,0.24), 0 10px 24px rgba(226,75,74,0.26); transform: scale(1.028); }
+}
+
+/* МЕНЮ */
+.menu-overlay {
+  position: fixed; inset: 0;
+  z-index: 120;
+  display: flex; justify-content: flex-end;
+  background: rgba(15,25,34,0.54);
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.24s ease, visibility 0.24s ease;
+}
+.menu-overlay.open { opacity: 1; visibility: visible; }
+.menu-panel {
+  width: min(86vw, 340px);
+  height: 100%;
+  padding: 20px;
+  overflow-y: auto;
+  background: var(--surface);
+  box-shadow: -18px 0 40px rgba(15,25,34,0.18);
+  transform: translateX(100%);
+  transition: transform 0.28s ease;
+}
+.menu-overlay.open .menu-panel { transform: translateX(0); }
+.menu-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.menu-brand { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.menu-brand .brand-avatar { width: 34px; height: 34px; }
+.menu-brand .logo-name { color: var(--ink); font-size: 12px; }
+.menu-close {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%;
+  background: var(--surface-2); color: var(--ink);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.menu-close:hover { background: var(--blue-light); transform: rotate(8deg); }
+.menu-close .ti { font-size: 19px; }
+.menu-nav { display: grid; }
+.menu-nav a {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 11px;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  color: var(--text);
+  text-decoration: none;
+  font-family: var(--f-display);
+  font-size: 13px; font-weight: 700;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.menu-nav a:last-child { border-bottom: 0; }
+.menu-nav a:hover { background: var(--blue-light); color: var(--blue); transform: translateX(3px); }
+.menu-nav .ti { width: 18px; font-size: 17px; color: var(--blue); }
+.menu-offer {
+  position: relative;
+  overflow: hidden;
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: var(--ink);
+  color: #fff;
+}
+.menu-offer::after {
+  content: '';
+  position: absolute;
+  width: 100px; height: 100px;
+  right: -42px; top: -48px;
+  border-radius: 50%;
+  background: rgba(226,75,74,0.18);
+}
+.menu-offer-live { display: flex; align-items: center; gap: 6px; margin-bottom: 9px; font-family: var(--f-display); font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.62); letter-spacing: 0.07em; text-transform: uppercase; }
+.menu-offer-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--danger); animation: pulse-dot 1.6s ease-in-out infinite; }
+.menu-countdown { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; margin-bottom: 10px; text-align: center; }
+.menu-countdown-cell { padding: 7px 3px; border: 0.5px solid rgba(226,75,74,0.4); border-radius: 7px; background: rgba(226,75,74,0.12); }
+.menu-countdown-num { font-family: var(--f-display); font-size: 17px; font-weight: 800; line-height: 1; color: #FF7776; font-variant-numeric: tabular-nums; }
+.menu-countdown-label { margin-top: 3px; font-size: 8px; color: rgba(255,255,255,0.44); }
+.menu-price { margin-bottom: 9px; color: rgba(255,255,255,0.62); font-size: 11px; }
+.menu-price strong { margin-left: 4px; color: #fff; font-family: var(--f-display); font-size: 17px; }
+.menu-cta {
+  width: 100%; padding: 13px;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  border: 0; border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #F45B5A 0%, #D9363E 100%); color: #fff;
+  font-family: var(--f-display); font-size: 13px; font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  animation: cta-red-pulse 2.35s ease-in-out infinite;
+}
+.menu-cta:hover { background: linear-gradient(135deg, #FB6A68 0%, #C92F39 100%); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(226,75,74,0.28); }
+
+/* SECTION TITLE */
+h2.section-title {
+  font-family: var(--f-display);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+/* ЛОКАЛЬНИЙ ДЕКОР СЕКЦІЙ */
+.audience-section,
+.decorated-section { position: relative; overflow: hidden; }
+.audience-section > *:not(.section-decor),
+.decorated-section > *:not(.section-decor) { position: relative; z-index: 1; }
+.section-decor {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.audience-section .section-decor .ti,
+.decorated-section .section-decor .ti {
+  position: absolute;
+  color: var(--blue);
+  opacity: 0.13;
+}
+
+/* ДЛЯ КОГО */
+.audience-decor-user { top: 30px; right: 2px; font-size: 42px; transform: rotate(8deg); }
+.audience-decor-growth { bottom: 26px; right: 4px; font-size: 34px; transform: rotate(-8deg); }
+.audience-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+.audience-item:last-child { border-bottom: none; }
+.audience-num {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--surface-2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.audience-title { font-family: var(--f-display); font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+.audience-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.45; font-family: var(--f-body); }
+
+/* РЕЗУЛЬТАТИ */
+.results-decor-target { top: 32px; right: 2px; font-size: 42px; transform: rotate(8deg); }
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.result-card {
+  padding: 14px;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.result-card .ti { font-size: 20px; color: var(--blue); }
+.result-card .text { font-family: var(--f-display); font-size: 13px; font-weight: 600; margin-top: 10px; line-height: 1.35; }
+
+/* ЯК ПРОХОДИТЬ */
+.how-decor-telegram { top: 32px; right: 3px; font-size: 42px; transform: rotate(-8deg); }
+.how-card {
+  padding: 20px 16px 16px;
+  border: 0.5px solid rgba(24,95,165,0.14);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(145deg, #E6F1FB 0%, #F8FBFF 100%);
+}
+.phone-mockup {
+  position: relative;
+  width: 232px;
+  margin: 0 auto 16px;
+  padding: 7px;
+  border: 1px solid #343A43;
+  border-radius: 37px;
+  background: #080A0D;
+  box-shadow: 0 16px 30px rgba(15,25,34,0.2);
+}
+.phone-mockup::before,
+.phone-mockup::after {
+  content: '';
+  position: absolute;
+  left: -3px;
+  width: 3px;
+  border-radius: 3px 0 0 3px;
+  background: #242932;
+}
+.phone-mockup::before { top: 82px; height: 42px; }
+.phone-mockup::after { top: 135px; height: 56px; }
+.phone-island {
+  position: absolute;
+  z-index: 4;
+  top: 13px; left: 50%;
+  width: 74px; height: 18px;
+  border-radius: 999px;
+  background: #050607;
+  transform: translateX(-50%);
+}
+.phone-home {
+  position: absolute;
+  z-index: 4;
+  left: 50%; bottom: 11px;
+  width: 74px; height: 4px;
+  border-radius: 999px;
+  background: rgba(15,25,34,0.76);
+  transform: translateX(-50%);
+}
+.phone-screen {
+  min-height: 388px;
+  overflow: hidden;
+  border-radius: 30px;
+  background: #D5E5EE;
+}
+.tg-statusbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 13px 5px;
+  background: #fff; color: #11151A;
+  font-family: Arial, sans-serif;
+  font-size: 8px; font-weight: 700;
+}
+.tg-status-icons { display: flex; align-items: center; gap: 4px; }
+.tg-status-icons .ti { font-size: 10px; }
+.tg-appbar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 8px 8px 6px;
+  border-bottom: 0.5px solid rgba(15,25,34,0.08);
+  background: #fff;
+  color: #2481CC;
+}
+.tg-back { color: #2481CC; font-size: 17px; }
+.tg-avatar {
+  width: 31px; height: 31px;
+  border-radius: 50%;
+  background: #2AABEE;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.tg-avatar .ti { color: #fff; font-size: 17px; }
+.tg-channel { min-width: 0; flex: 1; }
+.tg-channel-name { overflow: hidden; color: #11151A; font-family: Arial, sans-serif; font-size: 11px; font-weight: 700; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+.tg-channel-meta { margin-top: 2px; color: #7D8790; font-family: Arial, sans-serif; font-size: 9px; line-height: 1; }
+.tg-more { color: #2481CC; font-size: 17px; }
+.telegram-feed {
+  padding: 8px 7px 7px;
+  background:
+    linear-gradient(rgba(213,229,238,0.9), rgba(213,229,238,0.9)),
+    radial-gradient(circle at 20% 30%, rgba(81,125,162,0.2) 0 1px, transparent 1.5px);
+  background-size: auto, 18px 18px;
+}
+.tg-date {
+  width: max-content;
+  margin: 0 auto 6px;
+  padding: 2px 7px;
+  border-radius: 9px;
+  background: rgba(82,120,144,0.62); color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 8px;
+}
+.lesson-message {
+  position: relative;
+  padding: 7px 7px 5px;
+  margin-bottom: 6px;
+  border-radius: 7px 7px 7px 2px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(15,25,34,0.05);
+}
+.lesson-message:last-child { margin-bottom: 0; }
+.lesson-kicker { font-family: Arial, sans-serif; font-size: 8px; font-weight: 700; color: #2AABEE; }
+.lesson-title { margin-top: 2px; font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; line-height: 1.3; }
+.lesson-desc { margin-top: 2px; padding-right: 22px; font-family: Arial, sans-serif; font-size: 8px; line-height: 1.35; color: #434A54; }
+.lesson-action {
+  display: flex; align-items: center; gap: 4px;
+  margin-top: 5px;
+  padding: 4px 5px;
+  border-radius: 4px;
+  background: #EDF6FB;
+  font-family: Arial, sans-serif;
+  font-size: 8px; font-weight: 700;
+  color: #2589BE;
+}
+.lesson-action .ti { font-size: 10px; }
+.tg-message-time { position: absolute; right: 6px; bottom: 4px; color: #93A0A8; font-family: Arial, sans-serif; font-size: 7px; }
+.tg-compose {
+  display: flex; align-items: center; gap: 7px;
+  padding: 7px 8px 15px;
+  background: #fff; color: #91A0AA;
+}
+.tg-compose .ti { font-size: 16px; }
+.tg-compose span { flex: 1; font-family: Arial, sans-serif; font-size: 9px; }
+.how-facts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+.how-fact {
+  padding: 9px 6px;
+  border: 0.5px solid rgba(24,95,165,0.12);
+  border-radius: 9px;
+  background: rgba(255,255,255,0.7);
+  text-align: center;
+}
+.how-fact .ti { font-size: 17px; color: var(--blue); }
+.how-fact-title { margin-top: 4px; font-family: var(--f-display); font-size: 10px; font-weight: 700; line-height: 1.2; }
+.how-fact-desc { margin-top: 3px; font-size: 9px; line-height: 1.3; color: var(--text-secondary); }
+
+/* ПРОГРАМА */
+.card-decor-host { position: relative; overflow: hidden; }
+.card-decor-host > *:not(.card-decor) { position: relative; z-index: 1; }
+.card-decor {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.card-decor .ti {
+  position: absolute;
+  color: var(--sky);
+  opacity: 0.2;
+}
+.program-decor-book { top: 26px; right: 18px; font-size: 46px; transform: rotate(10deg); }
+.program-decor-route { top: 176px; right: 14px; font-size: 32px; transform: rotate(-10deg); }
+.program-block {
+  background: var(--ink);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  color: #fff;
+}
+.program-eyebrow { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.program-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sky); }
+.program-eyebrow-text {
+  font-family: var(--f-display);
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.5);
+}
+.program-block h2 {
+  font-family: var(--f-display);
+  font-size: 30px; font-weight: 800;
+  line-height: 1.1; margin-bottom: 12px;
+  letter-spacing: -0.03em; color: #fff;
+}
+.program-block > p { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 24px; font-family: var(--f-body); }
+.program-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.program-stat {
+  padding: 12px 8px;
+  background: rgba(255,255,255,0.06);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+.program-stat-num { font-family: var(--f-display); font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+.program-stat-label { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 3px; font-family: var(--f-body); }
+.modules-list {
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.modules-list details {
+  --module-accent: var(--sky);
+  --module-accent-rgb: 133,183,235;
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+}
+.modules-list details:nth-child(2) { --module-accent: #9BCF76; --module-accent-rgb: 155,207,118; }
+.modules-list details:nth-child(3) { --module-accent: #F5B971; --module-accent-rgb: 245,185,113; }
+.modules-list details:nth-child(4) { --module-accent: #BDA7F2; --module-accent-rgb: 189,167,242; }
+.modules-list details:last-child { border-bottom: none; }
+.modules-list summary {
+  list-style: none; cursor: pointer;
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  border-left: 2px solid transparent;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.modules-list details[open] summary {
+  background: rgba(var(--module-accent-rgb),0.09);
+  border-left-color: var(--module-accent);
+}
+.modules-list summary::-webkit-details-marker { display: none; }
+.module-num {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(var(--module-accent-rgb),0.17);
+  color: var(--module-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); font-size: 12px; font-weight: 700;
+}
+.module-title { font-family: var(--f-display); font-weight: 600; font-size: 14px; color: #fff; }
+.module-count { font-size: 11px; color: rgba(255,255,255,0.45); font-family: var(--f-body); }
+.modules-list .chev { font-size: 16px; color: rgba(255,255,255,0.4); transition: transform 0.2s ease; }
+.modules-list details[open] .chev { transform: rotate(180deg); }
+.module-body { padding: 0 16px 14px 56px; font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; font-family: var(--f-body); }
+.lesson-list {
+  list-style: none;
+  padding: 0 16px 6px 56px;
+}
+.lesson-list li {
+  padding: 10px 0;
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.72);
+  font-size: 12px;
+  line-height: 1.45;
+  font-family: var(--f-body);
+}
+.lesson-list li:last-child { border-bottom: none; }
+.lesson-list strong {
+  color: var(--module-accent);
+  font-family: var(--f-display);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* СПІКЕР */
+.speaker-decor-briefcase { top: 28px; right: 3px; font-size: 42px; transform: rotate(8deg); }
+.speaker-head { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.speaker-photo {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--surface-2) center/cover no-repeat;
+  flex-shrink: 0;
+  border: 0.5px solid var(--border);
+}
+.speaker-name { font-family: var(--f-display); font-size: 16px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 4px; }
+.speaker-role { font-size: 12px; color: var(--text-secondary); line-height: 1.45; font-family: var(--f-body); }
+.speaker-brands { margin-bottom: 20px; }
+.speaker-brands-label {
+  margin-bottom: 7px;
+  font-family: var(--f-display);
+  font-size: 9px; font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.speaker-brands-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+.speaker-brand {
+  height: 46px;
+  padding: 8px;
+  border: 0.5px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+}
+.speaker-brand img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.speaker-brand-aima img { width: 92%; }
+.speaker-brand-znaesh img { width: 94%; }
+.speaker-brand-tred img { width: 84%; }
+.speaker-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.speaker-stat {
+  padding: 12px 10px;
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+.speaker-stat-num { font-family: var(--f-display); font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+.speaker-stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; font-family: var(--f-body); }
+.speaker-quote {
+  position: relative;
+  padding: 18px 16px;
+  margin-bottom: 14px;
+  border-left: 2px solid var(--blue);
+  background: var(--blue-light);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.speaker-quote::before {
+  content: "“";
+  position: absolute;
+  top: -8px; left: 12px;
+  color: rgba(24,95,165,0.2);
+  font-family: Georgia, serif;
+  font-size: 66px;
+  line-height: 1;
+}
+.speaker-quote::after {
+  content: "”";
+  position: absolute;
+  bottom: -28px; right: 12px;
+  color: rgba(24,95,165,0.2);
+  font-family: Georgia, serif;
+  font-size: 66px;
+  line-height: 1;
+}
+.speaker-quote p { position: relative; font-size: 14px; font-style: italic; line-height: 1.65; color: var(--text); margin-bottom: 10px; font-family: var(--f-body); }
+.speaker-quote p:last-child { margin-bottom: 0; }
+.speaker-instagram {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 14px;
+  border: 1px solid rgba(193,53,132,0.24);
+  border-radius: var(--radius-md);
+  background: linear-gradient(115deg, #833AB4 0%, #C13584 34%, #E1306C 58%, #F77737 100%);
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--f-display);
+  font-size: 13px; font-weight: 700;
+  transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  animation: cta-red-pulse 2.35s ease-in-out infinite;
+}
+.speaker-instagram:hover { filter: brightness(1.06); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(226,75,74,0.28); animation-play-state: paused; }
+.speaker-instagram .ti-brand-instagram { font-size: 18px; }
+.speaker-instagram .ti-arrow-up-right { font-size: 16px; }
+
+/* КЕЙСИ */
+.cases-decor-store { top: 30px; right: 2px; font-size: 42px; transform: rotate(-6deg); }
+.cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.case-card {
+  display: block;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.case-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15,25,34,0.08); }
+.case-image { aspect-ratio: 1/1; background: var(--surface-2) center/cover no-repeat; }
+.case-info { position: relative; padding: 10px 30px 10px 12px; }
+.case-name { font-family: var(--f-display); font-size: 13px; font-weight: 700; }
+.case-cat { font-size: 11px; color: var(--text-secondary); font-family: var(--f-body); margin-top: 1px; }
+.case-link-icon { position: absolute; top: 12px; right: 10px; color: var(--blue); font-size: 15px; }
+
+/* ВІДГУКИ */
+.reviews-decor-quote { top: 30px; right: 2px; font-size: 44px; transform: rotate(8deg); }
+.review {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  background: var(--surface);
+}
+.review:last-child { margin-bottom: 0; }
+.review-head { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+.review-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--blue-light);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); font-size: 11px; font-weight: 700;
+  color: var(--blue);
+  flex-shrink: 0;
+}
+.review-name { font-family: var(--f-display); font-size: 13px; font-weight: 700; }
+.review-meta { font-size: 11px; color: var(--text-secondary); font-family: var(--f-body); }
+.review-stars { margin-left: auto; display: flex; gap: 1px; color: #F5A524; }
+.review-stars .ti { font-size: 13px; }
+.review p { font-size: 13px; line-height: 1.6; color: var(--text-secondary); font-family: var(--f-body); }
+.review-proof {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin-top: 12px;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+}
+.review-proof img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: top center;
+}
+.review-proof-wide img { height: auto; max-height: 220px; object-fit: contain; }
+.review-proof span {
+  position: absolute;
+  right: 8px; bottom: 8px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: rgba(15,25,34,0.82);
+  color: #fff;
+  font-family: var(--f-display);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* БОНУСИ */
+.bonuses-decor-gift { top: 30px; right: 2px; font-size: 42px; transform: rotate(-8deg); }
+.bonuses-intro {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(99,153,34,0.2);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #F0F8E8 0%, #FBFDF9 100%);
+}
+.bonuses-intro-icon {
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fff; color: var(--green);
+  box-shadow: 0 4px 12px rgba(99,153,34,0.12);
+}
+.bonuses-intro-icon .ti { font-size: 22px; }
+.bonuses-intro-title { font-family: var(--f-display); font-size: 13px; font-weight: 800; color: var(--text); }
+.bonuses-intro-text { margin-top: 2px; font-size: 11px; color: var(--text-secondary); line-height: 1.45; }
+.bonuses-list {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+}
+.bonus-row { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-bottom: 0.5px solid var(--border); }
+.bonus-row:last-child { border-bottom: none; }
+.bonus-icon {
+  width: 31px; height: 31px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: var(--blue-light); color: var(--blue);
+}
+.bonus-icon .ti { font-size: 16px; }
+.bonus-copy { min-width: 0; flex: 1; }
+.bonus-title { font-family: var(--f-display); font-size: 12px; font-weight: 700; line-height: 1.3; }
+.bonus-type { margin-top: 2px; font-size: 10px; color: var(--text-tertiary); line-height: 1.25; }
+.bonus-free {
+  flex-shrink: 0;
+  padding: 3px 6px;
+  border-radius: 5px;
+  background: #EEF7E8; color: var(--green);
+  font-family: var(--f-display);
+  font-size: 9px; font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ГАРАНТІЯ */
+.guarantee-decor-shield { top: 10px; right: 12px; font-size: 48px; transform: rotate(10deg); color: #D8A84E !important; opacity: 0.22 !important; }
+.guarantee {
+  background: linear-gradient(135deg, #211D13 0%, var(--ink) 78%);
+  border: 1px solid rgba(216,168,78,0.48);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  color: #fff;
+  box-shadow: 0 10px 26px rgba(137,99,24,0.14), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.guarantee-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+.guarantee-icon {
+  flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(216,168,78,0.12);
+  border: 1px solid rgba(216,168,78,0.36);
+  display: flex; align-items: center; justify-content: center;
+}
+.guarantee-icon .ti { font-size: 22px; color: #F2CE78; }
+.guarantee-kicker { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; color: #F2CE78; font-family: var(--f-display); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.guarantee-kicker .ti { font-size: 13px; }
+.guarantee-title { font-family: var(--f-display); font-weight: 700; font-size: 15px; margin-bottom: 5px; color: #FFF7E2; letter-spacing: -0.01em; }
+.guarantee-desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.55; font-family: var(--f-body); }
+.guarantee-conditions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.guarantee-condition {
+  padding: 12px 8px;
+  background: rgba(216,168,78,0.06);
+  border: 0.5px solid rgba(216,168,78,0.24);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+.guarantee-condition .ti { font-size: 18px; color: #F2CE78; }
+.guarantee-condition .text { font-family: var(--f-display); font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.76); margin-top: 6px; line-height: 1.3; }
+
+/* CTA ФІНАЛЬНИЙ */
+.cta-decor-tag { top: 12px; right: 14px; font-size: 44px; transform: rotate(10deg); }
+.cta-decor-bolt { bottom: 14px; left: 12px; font-size: 30px; transform: rotate(-10deg); }
+.cta-final {
+  background: var(--ink);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  color: #fff;
+}
+.cta-final-mid { background: linear-gradient(145deg, #132330 0%, var(--ink) 100%); }
+.cta-live { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.cta-live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--danger); animation: pulse-dot 1.6s ease-in-out infinite; }
+.cta-live-text { font-family: var(--f-display); font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.countdown { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 22px; text-align: center; }
+.countdown-cell {
+  padding: 14px 4px;
+  background: rgba(226,75,74,0.12);
+  border: 0.5px solid rgba(226,75,74,0.42);
+  border-radius: var(--radius-md);
+}
+.countdown-num { font-family: var(--f-display); font-weight: 800; font-size: 26px; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: #FF7776; }
+.countdown-label { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 6px; font-family: var(--f-body); }
+.cta-final h2 { font-family: var(--f-display); font-size: 22px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 8px; color: #fff; }
+.cta-final > p { font-size: 14px; line-height: 1.55; margin-bottom: 20px; color: rgba(255,255,255,0.6); font-family: var(--f-body); }
+.cta-spec { margin-bottom: 20px; }
+.cta-spec-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 0.5px solid rgba(255,255,255,0.08); }
+.cta-spec-row:last-child { border-bottom: none; }
+.cta-spec-row .ti { font-size: 18px; color: rgba(255,255,255,0.4); width: 20px; flex-shrink: 0; }
+.cta-spec-label { flex: 1; font-size: 13px; color: rgba(255,255,255,0.55); font-family: var(--f-body); }
+.cta-spec-value { font-family: var(--f-display); font-size: 13px; font-weight: 600; }
+.price-block { display: flex; align-items: baseline; gap: 7px; }
+.price-new { font-family: var(--f-display); font-size: 16px; font-weight: 800; letter-spacing: -0.02em; }
+.price-old-dark { font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: line-through; }
+.discount-badge {
+  font-family: var(--f-display);
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px;
+  background: var(--danger); color: #fff;
+  border-radius: 5px;
+}
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(15,25,34,0.6);
+  z-index: 100;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 24px 20px 40px;
+  width: 100%;
+  max-width: 440px;
+}
+.modal-handle { width: 36px; height: 4px; background: var(--border-strong); border-radius: 99px; margin: 0 auto 20px; }
+.modal h3 { font-family: var(--f-display); font-size: 20px; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 6px; }
+.modal p { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; font-family: var(--f-body); }
+.form-field { margin-bottom: 12px; }
+.form-label { font-family: var(--f-display); font-size: 12px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 5px; }
+.form-input {
+  width: 100%; padding: 12px 14px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-size: 15px; font-family: var(--f-body);
+  color: var(--text); background: var(--surface);
+  outline: none;
+}
+.form-input:focus { border-color: var(--blue); }
+.btn-submit {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, #F45B5A 0%, #D9363E 100%); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--f-display); font-weight: 700; font-size: 15px;
+  letter-spacing: -0.01em; cursor: pointer; margin-top: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  animation: cta-red-pulse 2.35s ease-in-out infinite;
+}
+.btn-submit:hover:not(:disabled) { transform: translateY(-2px); background: linear-gradient(135deg, #FB6A68 0%, #C92F39 100%); box-shadow: 0 8px 20px rgba(226,75,74,0.28); }
+.btn-cta:hover, .menu-cta:hover, .btn-submit:hover:not(:disabled) { animation-play-state: paused; }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.form-note { font-size: 12px; color: var(--text-tertiary); text-align: center; margin-top: 10px; font-family: var(--f-body); }
+.form-success { text-align: center; padding: 20px 0; display: none; }
+.form-success .ti { font-size: 40px; color: var(--green); }
+.form-success h4 { font-family: var(--f-display); font-size: 18px; font-weight: 800; margin: 10px 0 6px; }
+.form-success p { font-size: 14px; color: var(--text-secondary); }
+
+/* FAQ */
+.faq-decor-help { top: 28px; right: 2px; font-size: 42px; transform: rotate(8deg); }
+.faq-list {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+}
+.faq-list details { border-bottom: 0.5px solid var(--border); }
+.faq-list details:last-child { border-bottom: none; }
+.faq-list summary {
+  list-style: none; cursor: pointer;
+  padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.faq-list summary::-webkit-details-marker { display: none; }
+.faq-question { font-family: var(--f-display); font-weight: 600; font-size: 14px; flex: 1; }
+.faq-list .chev { font-size: 16px; color: var(--text-tertiary); transition: transform 0.2s ease; flex-shrink: 0; }
+.faq-list details[open] .chev { transform: rotate(180deg); }
+.faq-answer { padding: 0 16px 14px; font-size: 13px; color: var(--text-secondary); line-height: 1.65; font-family: var(--f-body); }
+
+/* FOOTER */
+.footer-decor-sparkles { top: 14px; right: 14px; font-size: 34px; transform: rotate(10deg); }
+.site-footer {
+  background: var(--ink);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin: 0 0 16px;
+  color: #fff;
+}
+.footer-brand { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+.site-footer p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.6); margin-bottom: 18px; }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding-top: 14px;
+  border-top: 0.5px solid rgba(255,255,255,0.1);
+  font-family: var(--f-display);
+  font-size: 10px; font-weight: 600;
+  color: rgba(255,255,255,0.4);
+}
+body.reveal-ready .reveal-section > *:not(.hero-decor):not(.section-decor):not(.card-decor) {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.62s ease, transform 0.62s ease;
+}
+body.reveal-ready .reveal-section.is-visible > *:not(.hero-decor):not(.section-decor):not(.card-decor) { opacity: 1; transform: translateY(0); }
+body.reveal-ready .reveal-section.is-visible > *:nth-child(2) { transition-delay: 0.04s; }
+body.reveal-ready .reveal-section.is-visible > *:nth-child(3) { transition-delay: 0.08s; }
+body.reveal-ready .reveal-section.is-visible > *:nth-child(4) { transition-delay: 0.12s; }
+body.reveal-ready .reveal-section.is-visible > *:nth-child(5) { transition-delay: 0.16s; }
+body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-delay: 0.2s; }
+
+@media (min-width: 700px) {
+  .container { max-width: 780px; padding: 0 24px; }
+  section { padding: 20px 0; }
+  .hero { padding: 32px; margin: 24px 0; }
+  .hero h1 { font-size: 42px; }
+  .hero > p { max-width: 610px; font-size: 16px; }
+  .hero-photo { max-width: 650px; }
+  h2.section-title { font-size: 30px; }
+  .audience-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+  .audience-item { padding: 13px 0; }
+  .results-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .result-card { padding: 18px; }
+  .how-card { display: grid; grid-template-columns: 250px 1fr; align-items: center; gap: 24px; padding: 24px; }
+  .phone-mockup { width: 242px; margin: 0; }
+  .how-facts { grid-template-columns: 1fr; gap: 10px; }
+  .how-fact { padding: 15px 8px; }
+  .how-fact .ti { font-size: 22px; }
+  .how-fact-title { font-size: 12px; }
+  .how-fact-desc { font-size: 11px; }
+  .program-block, .cta-final, .guarantee, .site-footer { padding: 30px; }
+  .program-block h2 { font-size: 36px; }
+  .cases-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .reviews-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: 12px; }
+  .review { height: 100%; padding: 15px; margin-bottom: 0; }
+  .review-head { align-items: flex-start; flex-wrap: wrap; }
+  .review-stars { width: 100%; margin-left: 46px; }
+  .review-proof img, .review-proof-wide img { height: 180px; max-height: none; object-fit: cover; object-position: top center; }
+  .bonuses-list { display: grid; grid-template-columns: 1fr 1fr; }
+  .bonus-row:nth-child(odd) { border-right: 0.5px solid var(--border); }
+  .bonus-row:nth-last-child(-n+2) { border-bottom: none; }
+  #quick-enrollment .cta-final, #enrollment .cta-final { max-width: 720px; margin: 0 auto; }
+  .modal-overlay { align-items: center; padding: 24px; }
+  .modal { border-radius: var(--radius-lg); padding: 28px; }
+}
+
+@media (min-width: 1080px) {
+  .container { max-width: 1180px; padding: 0 28px; }
+  section { padding: 28px 0; }
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(470px, 0.96fr);
+    column-gap: 44px;
+    padding: 40px;
+    margin: 28px 0;
+  }
+  .hero-top { grid-column: 1 / -1; margin-bottom: 14px; }
+  .hero h1 { grid-column: 1; grid-row: 2; align-self: end; margin-top: 18px; font-size: 54px; }
+  .hero > p { grid-column: 1; grid-row: 3; max-width: 540px; margin-bottom: 18px; font-size: 17px; }
+  .hero-photo { grid-column: 2; grid-row: 2 / span 4; align-self: center; max-width: none; margin-bottom: 0; }
+  .hero .spec-card { grid-column: 1; grid-row: 4; margin-bottom: 16px; }
+  .hero > .btn-cta { grid-column: 1; grid-row: 5; }
+  .logo-name { max-width: none; font-size: 14px; }
+  .brand-avatar { width: 36px; height: 36px; }
+  h2.section-title { font-size: 36px; }
+  .audience-list { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .audience-item {
+    padding: 16px;
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
+  .results-grid { gap: 14px; }
+  .result-card { min-height: 118px; padding: 20px; }
+  .result-card .ti { font-size: 25px; }
+  .result-card .text { font-size: 15px; }
+  .program-block { padding: 40px; }
+  .program-block h2 { font-size: 44px; }
+  .program-block > p { max-width: 720px; font-size: 16px; }
+  .program-stats { max-width: 520px; }
+  .modules-list summary { padding: 17px 20px; }
+  .lesson-list { padding: 0 20px 10px 64px; }
+  .lesson-list li { padding: 12px 0; font-size: 14px; }
+  .how-card { grid-template-columns: 290px 1fr; gap: 44px; padding: 34px 52px; }
+  .phone-mockup { width: 268px; }
+  .phone-screen { min-height: 440px; }
+  .how-facts { gap: 14px; }
+  .how-fact { padding: 19px 12px; }
+  .how-fact .ti { font-size: 26px; }
+  .how-fact-title { font-size: 14px; }
+  .how-fact-desc { font-size: 12px; }
+  .cases-grid { gap: 16px; }
+  .case-info { padding: 13px 34px 13px 14px; }
+  .case-name { font-size: 15px; }
+  .case-cat { font-size: 12px; }
+  .review { padding: 18px; }
+  .review p { min-height: 84px; font-size: 14px; }
+  .review-proof img, .review-proof-wide img { height: 230px; }
+  .bonuses-intro { padding: 18px; }
+  .bonus-row { padding: 14px; }
+  .guarantee { padding: 34px; }
+  .guarantee-title { font-size: 19px; }
+  .guarantee-desc { font-size: 15px; }
+  #quick-enrollment .cta-final, #enrollment .cta-final { max-width: 800px; padding: 34px; }
+  .cta-final h2 { font-size: 28px; }
+  .menu-panel { width: 380px; padding: 24px; }
+  .site-footer { padding: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-decor" aria-hidden="true">
+      <i class="ti ti-package hero-decor-package"></i>
+      <i class="ti ti-chart-line hero-decor-chart"></i>
+      <i class="ti ti-sparkles hero-decor-sparkle"></i>
+    </div>
+    <div class="hero-top">
+      <div class="logo">
+        <div class="brand-avatar"><img src="avatar.png" alt="Анатолій Маліновський" onerror="this.style.display='none'"><span>АМ</span></div>
+        <span class="logo-name">Курс Анатолія Маліновського</span>
+      </div>
+      <button class="btn-menu" type="button" aria-label="Відкрити меню" aria-controls="site-menu" aria-expanded="false" onclick="openMenu()"><i class="ti ti-menu-2"></i></button>
+    </div>
+    <h1>Запусти свій<br>інтернет-магазин<br><span>за 21 урок</span> з нуля</h1>
+    <p>Практичний курс, де ти крок за кроком створиш свій інтернет-магазин.</p>
+    <div class="hero-photo" style="background-image: url('photo-v2.png');">
+      <div class="hero-badge"><i class="ti ti-player-play-filled"></i> Онлайн-курс</div>
+      <div class="hero-screen-carousel" aria-hidden="true">
+        <div class="hero-screen-plane">
+          <div class="hero-screen-slide" style="background-image: url('hero-screen-gardens.png');"></div>
+          <div class="hero-screen-slide" style="background-image: url('hero-screen-liaguminy.png');"></div>
+          <div class="hero-screen-slide" style="background-image: url('hero-screen-protennis.png');"></div>
+          <div class="hero-screen-slide" style="background-image: url('hero-screen-virefix.png');"></div>
+          <div class="hero-screen-slide" style="background-image: url('hero-screen-lukko.png');"></div>
+        </div>
+      </div>
+    </div>
+    <div class="spec-card">
+      <div class="spec-grid">
+        <div>
+          <div>Спікер</div>
+          <div style="font-size:12px; font-family:var(--f-display); font-weight:600; line-height:1.3;">Анатолій Маліновський</div>
+        </div>
+        <div>
+          <div>Ціна</div>
+          <div style="font-family:var(--f-display); font-size:15px; font-weight:800; letter-spacing:-0.02em;">490 ₴</div>
+          <div class="hero-price-meta"><span class="price-old">3490 ₴</span><span class="hero-discount">−86%</span></div>
+        </div>
+        <div>
+          <div>Формат</div>
+          <div style="font-family:var(--f-display); font-size:12px; font-weight:600; line-height:1.3;">21 урок<br><span style="font-family:var(--f-body); font-weight:400; color:rgba(255,255,255,0.55); font-size:11px;">по 5–10 хв</span></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-cta btn-cta-primary" onclick="openModal()">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+  </section>
+
+  <!-- ДЛЯ КОГО -->
+  <section class="audience-section" id="audience">
+    <div class="section-decor" aria-hidden="true">
+      <i class="ti ti-user-circle audience-decor-user"></i>
+      <i class="ti ti-trending-up audience-decor-growth"></i>
+    </div>
+    <div class="label">Для кого</div>
+    <h2 class="section-title">Цей курс для тебе,<br>якщо ти</h2>
+    <div class="audience-list">
+      <div class="audience-item"><div class="audience-num">🚀</div><div><div class="audience-title">Новачок</div><div class="audience-desc">Хочеш запустити свій бізнес з нуля.</div></div></div>
+      <div class="audience-item"><div class="audience-num">📱</div><div><div class="audience-title">Продаєш в Instagram</div><div class="audience-desc">Час масштабуватися у повноцінний магазин.</div></div></div>
+      <div class="audience-item"><div class="audience-num">💡</div><div><div class="audience-title">Є ідея, але немає дії</div><div class="audience-desc">Постійно відкладаєш запуск.</div></div></div>
+      <div class="audience-item"><div class="audience-num">🛠️</div><div><div class="audience-title">Вже пробував</div><div class="audience-desc">Запускав, але щось пішло не так.</div></div></div>
+      <div class="audience-item"><div class="audience-num">🏪</div><div><div class="audience-title">Малий бізнес або офлайн</div><div class="audience-desc">Готовий продавати онлайн.</div></div></div>
+      <div class="audience-item"><div class="audience-num">💸</div><div><div class="audience-title">Шукаєш додатковий дохід</div><div class="audience-desc">Хочеш створити нове джерело.</div></div></div>
+    </div>
+  </section>
+
+  <!-- РЕЗУЛЬТАТИ -->
+  <section class="decorated-section results-section" id="results">
+    <div class="section-decor" aria-hidden="true">
+      <i class="ti ti-target-arrow results-decor-target"></i>
+    </div>
+    <div class="label">Результати</div>
+    <h2 class="section-title">Що ти зробиш<br>за 21 урок</h2>
+    <div class="results-grid">
+      <div class="result-card"><i class="ti ti-building-store"></i><div class="text">Запустиш магазин з нуля</div></div>
+      <div class="result-card"><i class="ti ti-package"></i><div class="text">Оформиш товари правильно</div></div>
+      <div class="result-card"><i class="ti ti-credit-card"></i><div class="text">Налаштуєш оплату і доставку</div></div>
+      <div class="result-card"><i class="ti ti-users"></i><div class="text">Залучиш перших клієнтів</div></div>
+      <div class="result-card"><i class="ti ti-chart-arrows"></i><div class="text">Зробиш систему масштабованою</div></div>
+      <div class="result-card"><i class="ti ti-target-arrow"></i><div class="text">Отримаєш план продажів</div></div>
+    </div>
+  </section>
+
+  <!-- ЯК ПРОХОДИТЬ -->
+  <section class="decorated-section how-section" id="how">
+    <div class="section-decor" aria-hidden="true">
+      <i class="ti ti-brand-telegram how-decor-telegram"></i>
+    </div>
+    <div class="label">Як проходить</div>
+    <h2 class="section-title">Навчаєшся прямо<br>в Telegram</h2>
+    <div class="how-card">
+      <div class="phone-mockup">
+        <div class="phone-island"></div>
+        <div class="phone-screen">
+          <div class="tg-statusbar">
+            <span>9:41</span>
+            <div class="tg-status-icons"><i class="ti ti-signal-4g"></i><i class="ti ti-wifi"></i><i class="ti ti-battery-4"></i></div>
+          </div>
+          <div class="tg-appbar">
+            <i class="ti ti-arrow-left tg-back"></i>
+            <div class="tg-avatar"><i class="ti ti-brand-telegram"></i></div>
+            <div class="tg-channel">
+              <div class="tg-channel-name">Інтернет-магазин за 21 урок</div>
+              <div class="tg-channel-meta">приватний канал</div>
+            </div>
+            <i class="ti ti-dots-vertical tg-more"></i>
+          </div>
+          <div class="telegram-feed">
+            <div class="tg-date">1 червня</div>
+            <div class="lesson-message">
+              <div class="lesson-kicker">Інтернет-магазин за 21 урок</div>
+              <div class="lesson-title">Урок 01. Про автора курсу</div>
+              <div class="lesson-desc">Організаційні моменти та план навчання.</div>
+              <div class="lesson-action"><i class="ti ti-player-play-filled"></i> Дивитися · 7 хв</div>
+              <span class="tg-message-time">09:42</span>
+            </div>
+            <div class="lesson-message">
+              <div class="lesson-kicker">Інтернет-магазин за 21 урок</div>
+              <div class="lesson-title">Урок 02. Для якого бізнесу підходить магазин</div>
+              <div class="lesson-desc">Розбираємо формати та обираємо свій напрям.</div>
+              <div class="lesson-action"><i class="ti ti-player-play-filled"></i> Дивитися · 9 хв</div>
+              <span class="tg-message-time">09:48</span>
+            </div>
+            <div class="lesson-message">
+              <div class="lesson-kicker">Бонусні матеріали</div>
+              <div class="lesson-title">Чек-лист запуску магазину</div>
+              <div class="lesson-desc">Збережи файл і відмічай виконані кроки.</div>
+              <span class="tg-message-time">09:55</span>
+            </div>
+          </div>
+          <div class="tg-compose"><i class="ti ti-paperclip"></i><span>Повідомлення</span><i class="ti ti-microphone"></i></div>
+        </div>
+        <div class="phone-home"></div>
+      </div>
+      <div class="how-facts">
+        <div class="how-fact"><i class="ti ti-bolt"></i><div class="how-fact-title">Одразу</div><div class="how-fact-desc">після оплати</div></div>
+        <div class="how-fact"><i class="ti ti-clock"></i><div class="how-fact-title">5–10 хв</div><div class="how-fact-desc">на урок</div></div>
+        <div class="how-fact"><i class="ti ti-infinity"></i><div class="how-fact-title">Назавжди</div><div class="how-fact-desc">доступ до курсу</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПРОГРАМА -->
+  <section id="program">
+    <div class="program-block card-decor-host">
+      <div class="card-decor" aria-hidden="true">
+        <i class="ti ti-book-2 program-decor-book"></i>
+        <i class="ti ti-route program-decor-route"></i>
+      </div>
+      <div class="program-eyebrow"><div class="program-dot"></div><div class="program-eyebrow-text">Серце курсу</div></div>
+      <h2>21 урок<br>у 4 модулях</h2>
+      <p>Від першого входу в Aima до перших реальних продажів. Кожен урок — конкретна дія, яку ти зробиш одразу.</p>
+      <div class="program-stats">
+        <div class="program-stat"><div class="program-stat-num">4</div><div class="program-stat-label">модулі</div></div>
+        <div class="program-stat"><div class="program-stat-num">21</div><div class="program-stat-label">урок</div></div>
+        <div class="program-stat"><div class="program-stat-num">~3 год</div><div class="program-stat-label">матеріалу</div></div>
+      </div>
+      <div class="modules-list">
+        <details open>
+          <summary><div class="module-num">01</div><div style="flex:1;"><div class="module-title">Вступна частина</div><div class="module-count">5 уроків</div></div><i class="ti ti-chevron-down chev"></i></summary>
+          <ol class="lesson-list">
+            <li><strong>Урок 1.</strong> Про автора курсу та організаційні моменти</li>
+            <li><strong>Урок 2.</strong> Для якого бізнесу підходить інтернет-магазин</li>
+            <li><strong>Урок 3.</strong> Які товари реально варто продавати початківцю</li>
+            <li><strong>Урок 4.</strong> Що робити, якщо в мене немає ні товару, ні досвіду</li>
+            <li><strong>Урок 5.</strong> Про інтернет-магазин простими словами</li>
+          </ol>
+        </details>
+        <details>
+          <summary><div class="module-num">02</div><div style="flex:1;"><div class="module-title">Створюємо і налаштовуємо власний інтернет-магазин</div><div class="module-count">10 уроків</div></div><i class="ti ti-chevron-down chev"></i></summary>
+          <ol class="lesson-list">
+            <li><strong>Урок 6.</strong> Процес створення інтернет-магазину</li>
+            <li><strong>Урок 7.</strong> Огляд платформи Aima</li>
+            <li><strong>Урок 8.</strong> Логотип і фавікон без дизайнерів</li>
+            <li><strong>Урок 9.</strong> Додавання товарів і категорій</li>
+            <li><strong>Урок 10.</strong> Банери і базовий візуал</li>
+            <li><strong>Урок 11.</strong> Налаштування доставки і оплати</li>
+            <li><strong>Урок 12.</strong> Налаштування головної сторінки та ін.</li>
+            <li><strong>Урок 13.</strong> Підключення власного домену</li>
+            <li><strong>Урок 14.</strong> Аналітика. Для чого потрібна та як поставити</li>
+            <li><strong>Урок 15.</strong> Типові помилки початківців на старті</li>
+          </ol>
+        </details>
+        <details>
+          <summary><div class="module-num">03</div><div style="flex:1;"><div class="module-title">Створюємо трафік та отримуємо перші продажі</div><div class="module-count">3 уроки</div></div><i class="ti ti-chevron-down chev"></i></summary>
+          <ol class="lesson-list">
+            <li><strong>Урок 16.</strong> Як отримати перші продажі безкоштовно</li>
+            <li><strong>Урок 17.</strong> Платні джерела клієнтів і контроль реклами</li>
+            <li><strong>Урок 18.</strong> Обробка замовлень: як не втрачати клієнтів</li>
+          </ol>
+        </details>
+        <details>
+          <summary><div class="module-num">04</div><div style="flex:1;"><div class="module-title">Підсумки та рекомендації</div><div class="module-count">3 уроки</div></div><i class="ti ti-chevron-down chev"></i></summary>
+          <ol class="lesson-list">
+            <li><strong>Урок 19.</strong> Чому одні магазини продають, а інші ні</li>
+            <li><strong>Урок 20.</strong> Огляди інтернет-магазинів</li>
+            <li><strong>Урок 21.</strong> Підсумки запуску. Розмова про подальший рух</li>
+          </ol>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA ПІСЛЯ ПРОГРАМИ -->
+  <section id="quick-enrollment">
+    <div class="cta-final cta-final-mid card-decor-host">
+      <div class="card-decor" aria-hidden="true">
+        <i class="ti ti-tag cta-decor-tag"></i>
+        <i class="ti ti-bolt cta-decor-bolt"></i>
+      </div>
+      <div class="cta-live"><div class="cta-live-dot"></div><div class="cta-live-text">Ціна 490 ₴ діє ще</div></div>
+      <div class="countdown">
+        <div class="countdown-cell"><div class="countdown-num" data-countdown="hr">00</div><div class="countdown-label">годин</div></div>
+        <div class="countdown-cell"><div class="countdown-num" data-countdown="min">10</div><div class="countdown-label">хвилин</div></div>
+        <div class="countdown-cell"><div class="countdown-num" data-countdown="sec">00</div><div class="countdown-label">секунд</div></div>
+      </div>
+      <h2>Готовий запустити свій магазин?</h2>
+      <p>Переходь до практики одразу після оплати й проходь уроки у власному темпі.</p>
+      <div class="cta-spec">
+        <div class="cta-spec-row"><i class="ti ti-school"></i><div class="cta-spec-label">Старт</div><div class="cta-spec-value">Одразу після оплати</div></div>
+        <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">490 ₴</span><span class="price-old-dark">3490 ₴</span><span class="discount-badge">−86%</span></div></div>
+        <div class="cta-spec-row"><i class="ti ti-brand-telegram"></i><div class="cta-spec-label">Доступ</div><div class="cta-spec-value">У Telegram, назавжди</div></div>
+      </div>
+      <button class="btn-cta btn-cta-final" onclick="openModal()">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </section>
+
+  <!-- СПІКЕР -->
+  <section class="decorated-section speaker-section" id="speaker">
+    <div class="section-decor" aria-hidden="true">
+      <i class="ti ti-briefcase-2 speaker-decor-briefcase"></i>
+    </div>
+    <div class="label">Спікер</div>
+    <div class="speaker-head">
+      <div class="speaker-photo" style="background-image: url('avatar.png');"></div>
+      <div>
+        <div class="speaker-name">Анатолій Маліновський</div>
+        <div class="speaker-role">Co-founder & CEO Aima<br>Підприємець і засновник digital-проєктів</div>
+      </div>
+    </div>
+    <div class="speaker-brands">
+      <div class="speaker-brands-label">Проєкти</div>
+      <div class="speaker-brands-grid">
+        <div class="speaker-brand speaker-brand-aima"><img src="brand-aima.png?v=2" alt="Aima"></div>
+        <div class="speaker-brand speaker-brand-znaesh"><img src="brand-znaesh.svg" alt="Знаєш Agency"></div>
+        <div class="speaker-brand speaker-brand-tred"><img src="brand-tred.png" alt="Tred"></div>
+      </div>
+    </div>
+    <div class="speaker-quote">
+      <p>Я пройшов шлях від запуску бізнесів з нуля до побудови систем, які приносять стабільний дохід.</p>
+      <p>У цьому курсі показую не теорію, а конкретні кроки, які використовую для запуску інтернет-магазинів своїх клієнтів.</p>
+      <p>Моє завдання — довести тебе до результату, навіть якщо ти починаєш з повного нуля.</p>
+    </div>
+    <div class="speaker-stats">
+      <div class="speaker-stat"><div class="speaker-stat-num">14+</div><div class="speaker-stat-label">років у бізнесі</div></div>
+      <div class="speaker-stat"><div class="speaker-stat-num">20+</div><div class="speaker-stat-label">бізнесів з нуля</div></div>
+      <div class="speaker-stat"><div class="speaker-stat-num">$10М+</div><div class="speaker-stat-label">оборот клієнтів</div></div>
+    </div>
+    <a class="speaker-instagram" href="https://www.instagram.com/malinovskyi_anatolii" target="_blank" rel="noopener noreferrer">
+      <i class="ti ti-brand-instagram"></i>
+      <span>Підписатись в Instagram</span>
+      <i class="ti ti-arrow-up-right"></i>
+    </a>
+  </section>
+
+  <!-- КЕЙСИ -->
+  <section class="decorated-section cases-section" id="cases">
+    <div class="section-decor" aria-hidden="true">
+      <i class="ti ti-building-store cases-decor-store"></i>
+    </div>
+    <div class="label">Кейси</div>
+    <h2 class="section-title" style="margin-bottom: 6px;">Магазини на Aima</h2>
+    <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 20px; font-family:var(--f-body);">Реальні приклади магазинів, створених на платформі.</p>
+    <div class="cases-grid">
+      <a class="case-card" href="https://liaguminy.aima.site/" target="_blank" rel="noopener noreferrer"><div class="case-image" style="background-image: url('case1.jpg');"></div><div class="case-info"><div class="case-name">Лягуміни</div><div class="case-cat">Горіхи та сухофрукти</div><i class="ti ti-arrow-up-right case-link-icon"></i></div></a>
+      <a class="case-card" href="https://protennis.com.ua/" target="_blank" rel="noopener noreferrer"><div class="case-image" style="background-image: url('case2.jpg');"></div><div class="case-info"><div class="case-name">Pro Tennis Kyiv</div><div class="case-cat">Товари для тенісу</div><i class="ti ti-arrow-up-right case-link-icon"></i></div></a>
+      <a class="case-card" href="https://gardens.dp.ua/" target="_blank" rel="noopener noreferrer"><div class="case-image" style="background-image: url('case3.jpg');"></div><div class="case-info"><div class="case-name">Green Garden</div><div class="case-cat">Все для саду</div><i class="ti ti-arrow-up-right case-link-icon"></i></div></a>
+      <a class="case-card" href="https://virefix.online/" target="_blank" rel="noopener noreferrer"><div class="case-image" style="background-image: url('case4.jpg');"></div><div class="case-info"><div class="case-name">Virefix</div><div class="case-cat">Риболовля та кемпінг</div><i class="ti ti-arrow-up-right case-link-icon"></i></div></a>
+      <a class="case-card" href="https://lukko.com.ua/" target="_blank" rel="noopener noreferrer"><div class="case-image" style="background-image: url('case5.jpg');"></div><div class="case-info"><div class="case-name">LUKKO</div><div class="case-cat">Іграшки та розвиток</div><i class="ti ti-arrow-up-right case-link-icon"></i></div></a>
+      <a class="case-card" href="https://famibud.com.ua/" target="_blank" rel="noopener noreferrer"><div class="case-image" style="background-image: url('case6.jpg');"></div><div class="case-info"><div class="case-name">FAMIBUD</div><div class="case-cat">Товари для ремонту</div><i class="ti ti-arrow-up-right case-link-icon"></i></div></a>
+    </div>
+  </section>
+
+  <!-- ВІДГУКИ -->
+  <section class="decorated-section reviews-section" id="reviews">
+    <div class="section-decor" aria-hidden="true">
+      <i class="ti ti-quote reviews-decor-quote"></i>
+    </div>
+    <div class="label">Відгуки</div>
+    <h2 class="section-title" style="margin-bottom: 6px;">Що кажуть власники<br>магазинів на Aima</h2>
+    <p style="font-size:13px; color: var(--text-secondary); margin-bottom: 20px; font-family:var(--f-body);">Без редагування — голос реальних людей.</p>
+    <div class="reviews-grid">
+      <div class="review">
+        <div class="review-head"><div class="review-avatar">TG</div><div><div class="review-name">Власниця магазину</div><div class="review-meta">Відгук у Telegram</div></div></div>
+        <p>«Просто супер, бо мені ваша платформа дуже сподобалась, і я хочу залишатись з вами».</p>
+        <a class="review-proof review-proof-wide" href="review1.jpg" target="_blank" rel="noopener noreferrer"><img src="review1.jpg" alt="Відгук власниці магазину в Telegram"><span>Відкрити скрін</span></a>
+      </div>
+      <div class="review">
+        <div class="review-head"><div class="review-avatar">VB</div><div><div class="review-name">Victorija Bobrova</div><div class="review-meta">Відгук у застосунку</div></div><div class="review-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div></div>
+        <p>«Зручний та простий додаток для створення власного інтернет-магазину. Все необхідне в одному місці».</p>
+        <a class="review-proof" href="review2.jpg" target="_blank" rel="noopener noreferrer"><img src="review2.jpg" alt="П'ятизірковий відгук Victorija Bobrova у застосунку"><span>Відкрити скрін</span></a>
+      </div>
+      <div class="review">
+        <div class="review-head"><div class="review-avatar">ТС</div><div><div class="review-name">Тетяна Стецина-Марфіян</div><div class="review-meta">Відгук у застосунку</div></div><div class="review-stars"><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i></div></div>
+        <p>«Там все дуже просто, зручно і зрозуміло: розбереться навіть новачок. Плюс підтримка техчату на вищому рівні».</p>
+        <a class="review-proof" href="review3.jpg" target="_blank" rel="noopener noreferrer"><img src="review3.jpg" alt="П'ятизірковий відгук Тетяни Стециної-Марфіян у застосунку"><span>Відкрити скрін</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ГАРАНТІЯ -->
+  <section id="guarantee">
+    <div class="guarantee card-decor-host">
+      <div class="card-decor" aria-hidden="true">
+        <i class="ti ti-shield-check guarantee-decor-shield"></i>
+      </div>
+      <div class="guarantee-head">
+        <div class="guarantee-icon"><i class="ti ti-shield-check"></i></div>
+        <div>
+          <div class="guarantee-kicker"><i class="ti ti-rosette-discount-check"></i> 100% повернення коштів</div>
+          <div class="guarantee-title">Гарантія результату — 21 день</div>
+          <div class="guarantee-desc">Якщо ти пройдеш усі 21 урок, зробиш усі дії з курсу — і не отримаєш свого інтернет-магазину, повернемо гроші повністю.</div>
+        </div>
+      </div>
+      <div class="guarantee-conditions">
+        <div class="guarantee-condition"><i class="ti ti-checks"></i><div class="text">Пройшов усі уроки</div></div>
+        <div class="guarantee-condition"><i class="ti ti-tool"></i><div class="text">Виконав усі дії</div></div>
+        <div class="guarantee-condition"><i class="ti ti-coin"></i><div class="text">Повертаємо 100%</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- БОНУСИ -->
+  <section class="decorated-section bonuses-section" id="bonuses">
+    <div class="section-decor" aria-hidden="true">
+      <i class="ti ti-gift bonuses-decor-gift"></i>
+    </div>
+    <div class="label">Бонуси</div>
+    <h2 class="section-title">8 цінних матеріалів<br>без доплат</h2>
+    <div class="bonuses-intro">
+      <div class="bonuses-intro-icon"><i class="ti ti-gift"></i></div>
+      <div>
+        <div class="bonuses-intro-title">Готовий набір для швидкого старту</div>
+        <div class="bonuses-intro-text">Забирай інструкції, шаблони й чек-листи разом із курсом. Усе вже входить у вартість.</div>
+      </div>
+    </div>
+    <div class="bonuses-list">
+      <div class="bonus-row"><div class="bonus-icon"><i class="ti ti-checklist"></i></div><div class="bonus-copy"><div class="bonus-title">Чек-лист налаштування магазину</div><div class="bonus-type">Покроковий список дій</div></div><div class="bonus-free">Безкоштовно</div></div>
+      <div class="bonus-row"><div class="bonus-icon"><i class="ti ti-chart-bar"></i></div><div class="bonus-copy"><div class="bonus-title">Інструкція Google Analytics</div><div class="bonus-type">Гайд із підключення аналітики</div></div><div class="bonus-free">Безкоштовно</div></div>
+      <div class="bonus-row"><div class="bonus-icon"><i class="ti ti-brand-facebook"></i></div><div class="bonus-copy"><div class="bonus-title">Інструкція Facebook Pixel</div><div class="bonus-type">Гайд для контролю реклами</div></div><div class="bonus-free">Безкоштовно</div></div>
+      <div class="bonus-row"><div class="bonus-icon"><i class="ti ti-world"></i></div><div class="bonus-copy"><div class="bonus-title">Підключення власного домену</div><div class="bonus-type">Коротка технічна інструкція</div></div><div class="bonus-free">Безкоштовно</div></div>
+      <div class="bonus-row"><div class="bonus-icon"><i class="ti ti-search"></i></div><div class="bonus-copy"><div class="bonus-title">Індексація сайту в Google</div><div class="bonus-type">Гайд для появи в пошуку</div></div><div class="bonus-free">Безкоштовно</div></div>
+      <div class="bonus-row"><div class="bonus-icon"><i class="ti ti-brand-instagram"></i></div><div class="bonus-copy"><div class="bonus-title">Підключення Instagram Shopping</div><div class="bonus-type">Інструкція для соцмереж</div></div><div class="bonus-free">Безкоштовно</div></div>
+      <div class="bonus-row"><div class="bonus-icon"><i class="ti ti-table"></i></div><div class="bonus-copy"><div class="bonus-title">Таблиця для аналітики</div><div class="bonus-type">Готовий Google-шаблон</div></div><div class="bonus-free">Безкоштовно</div></div>
+      <div class="bonus-row"><div class="bonus-icon"><i class="ti ti-clipboard-list"></i></div><div class="bonus-copy"><div class="bonus-title">Таблиця для замовлень</div><div class="bonus-type">Готовий Google-шаблон</div></div><div class="bonus-free">Безкоштовно</div></div>
+    </div>
+  </section>
+
+  <!-- CTA ФІНАЛЬНИЙ -->
+  <section id="enrollment">
+    <div class="cta-final card-decor-host">
+      <div class="card-decor" aria-hidden="true">
+        <i class="ti ti-tag cta-decor-tag"></i>
+        <i class="ti ti-bolt cta-decor-bolt"></i>
+      </div>
+      <div class="cta-live"><div class="cta-live-dot"></div><div class="cta-live-text">Ціна 490 ₴ діє ще</div></div>
+      <div class="countdown">
+        <div class="countdown-cell"><div class="countdown-num" id="cd-hr" data-countdown="hr">00</div><div class="countdown-label">годин</div></div>
+        <div class="countdown-cell"><div class="countdown-num" id="cd-min" data-countdown="min">10</div><div class="countdown-label">хвилин</div></div>
+        <div class="countdown-cell"><div class="countdown-num" id="cd-sec" data-countdown="sec">00</div><div class="countdown-label">секунд</div></div>
+      </div>
+      <h2>Записатися на курс</h2>
+      <p>Спеціальна ціна доступна тільки протягом цієї сесії на сайті.</p>
+      <div class="cta-spec">
+        <div class="cta-spec-row"><i class="ti ti-school"></i><div class="cta-spec-label">Старт</div><div class="cta-spec-value">Одразу після оплати</div></div>
+        <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">490 ₴</span><span class="price-old-dark">3490 ₴</span><span class="discount-badge">−86%</span></div></div>
+        <div class="cta-spec-row"><i class="ti ti-brand-telegram"></i><div class="cta-spec-label">Доступ</div><div class="cta-spec-value">У Telegram, назавжди</div></div>
+      </div>
+      <button class="btn-cta btn-cta-final" onclick="openModal()">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="decorated-section faq-section" id="faq" style="padding-bottom: 24px;">
+    <div class="section-decor" aria-hidden="true">
+      <i class="ti ti-help faq-decor-help"></i>
+    </div>
+    <div class="label">FAQ</div>
+    <h2 class="section-title">Залишилися запитання?</h2>
+    <div class="faq-list">
+      <details open>
+        <summary><span class="faq-question">Чи підійде курс, якщо я починаю з нуля?</span><i class="ti ti-chevron-down chev"></i></summary>
+        <div class="faq-answer">Так. Курс створений для новачків: від вибору товару до запуску магазину й перших продажів.</div>
+      </details>
+      <details><summary><span class="faq-question">Що я отримаю після оплати?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Одразу отримаєш доступ до Telegram-каналу з 21 уроком і всіма бонусними матеріалами.</div></details>
+      <details><summary><span class="faq-question">Скільки часу потрібно на навчання?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Уроки тривають 5–10 хвилин. Проходь у власному темпі: доступ до матеріалів залишається назавжди.</div></details>
+      <details><summary><span class="faq-question">Чи потрібен товар, щоб почати?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Ні. У курсі є урок про вибір товару для початківця та дії, якщо ідеї ще немає.</div></details>
+      <details><summary><span class="faq-question">Чи потрібні знання програмування?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Ні. Магазин створюється в Aima без коду, крок за кроком із телефону.</div></details>
+      <details><summary><span class="faq-question">Що робити, якщо я не запущу магазин?</span><i class="ti ti-chevron-down chev"></i></summary><div class="faq-answer">Якщо пройдеш усі уроки, виконаєш усі дії й не отримаєш свого магазину, повернемо гроші повністю за умовами 21-денної гарантії.</div></details>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer card-decor-host">
+    <div class="card-decor" aria-hidden="true">
+      <i class="ti ti-sparkles footer-decor-sparkles"></i>
+    </div>
+    <div class="footer-brand">
+      <div class="brand-avatar"><img src="avatar.png" alt="Анатолій Маліновський" onerror="this.style.display='none'"><span>АМ</span></div>
+      <span class="logo-name">Курс Анатолія Маліновського</span>
+    </div>
+    <p>Створюй інтернет-магазин і розвивай свій бізнес онлайн.</p>
+    <div class="footer-bottom">
+      <span>© 2026</span>
+      <span>Усі права захищені</span>
+    </div>
+  </footer>
+
+</div>
+
+<!-- МЕНЮ -->
+<div class="menu-overlay" id="site-menu" aria-hidden="true">
+  <div class="menu-panel" role="dialog" aria-modal="true" aria-label="Навігація по сторінці">
+    <div class="menu-head">
+      <div class="menu-brand">
+        <div class="brand-avatar"><img src="avatar.png" alt="Анатолій Маліновський" onerror="this.style.display='none'"><span>АМ</span></div>
+        <span class="logo-name">Курс Анатолія Маліновського</span>
+      </div>
+      <button class="menu-close" type="button" aria-label="Закрити меню" onclick="closeMenu()"><i class="ti ti-x"></i></button>
+    </div>
+    <nav class="menu-nav" aria-label="Розділи сторінки">
+      <a href="#audience"><i class="ti ti-users"></i> Для кого курс</a>
+      <a href="#results"><i class="ti ti-target-arrow"></i> Результат навчання</a>
+      <a href="#program"><i class="ti ti-book-2"></i> Програма курсу</a>
+      <a href="#how"><i class="ti ti-brand-telegram"></i> Як проходить курс</a>
+      <a href="#speaker"><i class="ti ti-user-circle"></i> Про спікера</a>
+      <a href="#cases"><i class="ti ti-building-store"></i> Кейси магазинів</a>
+      <a href="#guarantee"><i class="ti ti-shield-check"></i> Гарантія результату</a>
+      <a href="#bonuses"><i class="ti ti-gift"></i> Бонуси</a>
+      <a href="#faq"><i class="ti ti-help"></i> Запитання</a>
+    </nav>
+    <div class="menu-offer">
+      <div class="menu-offer-live"><div class="menu-offer-dot"></div>Спецціна діє ще</div>
+      <div class="menu-countdown">
+        <div class="menu-countdown-cell"><div class="menu-countdown-num" data-countdown="hr">00</div><div class="menu-countdown-label">год</div></div>
+        <div class="menu-countdown-cell"><div class="menu-countdown-num" data-countdown="min">10</div><div class="menu-countdown-label">хв</div></div>
+        <div class="menu-countdown-cell"><div class="menu-countdown-num" data-countdown="sec">00</div><div class="menu-countdown-label">сек</div></div>
+      </div>
+      <div class="menu-price">Курс зараз за <strong>490 ₴</strong></div>
+      <button class="menu-cta" type="button" onclick="openModal()">Записатися на курс <i class="ti ti-arrow-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ФОРМА -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div id="form-wrap">
+      <h3>Записатися на курс</h3>
+      <p>Залиш дані — ми надішлемо посилання на оплату</p>
+      <div class="form-field">
+        <label class="form-label">Ім'я</label>
+        <input class="form-input" type="text" id="f-name" placeholder="Олена Коваль" />
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="f-email" placeholder="olena@example.com" />
+      </div>
+      <div class="form-field">
+        <label class="form-label">Телефон</label>
+        <input class="form-input" type="tel" id="f-phone" placeholder="+380 XX XXX XX XX" />
+      </div>
+      <button class="btn-submit" id="btn-submit">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+      <p class="form-note">Після заявки отримаєш посилання на оплату на email</p>
+    </div>
+    <div class="form-success" id="form-success">
+      <i class="ti ti-circle-check"></i>
+      <h4>Заявку прийнято!</h4>
+      <p>Перевір email — надіслали посилання на оплату.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Supabase
+var SUPABASE_URL = 'https://binylmnmfpecucosgmtv.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_oOuhWQ9Vg8N6dvdzRLKnEA_43JV-MBr';
+
+// Показуємо програму перед Telegram-форматом навчання.
+(function(){
+  var how = document.getElementById('how');
+  var program = document.getElementById('program');
+  if (!how || !program) return;
+  how.parentNode.insertBefore(program, how);
+})();
+
+// Проєктивно вкладаємо карусель у площину дисплея ноутбука.
+(function(){
+  var frame = document.querySelector('.hero-screen-carousel');
+  var plane = document.querySelector('.hero-screen-plane');
+  if (!frame || !plane) return;
+
+  function projectScreen(){
+    var width = frame.offsetWidth;
+    var height = frame.offsetHeight;
+    if (!width || !height) return;
+
+    var p0 = { x: width * 0.042, y: 0 };
+    var p1 = { x: width, y: height * 0.024 };
+    var p2 = { x: width * 0.955, y: height };
+    var p3 = { x: 0, y: height * 0.918 };
+    var dx1 = p1.x - p2.x;
+    var dx2 = p3.x - p2.x;
+    var dx3 = p0.x - p1.x + p2.x - p3.x;
+    var dy1 = p1.y - p2.y;
+    var dy2 = p3.y - p2.y;
+    var dy3 = p0.y - p1.y + p2.y - p3.y;
+    var denominator = dx1 * dy2 - dx2 * dy1;
+    var projectX = (dx3 * dy2 - dx2 * dy3) / denominator;
+    var projectY = (dx1 * dy3 - dx3 * dy1) / denominator;
+    var scaleX = p1.x - p0.x + projectX * p1.x;
+    var slopeX = p1.y - p0.y + projectX * p1.y;
+    var skewX = p3.x - p0.x + projectY * p3.x;
+    var scaleY = p3.y - p0.y + projectY * p3.y;
+
+    plane.style.transform = 'matrix3d(' + [
+      scaleX / width, slopeX / width, 0, projectX / width,
+      skewX / height, scaleY / height, 0, projectY / height,
+      0, 0, 1, 0,
+      p0.x, p0.y, 0, 1
+    ].join(',') + ')';
+  }
+
+  projectScreen();
+  window.addEventListener('resize', projectScreen);
+  if ('ResizeObserver' in window) new ResizeObserver(projectScreen).observe(frame);
+})();
+
+// Плавна поява секцій при скролі
+(function(){
+  var sections = document.querySelectorAll('.container > section, .site-footer');
+  sections.forEach(function(section){ section.classList.add('reveal-section'); });
+  if (!('IntersectionObserver' in window)) {
+    sections.forEach(function(section){ section.classList.add('is-visible'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -28px' });
+  sections.forEach(function(section){ observer.observe(section); });
+  requestAnimationFrame(function(){ document.body.classList.add('reveal-ready'); });
+})();
+
+// Таймер
+(function(){
+  var KEY = 'aima_timer_end';
+  var DURATION_MS = 10 * 60 * 1000;
+  var end = parseInt(sessionStorage.getItem(KEY), 10);
+  if (!end || isNaN(end) || end < Date.now()) {
+    end = Date.now() + DURATION_MS;
+    sessionStorage.setItem(KEY, end);
+  }
+  var pad = function(n){ return String(n).padStart(2,'0'); };
+  function tick(){
+    var s = Math.max(0, Math.floor((end - Date.now())/1000));
+    var h = Math.floor(s/3600); s -= h*3600;
+    var m = Math.floor(s/60);
+    var sec = s - m*60;
+    var setPart = function(part, value) {
+      document.querySelectorAll('[data-countdown="' + part + '"]').forEach(function(el){
+        el.textContent = value;
+      });
+    };
+    setPart('hr', pad(h));
+    setPart('min', pad(m));
+    setPart('sec', pad(sec));
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+// Модальне вікно
+function openModal() {
+  closeMenu();
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+document.getElementById('modal').addEventListener('click', function(e){
+  if (e.target === this) closeModal();
+});
+
+// Меню
+function openMenu() {
+  var menu = document.getElementById('site-menu');
+  menu.classList.add('open');
+  menu.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('menu-open');
+  document.querySelector('.btn-menu').setAttribute('aria-expanded', 'true');
+}
+function closeMenu() {
+  var menu = document.getElementById('site-menu');
+  if (!menu) return;
+  menu.classList.remove('open');
+  menu.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('menu-open');
+  document.querySelector('.btn-menu').setAttribute('aria-expanded', 'false');
+}
+document.getElementById('site-menu').addEventListener('click', function(e){
+  if (e.target === this) closeMenu();
+});
+document.querySelectorAll('.menu-nav a').forEach(function(link){
+  link.addEventListener('click', function(e){
+    var target = document.querySelector(this.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    closeMenu();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.replaceState(null, '', this.getAttribute('href'));
+  });
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') {
+    closeMenu();
+    closeModal();
+  }
+});
+
+// Форма → Supabase
+document.getElementById('btn-submit').addEventListener('click', async function(){
+  var name = document.getElementById('f-name').value.trim();
+  var email = document.getElementById('f-email').value.trim();
+  var phone = document.getElementById('f-phone').value.trim();
+
+  if (!name || !email) {
+    alert("Заповни ім'я і email");
+    return;
+  }
+
+  this.disabled = true;
+  this.textContent = 'Відправляємо...';
+
+  try {
+    var res = await fetch(SUPABASE_URL + '/rest/v1/leads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ name: name, email: email, phone: phone, status: 'new' })
+    });
+
+    if (res.ok) {
+      document.getElementById('form-wrap').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    } else {
+      throw new Error('error');
+    }
+  } catch(e) {
+    alert('Щось пішло не так. Спробуй ще раз.');
+    this.disabled = false;
+    this.innerHTML = 'Записатися за 490 ₴ <i class="ti ti-arrow-right"></i>';
+  }
+});
+</script>
+</body>
+</html>

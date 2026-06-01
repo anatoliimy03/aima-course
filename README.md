@@ -4,10 +4,14 @@
 Лендінг для курсу "Інтернет-магазин за 21 урок" на платформі Aima.
 Аудиторія — початківці з нульовим рівнем.
 
+- **Головна сторінка:** порожня заглушка в `index.html`
+- **Лендінг курсу:** `online-shop-21-days/index.html`
+- **Майбутній URL курсу:** https://malinovskyi.in.ua/online-shop-21-days/
+
 ---
 
 ## Стек
-- **Фронтенд:** чистий HTML + CSS + JS (один файл `index.html`)
+- **Фронтенд:** чистий HTML + CSS + JS
 - **Хостинг:** Netlify → https://aima-course.netlify.app
 - **Репозиторій:** GitHub → https://github.com/anatoliimy03/aima-course
 - **База даних:** Supabase → https://binylmnmfpecucosgmtv.supabase.co
@@ -44,7 +48,7 @@
 
 ---
 
-## Структура сайту (секції index.html)
+## Структура сайту (секції online-shop-21-days/index.html)
 1. **Hero** — логотип, заголовок, фото спікера, ціна, CTA кнопка
 2. **Для кого** — 6 типів аудиторії
 3. **Результати** — 6 карток що отримає учень
