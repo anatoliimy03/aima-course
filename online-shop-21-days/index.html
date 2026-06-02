@@ -930,6 +930,52 @@ h2.section-title {
 }
 .footer-brand { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
 .site-footer p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.6); margin-bottom: 18px; }
+.payment-methods {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+.payment-badge {
+  height: 28px;
+  min-width: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 9px;
+  border-radius: 7px;
+  background: rgba(255,255,255,0.94);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: var(--ink);
+  font-family: var(--f-display);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+}
+.payment-badge-visa {
+  color: #1A1F71;
+  font-size: 11px;
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+.payment-badge-mastercard { gap: 0; min-width: 54px; }
+.mc-circle {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: block;
+}
+.mc-red { background: #EB001B; }
+.mc-yellow { background: #F79E1B; margin-left: -6px; mix-blend-mode: multiply; }
+.payment-badge-google { font-weight: 700; }
+.payment-badge-google .g-blue { color: #4285F4; }
+.payment-badge-google .g-red { color: #EA4335; }
+.payment-badge-google .g-yellow { color: #FBBC05; }
+.payment-badge-google .g-green { color: #34A853; }
+.payment-badge-apple .ti { font-size: 14px; }
 .footer-bottom {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   padding-top: 14px;
@@ -1467,6 +1513,12 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
       <span class="logo-name">Курс Анатолія Маліновського</span>
     </div>
     <p>Створюй інтернет-магазин і розвивай свій бізнес онлайн.</p>
+    <div class="payment-methods" aria-label="Доступні способи оплати">
+      <span class="payment-badge payment-badge-visa" aria-label="Visa">VISA</span>
+      <span class="payment-badge payment-badge-mastercard" aria-label="Mastercard"><span class="mc-circle mc-red"></span><span class="mc-circle mc-yellow"></span></span>
+      <span class="payment-badge payment-badge-google" aria-label="Google Pay"><span class="g-blue">G</span><span>Pay</span></span>
+      <span class="payment-badge payment-badge-apple" aria-label="Apple Pay"><i class="ti ti-brand-apple"></i><span>Pay</span></span>
+    </div>
     <div class="footer-bottom">
       <span>© 2026</span>
       <span>Усі права захищені</span>
@@ -1517,7 +1569,8 @@ var ANALYTICS_CONFIG = {
   supabaseUrl: 'https://binylmnmfpecucosgmtv.supabase.co',
   supabaseKey: 'sb_publishable_oOuhWQ9Vg8N6dvdzRLKnEA_43JV-MBr',
   supabaseEventsTable: 'analytics_events',
-  supabaseEnabled: true,
+  // Увімкнути тільки після створення таблиці analytics_events у Supabase.
+  supabaseEnabled: false,
   debug: window.location.search.indexOf('debug_analytics=1') !== -1
 };
 
