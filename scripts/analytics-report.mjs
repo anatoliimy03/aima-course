@@ -123,7 +123,7 @@ function summarize(events) {
   const ctaClicks = events.filter((event) => event.event_name === 'cta_click');
   const checkouts = events.filter((event) => event.event_name === 'begin_checkout');
   const purchases = events.filter((event) => event.event_name === 'purchase_success');
-  const paymentMissing = events.filter((event) => event.event_name === 'payment_link_missing');
+  const paymentInvoiceFailed = events.filter((event) => event.event_name === 'payment_invoice_failed');
   const telegramClicks = events.filter((event) => event.event_name === 'telegram_access_click');
   const scrollDepths = maxScrollBySession(events);
 
@@ -143,7 +143,7 @@ function summarize(events) {
       cta_clicks: ctaClicks.length,
       begin_checkout: checkouts.length,
       purchase_success: purchases.length,
-      payment_link_missing: paymentMissing.length,
+      payment_invoice_failed: paymentInvoiceFailed.length,
       cta_rate: pct(ctaClicks.length, pageViews.length),
       checkout_rate_from_cta: pct(checkouts.length, ctaClicks.length),
       purchase_rate_from_checkout: pct(purchases.length, checkouts.length)
@@ -201,7 +201,7 @@ function printReport(summary) {
   console.log(`- CTA кліки: ${funnel.cta_clicks} (${funnel.cta_rate})`);
   console.log(`- Перехід до оплати: ${funnel.begin_checkout} (${funnel.checkout_rate_from_cta} від CTA)`);
   console.log(`- Успішні оплати: ${funnel.purchase_success} (${funnel.purchase_rate_from_checkout} від checkout)`);
-  console.log(`- Плейсхолдер WayForPay спрацював: ${funnel.payment_link_missing}`);
+  console.log(`- Помилки створення mono-рахунку: ${funnel.payment_invoice_failed}`);
 
   printList('CTA за місцем', summary.cta_by_location);
   printList('CTA за текстом кнопки', summary.cta_by_button);

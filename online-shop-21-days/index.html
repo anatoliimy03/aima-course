@@ -1562,7 +1562,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
 </div>
 
 <script>
-var WAYFORPAY_PAYMENT_URL = 'https://secure.wayforpay.com/button/REPLACE_WITH_REAL_PAYMENT_LINK';
+var MONO_INVOICE_ENDPOINT = '/.netlify/functions/create-mono-invoice';
 var ANALYTICS_CONFIG = {
   clarityProjectId: 'x0mjfee3xm',
   gaMeasurementId: '',
@@ -1753,8 +1753,8 @@ var AIMA_ANALYTICS = (function(){
         window.fbq('track', 'InitiateCheckout', metaProps);
       } else if (eventName === 'cta_click') {
         window.fbq('trackCustom', 'CTA_Click', metaProps);
-      } else if (eventName === 'payment_link_missing') {
-        window.fbq('trackCustom', 'Payment_Link_Missing', metaProps);
+      } else if (eventName === 'payment_invoice_failed') {
+        window.fbq('trackCustom', 'Payment_Invoice_Failed', metaProps);
       }
     } catch(e) {}
   }
@@ -1950,6 +1950,20 @@ function getAnalyticsText(element) {
   return (element.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120);
 }
 
+function setPaymentButtonLoading(buttonElement, isLoading) {
+  if (!buttonElement) return;
+  if (isLoading) {
+    buttonElement.dataset.originalHtml = buttonElement.dataset.originalHtml || buttonElement.innerHTML;
+    buttonElement.disabled = true;
+    buttonElement.setAttribute('aria-busy', 'true');
+    buttonElement.innerHTML = 'Створюємо оплату...';
+    return;
+  }
+  buttonElement.disabled = false;
+  buttonElement.removeAttribute('aria-busy');
+  if (buttonElement.dataset.originalHtml) buttonElement.innerHTML = buttonElement.dataset.originalHtml;
+}
+
 function goToPayment(locationName, buttonElement) {
   var location = locationName || 'unknown';
   var ctaProps = {
@@ -1962,15 +1976,49 @@ function goToPayment(locationName, buttonElement) {
   };
   trackEvent('cta_click', ctaProps, { keepalive: true });
   closeMenu('cta_click');
-  if (!WAYFORPAY_PAYMENT_URL || WAYFORPAY_PAYMENT_URL.indexOf('REPLACE_WITH_REAL_PAYMENT_LINK') !== -1) {
-    trackEvent('payment_link_missing', ctaProps, { keepalive: true });
-    alert('Платіжне посилання WayForPay ще не додано. Надішли його, і я вставлю в сайт.');
-    return;
-  }
-  trackEvent('begin_checkout', Object.assign({}, ctaProps, {
-    payment_provider: 'wayforpay'
-  }), { keepalive: true });
-  window.location.href = WAYFORPAY_PAYMENT_URL;
+  setPaymentButtonLoading(buttonElement, true);
+
+  fetch(MONO_INVOICE_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      location: location,
+      button_label: ctaProps.button_label,
+      page_path: window.location.pathname
+    })
+  })
+    .then(function(response){
+      return response.json().catch(function(){ return {}; }).then(function(data){
+        if (!response.ok) {
+          var message = data && data.error ? data.error : 'payment_invoice_failed_' + response.status;
+          throw new Error(message);
+        }
+        return data;
+      });
+    })
+    .then(function(data){
+      if (!data.pageUrl) throw new Error('payment_page_url_missing');
+      trackEvent('payment_invoice_created', Object.assign({}, ctaProps, {
+        payment_provider: 'monobank',
+        invoice_id: data.invoiceId || null,
+        reference: data.reference || null
+      }), { keepalive: true });
+      trackEvent('begin_checkout', Object.assign({}, ctaProps, {
+        payment_provider: 'monobank',
+        invoice_id: data.invoiceId || null,
+        reference: data.reference || null
+      }), { keepalive: true });
+      window.location.href = data.pageUrl;
+    })
+    .catch(function(error){
+      if (window.console) console.error('[payment]', error);
+      trackEvent('payment_invoice_failed', Object.assign({}, ctaProps, {
+        payment_provider: 'monobank',
+        error: error && error.message ? error.message : 'unknown'
+      }), { keepalive: true });
+      alert('Не вдалося створити оплату. Спробуй ще раз або напиши мені в Instagram.');
+      setPaymentButtonLoading(buttonElement, false);
+    });
 }
 
 // Меню

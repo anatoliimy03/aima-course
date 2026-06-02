@@ -125,7 +125,8 @@ node scripts/analytics-report.mjs --days 30 --json
   - `price_uah`: `490`
   - `currency`: `UAH`
 - `begin_checkout`
-- `payment_link_missing`
+- `payment_invoice_created`
+- `payment_invoice_failed`
 - `program_module_toggle`
 - `faq_toggle`
 - `instagram_click`

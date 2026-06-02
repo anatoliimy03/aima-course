@@ -14,7 +14,7 @@
 - **Фронтенд:** чистий HTML + CSS + JS
 - **Хостинг:** Netlify → https://aima-course.netlify.app
 - **Репозиторій:** GitHub → https://github.com/anatoliimy03/aima-course
-- **Оплата:** WayForPay через пряме платіжне посилання
+- **Оплата:** monobank acquiring через Netlify Function
 - **Telegram бот:** (ще не підключено)
 
 ---
@@ -64,16 +64,17 @@
 ---
 
 ## Оплата
-- Усі CTA кнопки ведуть напряму на WayForPay через функцію `goToPayment()`
-- Платіжне посилання задається в `online-shop-21-days/index.html` у змінній `WAYFORPAY_PAYMENT_URL`
-- Success/return URL у WayForPay: `https://malinovskyi.in.ua/online-shop-21-days/thank-you/`
+- Усі CTA кнопки запускають `goToPayment()` і створюють рахунок mono через `/.netlify/functions/create-mono-invoice`
+- Секретний mono token зберігається тільки в Netlify env var `MONOBANK_TOKEN`
+- Return URL mono: `https://malinovskyi.in.ua/online-shop-21-days/thank-you/`
 - Сторінка подяки: `online-shop-21-days/thank-you/index.html`
 - Посилання на Telegram-доступ після оплати задається на сторінці подяки у змінній `TELEGRAM_ACCESS_URL`
+- Для стабільного production URL можна додати Netlify env var `PUBLIC_SITE_URL=https://malinovskyi.in.ua`
 
 ---
 
 ## Що ще не зроблено
-- [ ] Вставити реальне платіжне посилання WayForPay у `WAYFORPAY_PAYMENT_URL`
+- [ ] Додати `MONOBANK_TOKEN` у Netlify environment variables
 - [ ] Вставити реальне посилання на Telegram-доступ у `TELEGRAM_ACCESS_URL`
 - [ ] Telegram бот — після оплати видає посилання на канал
 - [ ] Фото спікера (speaker.jpg)

@@ -57,6 +57,6 @@ phone text, status text (default 'new'), paid bool, telegram_sent bool
 
 ## Pending items (not yet implemented)
 
-- Wayforpay payment — redirect after form submit
+- monobank acquiring — invoice creation through Netlify Function
 - Telegram bot — sends channel link after payment
 - Real images: `photo.jpg` (hero), `speaker.jpg`, `case1-4.jpg`
