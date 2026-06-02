@@ -149,6 +149,7 @@ function summarize(events) {
       purchase_rate_from_checkout: pct(purchases.length, checkouts.length)
     },
     cta_by_location: countBy(ctaClicks, (event) => event.payload?.location),
+    cta_by_button: countBy(ctaClicks, (event) => event.payload?.button_label || event.payload?.location),
     section_views: countBy(events.filter((event) => event.event_name === 'section_view'), (event) => event.payload?.section_id),
     program_modules_opened: countBy(
       events.filter((event) => event.event_name === 'program_module_toggle' && event.payload?.is_open),
@@ -203,6 +204,7 @@ function printReport(summary) {
   console.log(`- Плейсхолдер WayForPay спрацював: ${funnel.payment_link_missing}`);
 
   printList('CTA за місцем', summary.cta_by_location);
+  printList('CTA за текстом кнопки', summary.cta_by_button);
   printList('Перегляди секцій', summary.section_views);
   printList('Відкриті модулі програми', summary.program_modules_opened);
   printList('Відкриті FAQ', summary.faq_opened);

@@ -264,7 +264,7 @@
         </div>
 
         <div class="actions">
-          <button class="btn btn-primary btn-telegram" type="button" onclick="goToTelegramAccess()">Перейти в Telegram і отримати доступ <i class="ti ti-brand-telegram"></i></button>
+          <button class="btn btn-primary btn-telegram" type="button" onclick="goToTelegramAccess(this)">Перейти в Telegram і отримати доступ <i class="ti ti-brand-telegram"></i></button>
           <a class="btn btn-secondary" href="https://www.instagram.com/malinovskyi_anatolii" target="_blank" rel="noopener">Проблема з доступом? Написати <i class="ti ti-brand-instagram"></i></a>
         </div>
 
@@ -276,12 +276,14 @@
   <script>
     var TELEGRAM_ACCESS_URL = 'https://t.me/REPLACE_WITH_TELEGRAM_ACCESS_LINK';
     var ANALYTICS_CONFIG = {
-      clarityProjectId: '',
+      clarityProjectId: 'x0mjfee3xm',
       gaMeasurementId: '',
+      metaPixelId: '',
       supabaseUrl: 'https://binylmnmfpecucosgmtv.supabase.co',
       supabaseKey: 'sb_publishable_oOuhWQ9Vg8N6dvdzRLKnEA_43JV-MBr',
       supabaseEventsTable: 'analytics_events',
-      supabaseEnabled: true,
+      // Увімкнути тільки після створення таблиці analytics_events у Supabase.
+      supabaseEnabled: false,
       debug: window.location.search.indexOf('debug_analytics=1') !== -1
     };
 
@@ -329,6 +331,20 @@
         gtag('js', new Date());
         gtag('config', measurementId, { send_page_view: false });
       }
+      function initMetaPixel() {
+        var pixelId = ANALYTICS_CONFIG.metaPixelId;
+        if (!pixelId) return;
+        (function(f,b,e,v,n,t,s){
+          if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments);};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s);
+        })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', pixelId);
+        fbq('track', 'PageView');
+      }
 
       var visitorId = getStoredId(localStorage, 'aima_analytics_visitor_id', 'visitor');
       var sessionId = getStoredId(sessionStorage, 'aima_analytics_session_id', 'session');
@@ -337,6 +353,7 @@
       setStorage(sessionStorage, 'aima_analytics_session_started_at', sessionStartedAt);
       initClarity();
       initGa();
+      initMetaPixel();
 
       function track(eventName, props) {
         var payload = {
@@ -376,7 +393,25 @@
         }
         if (typeof window.gtag === 'function') {
           try {
-            window.gtag('event', eventName, Object.assign({ page_path: window.location.pathname, event_category: 'aima_course' }, props || {}));
+            window.gtag('event', eventName, Object.assign({
+              page_path: window.location.pathname,
+              event_category: 'aima_course',
+              event_label: props && (props.button_label || props.location || props.href)
+            }, props || {}));
+          } catch(e) {}
+        }
+        if (typeof window.fbq === 'function') {
+          try {
+            if (eventName === 'purchase_success') {
+              window.fbq('track', 'Purchase', Object.assign({
+                content_name: 'Інтернет-магазин за 21 урок',
+                content_category: 'online_course',
+                currency: 'UAH',
+                value: 490
+              }, props || {}));
+            } else if (eventName === 'telegram_access_click') {
+              window.fbq('trackCustom', 'Telegram_Access_Click', props || {});
+            }
           } catch(e) {}
         }
         if (ANALYTICS_CONFIG.debug && window.console) console.log('[analytics]', eventName, payload);
@@ -410,14 +445,23 @@
       payment_provider: 'wayforpay'
     });
 
-    function goToTelegramAccess() {
-      trackEvent('telegram_access_click', { location: 'thank_you' });
+    function getAnalyticsText(element) {
+      if (!element) return '';
+      return (element.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+    }
+
+    function goToTelegramAccess(buttonElement) {
+      var props = {
+        location: 'thank_you',
+        button_label: getAnalyticsText(buttonElement)
+      };
+      trackEvent('telegram_access_click', props);
       if (!TELEGRAM_ACCESS_URL || TELEGRAM_ACCESS_URL.indexOf('REPLACE_WITH_TELEGRAM_ACCESS_LINK') !== -1) {
-        trackEvent('telegram_access_link_missing', { location: 'thank_you' });
+        trackEvent('telegram_access_link_missing', props);
         alert('Посилання на Telegram-доступ ще не додано. Надішли його, і я вставлю в сайт.');
         return;
       }
-      trackEvent('telegram_access_redirect', { location: 'thank_you' });
+      trackEvent('telegram_access_redirect', props);
       window.location.href = TELEGRAM_ACCESS_URL;
     }
 
@@ -425,6 +469,7 @@
       link.addEventListener('click', function(){
         trackEvent('instagram_click', {
           location: 'thank_you_support',
+          button_label: getAnalyticsText(this),
           href: this.href
         });
       });

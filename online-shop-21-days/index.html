@@ -1146,7 +1146,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
         </div>
       </div>
     </div>
-    <button class="btn-cta btn-cta-primary" onclick="goToPayment('hero')">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+    <button class="btn-cta btn-cta-primary" onclick="goToPayment('hero', this)">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
   </section>
 
   <!-- ДЛЯ КОГО -->
@@ -1324,7 +1324,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
         <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">490 ₴</span><span class="price-old-dark">3490 ₴</span><span class="discount-badge">−86%</span></div></div>
         <div class="cta-spec-row"><i class="ti ti-brand-telegram"></i><div class="cta-spec-label">Доступ</div><div class="cta-spec-value">У Telegram, назавжди</div></div>
       </div>
-      <button class="btn-cta btn-cta-final" onclick="goToPayment('program_cta')">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+      <button class="btn-cta btn-cta-final" onclick="goToPayment('program_cta', this)">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
     </div>
   </section>
 
@@ -1479,7 +1479,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
         <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">490 ₴</span><span class="price-old-dark">3490 ₴</span><span class="discount-badge">−86%</span></div></div>
         <div class="cta-spec-row"><i class="ti ti-brand-telegram"></i><div class="cta-spec-label">Доступ</div><div class="cta-spec-value">У Telegram, назавжди</div></div>
       </div>
-      <button class="btn-cta btn-cta-final" onclick="goToPayment('final_cta')">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
+      <button class="btn-cta btn-cta-final" onclick="goToPayment('final_cta', this)">Записатися за 490 ₴ <i class="ti ti-arrow-right"></i></button>
     </div>
   </section>
 
@@ -1556,7 +1556,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
         <div class="menu-countdown-cell"><div class="menu-countdown-num" data-countdown="sec">00</div><div class="menu-countdown-label">сек</div></div>
       </div>
       <div class="menu-price">Курс зараз за <strong>490 ₴</strong></div>
-      <button class="menu-cta" type="button" onclick="goToPayment('menu')">Оплатити курс <i class="ti ti-arrow-right"></i></button>
+      <button class="menu-cta" type="button" onclick="goToPayment('menu', this)">Оплатити курс <i class="ti ti-arrow-right"></i></button>
     </div>
   </div>
 </div>
@@ -1566,6 +1566,7 @@ var WAYFORPAY_PAYMENT_URL = 'https://secure.wayforpay.com/button/REPLACE_WITH_RE
 var ANALYTICS_CONFIG = {
   clarityProjectId: 'x0mjfee3xm',
   gaMeasurementId: '',
+  metaPixelId: '',
   supabaseUrl: 'https://binylmnmfpecucosgmtv.supabase.co',
   supabaseKey: 'sb_publishable_oOuhWQ9Vg8N6dvdzRLKnEA_43JV-MBr',
   supabaseEventsTable: 'analytics_events',
@@ -1662,6 +1663,21 @@ var AIMA_ANALYTICS = (function(){
     gtag('config', measurementId, { send_page_view: false });
   }
 
+  function initMetaPixel() {
+    var pixelId = ANALYTICS_CONFIG.metaPixelId;
+    if (!pixelId) return;
+    (function(f,b,e,v,n,t,s){
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments);};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s);
+    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', pixelId);
+    fbq('track', 'PageView');
+  }
+
   function safeUrl() {
     return window.location.origin + window.location.pathname + window.location.hash;
   }
@@ -1716,8 +1732,30 @@ var AIMA_ANALYTICS = (function(){
     try {
       window.gtag('event', eventName, Object.assign({
         page_path: window.location.pathname,
-        event_category: 'aima_course'
+        event_category: 'aima_course',
+        event_label: props && (props.button_label || props.location || props.section_id || props.href || props.question)
       }, props || {}));
+    } catch(e) {}
+  }
+
+  function sendToMetaPixel(eventName, props) {
+    if (typeof window.fbq !== 'function') return;
+    var metaProps = Object.assign({
+      content_name: 'Інтернет-магазин за 21 урок',
+      content_category: 'online_course',
+      currency: 'UAH',
+      value: 490
+    }, props || {});
+    try {
+      if (eventName === 'page_view') {
+        window.fbq('track', 'ViewContent', metaProps);
+      } else if (eventName === 'begin_checkout') {
+        window.fbq('track', 'InitiateCheckout', metaProps);
+      } else if (eventName === 'cta_click') {
+        window.fbq('trackCustom', 'CTA_Click', metaProps);
+      } else if (eventName === 'payment_link_missing') {
+        window.fbq('trackCustom', 'Payment_Link_Missing', metaProps);
+      }
     } catch(e) {}
   }
 
@@ -1772,6 +1810,7 @@ var AIMA_ANALYTICS = (function(){
     sendToDataLayer(eventName, payload, props);
     sendToClarity(eventName, props);
     sendToGa(eventName, props);
+    sendToMetaPixel(eventName, props);
     if (ANALYTICS_CONFIG.debug && window.console) console.log('[analytics]', eventName, payload);
     sendToSupabase(payload, !options || options.keepalive !== false).catch(function(){
       queuePayload(payload);
@@ -1781,6 +1820,7 @@ var AIMA_ANALYTICS = (function(){
 
   initClarity();
   initGa();
+  initMetaPixel();
   setTimeout(flushQueue, 1200);
 
   return {
@@ -1905,20 +1945,31 @@ function trackEvent(eventName, props, options) {
   setInterval(tick, 1000);
 })();
 
-function goToPayment(locationName) {
+function getAnalyticsText(element) {
+  if (!element) return '';
+  return (element.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+}
+
+function goToPayment(locationName, buttonElement) {
   var location = locationName || 'unknown';
-  trackEvent('cta_click', { location: location, price_uah: 490 }, { keepalive: true });
+  var ctaProps = {
+    location: location,
+    cta_id: location,
+    button_label: getAnalyticsText(buttonElement),
+    button_type: buttonElement && buttonElement.className ? String(buttonElement.className).slice(0, 120) : null,
+    price_uah: 490,
+    currency: 'UAH'
+  };
+  trackEvent('cta_click', ctaProps, { keepalive: true });
   closeMenu('cta_click');
   if (!WAYFORPAY_PAYMENT_URL || WAYFORPAY_PAYMENT_URL.indexOf('REPLACE_WITH_REAL_PAYMENT_LINK') !== -1) {
-    trackEvent('payment_link_missing', { location: location }, { keepalive: true });
+    trackEvent('payment_link_missing', ctaProps, { keepalive: true });
     alert('Платіжне посилання WayForPay ще не додано. Надішли його, і я вставлю в сайт.');
     return;
   }
-  trackEvent('begin_checkout', {
-    location: location,
-    price_uah: 490,
+  trackEvent('begin_checkout', Object.assign({}, ctaProps, {
     payment_provider: 'wayforpay'
-  }, { keepalive: true });
+  }), { keepalive: true });
   window.location.href = WAYFORPAY_PAYMENT_URL;
 }
 
