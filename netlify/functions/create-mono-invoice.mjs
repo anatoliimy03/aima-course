@@ -1,6 +1,10 @@
 const MONO_CREATE_INVOICE_URL = 'https://api.monobank.ua/api/merchant/invoice/create';
-const COURSE_PRICE_KOPIYKY = 49000;
-const COURSE_PRICE_UAH = 490;
+const DEFAULT_COURSE_PRICE_UAH = 490;
+const PRICE_VARIANTS = {
+  '/online-shop-21-days/': 490,
+  '/online-shop-21-days-990/': 990,
+  '/online-shop-21-days-1390/': 1390
+};
 const COURSE_CODE = 'online-shop-21-days';
 const COURSE_NAME = 'Курс "Інтернет-магазин за 21 урок"';
 
@@ -73,6 +77,31 @@ function makeReference() {
   return `aima-course-${Date.now()}-${randomPart}`;
 }
 
+function normalizePagePath(pagePath) {
+  if (typeof pagePath !== 'string') return '/online-shop-21-days/';
+
+  try {
+    if (pagePath.startsWith('http://') || pagePath.startsWith('https://')) {
+      pagePath = new URL(pagePath).pathname;
+    }
+  } catch (error) {
+    pagePath = '/online-shop-21-days/';
+  }
+
+  const normalized = pagePath.split('?')[0].split('#')[0].replace(/\/index\.html$/, '/');
+  return normalized.endsWith('/') ? normalized : `${normalized}/`;
+}
+
+function getPriceVariant(pagePath) {
+  const normalizedPath = normalizePagePath(pagePath);
+  const priceUah = PRICE_VARIANTS[normalizedPath] || DEFAULT_COURSE_PRICE_UAH;
+  return {
+    pagePath: normalizedPath,
+    priceUah,
+    priceKopiyky: priceUah * 100
+  };
+}
+
 export async function handler(event) {
   if (event.httpMethod === 'OPTIONS') {
     if (!isSameOriginRequest(event)) {
@@ -95,12 +124,13 @@ export async function handler(event) {
   }
 
   const body = parseBody(event);
+  const priceVariant = getPriceVariant(body.page_path);
   const baseUrl = getBaseUrl(event);
   const reference = makeReference();
-  const redirectUrl = `${baseUrl}/online-shop-21-days/thank-you/?payment=mono&reference=${encodeURIComponent(reference)}`;
+  const redirectUrl = `${baseUrl}${priceVariant.pagePath}thank-you/?payment=mono&reference=${encodeURIComponent(reference)}`;
 
   const invoice = {
-    amount: COURSE_PRICE_KOPIYKY,
+    amount: priceVariant.priceKopiyky,
     ccy: 980,
     redirectUrl,
     validity: 3600,
@@ -113,8 +143,8 @@ export async function handler(event) {
         {
           name: COURSE_NAME,
           qty: 1,
-          sum: COURSE_PRICE_KOPIYKY,
-          total: COURSE_PRICE_KOPIYKY,
+          sum: priceVariant.priceKopiyky,
+          total: priceVariant.priceKopiyky,
           unit: 'шт.',
           code: COURSE_CODE
         }
@@ -159,7 +189,7 @@ export async function handler(event) {
       invoiceId: monoData.invoiceId,
       pageUrl: monoData.pageUrl,
       reference,
-      amount: COURSE_PRICE_UAH,
+      amount: priceVariant.priceUah,
       currency: 'UAH',
       location: typeof body.location === 'string' ? body.location.slice(0, 80) : null
     });
