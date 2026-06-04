@@ -1,0 +1,23 @@
+<svg width="120" height="82" viewBox="0 0 120 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="metal" x1="20" y1="12" x2="98" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.5" stop-color="#C9CED8"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(60 70) rotate(90) scale(14 42)">
+      <stop offset="0" stop-color="#2563EB" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-15%" y="-30%" width="130%" height="160%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.6"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#FFFFFF" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+  <ellipse cx="60" cy="70" rx="38" ry="10" fill="url(#glow)"/>
+  <g filter="url(#shadow)">
+    <path d="M22 68V17L32 27V68H22Z" fill="url(#metal)"/>
+    <path d="M98 68V17L88 27V68H98Z" fill="url(#metal)"/>
+    <path d="M31 17H43L60 36L77 17H89L60 48L31 17Z" fill="url(#metal)"/>
+  </g>
+</svg>

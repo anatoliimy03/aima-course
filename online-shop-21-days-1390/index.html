@@ -38,6 +38,7 @@ body {
   color: var(--text);
   font-size: 15px;
   line-height: 1.65;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 body.menu-open { overflow: hidden; }
@@ -58,30 +59,20 @@ ol { list-style: decimal; }
   margin-bottom: 12px;
 }
 
-/* HERO */
-.hero {
-  position: relative;
-  overflow: hidden;
-  background: var(--ink);
+/* HEADER */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 16px 0 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 24px 20px;
-  color: #fff;
-  margin: 16px 0;
+  background: rgba(255,255,255,0.88);
+  box-shadow: 0 14px 34px rgba(15,25,34,0.06);
+  backdrop-filter: blur(14px);
 }
-.hero > *:not(.hero-decor) { position: relative; z-index: 1; }
-.hero-decor {
-  position: absolute; inset: 0;
-  pointer-events: none;
-}
-.hero-decor .ti {
-  position: absolute;
-  color: var(--sky);
-  opacity: 0.2;
-}
-.hero-decor-package { top: 126px; right: 14px; font-size: 40px; transform: rotate(12deg); }
-.hero-decor-chart { top: 206px; right: 16px; font-size: 31px; transform: rotate(-8deg); }
-.hero-decor-sparkle { bottom: 14px; left: 12px; font-size: 28px; transform: rotate(10deg); }
-.hero-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
 .logo { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .brand-avatar {
   position: relative;
@@ -104,18 +95,42 @@ ol { list-style: decimal; }
 }
 .btn-menu {
   width: 36px; height: 36px;
-  background: rgba(255,255,255,0.08);
+  background: var(--ink);
   color: #fff;
-  border: 1px solid rgba(255,255,255,0.16);
+  border: 1px solid rgba(15,25,34,0.08);
   border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   box-shadow: 0 8px 22px rgba(0,0,0,0.12);
   transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
-.btn-menu:hover { background: rgba(255,255,255,0.13); border-color: rgba(133,183,235,0.55); color: var(--sky); transform: scale(1.06); }
+.btn-menu:hover { background: var(--blue); border-color: rgba(24,95,165,0.28); color: #fff; transform: scale(1.06); }
 .btn-menu .ti { font-size: 24px; transition: transform 0.2s ease; }
 .btn-menu:hover .ti { transform: rotate(4deg); }
+
+/* HERO */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  color: #fff;
+  margin: 10px 0 16px;
+}
+.hero > *:not(.hero-decor) { position: relative; z-index: 1; }
+.hero-decor {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.hero-decor .ti {
+  position: absolute;
+  color: var(--sky);
+  opacity: 0.2;
+}
+.hero-decor-package { top: 126px; right: 14px; font-size: 40px; transform: rotate(12deg); }
+.hero-decor-chart { top: 206px; right: 16px; font-size: 31px; transform: rotate(-8deg); }
+.hero-decor-sparkle { bottom: 14px; left: 12px; font-size: 28px; transform: rotate(10deg); }
 .hero-badge {
   position: absolute; top: 10px; right: 10px;
   display: inline-flex; align-items: center; gap: 4px;
@@ -1334,7 +1349,8 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
 @media (min-width: 700px) {
   .container { max-width: 780px; padding: 0 24px; }
   section { padding: 20px 0; }
-  .hero { padding: 32px; margin: 24px 0; }
+  .site-header { padding: 12px 14px; margin: 24px 0 12px; }
+  .hero { padding: 32px; margin: 12px 0 24px; }
   .hero h1 { font-size: 42px; }
   .hero > p { max-width: 610px; font-size: 16px; }
   .hero-photo { max-width: 650px; }
@@ -1377,6 +1393,10 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
 @media (min-width: 1080px) {
   .container { max-width: 1280px; padding: 0 32px; }
   section { padding: 32px 0; }
+  .site-header {
+    padding: 14px 18px;
+    border-radius: 18px;
+  }
   .hero {
     display: grid;
     grid-template-columns: minmax(0, 0.92fr) minmax(520px, 1fr);
@@ -1388,18 +1408,17 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
   .hero-decor-package { top: 150px; right: 52px; font-size: 58px; }
   .hero-decor-chart { top: auto; right: 48px; bottom: 96px; font-size: 44px; }
   .hero-decor-sparkle { bottom: 38px; left: 42px; font-size: 38px; }
-  .hero-top { grid-column: 1 / -1; margin-bottom: 22px; }
-  .hero h1 { grid-column: 1; grid-row: 2; align-self: end; margin-top: 10px; margin-bottom: 18px; font-size: 60px; line-height: 1.08; }
-  .hero > p { grid-column: 1; grid-row: 3; max-width: 560px; margin-bottom: 24px; font-size: 18px; line-height: 1.65; }
+  .hero h1 { grid-column: 1; grid-row: 1; align-self: end; margin-top: 10px; margin-bottom: 18px; font-size: 60px; line-height: 1.08; }
+  .hero > p { grid-column: 1; grid-row: 2; max-width: 560px; margin-bottom: 24px; font-size: 18px; line-height: 1.65; }
   .hero-photo {
-    grid-column: 2; grid-row: 2 / span 4;
+    grid-column: 2; grid-row: 1 / span 4;
     align-self: center;
     max-width: none;
     margin-bottom: 0;
     border-radius: 18px;
     box-shadow: 0 28px 80px rgba(0,0,0,0.24);
   }
-  .hero .spec-card { grid-column: 1; grid-row: 4; margin-bottom: 18px; padding: 18px 20px; border-radius: 16px; }
+  .hero .spec-card { grid-column: 1; grid-row: 3; margin-bottom: 18px; padding: 18px 20px; border-radius: 16px; }
   .spec-grid { gap: 16px; }
   .spec-grid > div > div:first-child { font-size: 10px; margin-bottom: 7px; }
   .spec-value { font-size: 14px; }
@@ -1408,7 +1427,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
   .spec-grid .price-old { font-size: 12px; }
   .hero-price-meta { gap: 7px; margin-top: 4px; }
   .hero-discount { font-size: 10px; padding: 2px 7px; }
-  .hero > .btn-cta { grid-column: 1; grid-row: 5; }
+  .hero > .btn-cta { grid-column: 1; grid-row: 4; }
   .hero .btn-cta { min-height: 58px; font-size: 17px; border-radius: 16px; }
   .logo-name { max-width: none; font-size: 14px; }
   .brand-avatar { width: 36px; height: 36px; }
@@ -1502,7 +1521,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
     min-height: 700px;
     border-radius: 24px;
   }
-  .hero-top { margin-bottom: 28px; }
+  .site-header { padding: 16px 22px; border-radius: 22px; }
   .brand-avatar { width: 44px; height: 44px; border-radius: 12px; }
   .logo { gap: 14px; }
   .logo-name { font-size: 18px; }
@@ -2227,19 +2246,20 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
 
 <div class="container">
 
+  <header class="site-header">
+    <div class="logo">
+      <div class="brand-avatar"><img src="avatar.png" alt="Анатолій Маліновський" onerror="this.style.display='none'"><span>АМ</span></div>
+      <span class="logo-name">Курс Анатолія Маліновського</span>
+    </div>
+    <button class="btn-menu" type="button" aria-label="Відкрити меню" aria-controls="site-menu" aria-expanded="false" onclick="openMenu()"><i class="ti ti-menu-2"></i></button>
+  </header>
+
   <!-- HERO -->
   <section class="hero" id="top">
     <div class="hero-decor" aria-hidden="true">
       <i class="ti ti-package hero-decor-package"></i>
       <i class="ti ti-chart-line hero-decor-chart"></i>
       <i class="ti ti-sparkles hero-decor-sparkle"></i>
-    </div>
-    <div class="hero-top">
-      <div class="logo">
-        <div class="brand-avatar"><img src="avatar.png" alt="Анатолій Маліновський" onerror="this.style.display='none'"><span>АМ</span></div>
-        <span class="logo-name">Курс Анатолія Маліновського</span>
-      </div>
-      <button class="btn-menu" type="button" aria-label="Відкрити меню" aria-controls="site-menu" aria-expanded="false" onclick="openMenu()"><i class="ti ti-menu-2"></i></button>
     </div>
     <h1>Запусти свій<br>інтернет-магазин<br><span>за 21 урок</span> з нуля</h1>
     <p>Практичний курс, де ти крок за кроком створиш свій інтернет-магазин.</p>
@@ -2264,7 +2284,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
         <div>
           <div>Ціна</div>
           <div class="spec-value spec-value-price">1390 ₴</div>
-          <div class="hero-price-meta"><span class="price-old">3490 ₴</span><span class="hero-discount">−86%</span></div>
+          <div class="hero-price-meta"><span class="price-old">2900 ₴</span><span class="hero-discount">−52%</span></div>
         </div>
         <div>
           <div>Формат</div>
@@ -2471,7 +2491,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
         <p>Переходь до практики одразу після оплати й проходь уроки у власному темпі.</p>
         <div class="cta-spec">
           <div class="cta-spec-row"><i class="ti ti-school"></i><div class="cta-spec-label">Старт</div><div class="cta-spec-value">Одразу після оплати</div></div>
-          <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">1390 ₴</span><span class="price-old-dark">3490 ₴</span><span class="discount-badge">−86%</span></div></div>
+          <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">1390 ₴</span><span class="price-old-dark">2900 ₴</span><span class="discount-badge">−52%</span></div></div>
           <div class="cta-spec-row"><i class="ti ti-brand-telegram"></i><div class="cta-spec-label">Доступ</div><div class="cta-spec-value">У Telegram, назавжди</div></div>
         </div>
         <button class="btn-cta btn-cta-final" onclick="goToPayment('program_cta', this)">Записатися за 1390 ₴ <i class="ti ti-arrow-right"></i></button>
@@ -2626,7 +2646,7 @@ body.reveal-ready .reveal-section.is-visible > *:nth-child(n+6) { transition-del
       <p>Спеціальна ціна доступна тільки протягом цієї сесії на сайті.</p>
       <div class="cta-spec">
         <div class="cta-spec-row"><i class="ti ti-school"></i><div class="cta-spec-label">Старт</div><div class="cta-spec-value">Одразу після оплати</div></div>
-        <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">1390 ₴</span><span class="price-old-dark">3490 ₴</span><span class="discount-badge">−86%</span></div></div>
+        <div class="cta-spec-row"><i class="ti ti-tag"></i><div class="cta-spec-label">Ціна</div><div class="price-block"><span class="price-new">1390 ₴</span><span class="price-old-dark">2900 ₴</span><span class="discount-badge">−52%</span></div></div>
         <div class="cta-spec-row"><i class="ti ti-brand-telegram"></i><div class="cta-spec-label">Доступ</div><div class="cta-spec-value">У Telegram, назавжди</div></div>
       </div>
       <button class="btn-cta btn-cta-final" onclick="goToPayment('final_cta', this)">Записатися за 1390 ₴ <i class="ti ti-arrow-right"></i></button>

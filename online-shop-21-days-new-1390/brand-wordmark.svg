@@ -1,0 +1,21 @@
+<svg width="460" height="58" viewBox="0 0 460 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="wordMetal" x1="0" y1="0" x2="460" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.46" stop-color="#D7DBE4"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <filter id="wordGlow" x="-2%" y="-55%" width="104%" height="210%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#FFFFFF" flood-opacity="0.18"/>
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000000" flood-opacity="0.58"/>
+    </filter>
+  </defs>
+  <rect width="460" height="58" fill="transparent"/>
+  <text x="8" y="38"
+        fill="url(#wordMetal)"
+        filter="url(#wordGlow)"
+        font-family="'Space Grotesk', 'Montserrat', 'Arial', sans-serif"
+        font-size="27"
+        font-weight="500"
+        letter-spacing="13.5">MALINOVSKYI</text>
+</svg>

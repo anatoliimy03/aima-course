@@ -3,7 +3,10 @@ const DEFAULT_COURSE_PRICE_UAH = 490;
 const PRICE_VARIANTS = {
   '/online-shop-21-days/': 490,
   '/online-shop-21-days-990/': 990,
-  '/online-shop-21-days-1390/': 1390
+  '/online-shop-21-days-1390/': 1390,
+  '/online-shop-21-days-new/': 490,
+  '/online-shop-21-days-new-990/': 990,
+  '/online-shop-21-days-new-1390/': 1390
 };
 const COURSE_CODE = 'online-shop-21-days';
 const COURSE_NAME = 'Курс "Інтернет-магазин за 21 урок"';
