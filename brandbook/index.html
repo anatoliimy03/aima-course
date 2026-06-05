@@ -200,6 +200,14 @@ button { font-family: var(--font-display); }
   background: rgba(255,255,255,0.05);
   box-shadow: none;
 }
+.btn-pdf {
+  border-color: rgba(255,255,255,0.34);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04)),
+    rgba(17,24,39,0.72);
+  box-shadow: 0 18px 54px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+.btn-pdf .ti { color: var(--blue-soft); font-size: 22px; }
 .btn-instagram {
   border-color: rgba(255,255,255,0.34);
   background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 48%, #FCAF45 100%);
@@ -237,6 +245,19 @@ button { font-family: var(--font-display); }
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-top: 28px;
+}
+.pdf-download-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.pdf-note {
+  max-width: 320px;
+  color: rgba(255,255,255,0.52);
+  font-size: 13px;
+  line-height: 1.45;
 }
 .hero-action {
   min-height: 72px;
@@ -1245,6 +1266,8 @@ button { font-family: var(--font-display); }
   .token-card { padding: 22px; }
   .hero-actions,
   .countdown { grid-template-columns: 1fr; }
+  .pdf-download-row .btn { width: 100%; }
+  .pdf-note { max-width: none; }
   .hero-action { min-height: 58px; }
   .hero-brand-card { min-height: 410px; border-radius: 24px; }
   .brandbook-top,
@@ -1257,6 +1280,102 @@ button { font-family: var(--font-display); }
   .footer-inner { align-items: flex-start; flex-direction: column; }
   .brand-row { grid-template-columns: 1fr; }
   .phone-screen { min-height: 500px; }
+}
+@page {
+  size: A4;
+  margin: 10mm;
+}
+@media print {
+  html { scroll-behavior: auto; }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-size: 13px;
+  }
+  .site-header,
+  .pdf-download-row {
+    display: none !important;
+  }
+  .container { width: 100%; }
+  .hero { padding: 18px 0 26px; }
+  .section { padding: 34px 0; }
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .hero-copy,
+  .component-card,
+  .cta-panel,
+  .guarantee,
+  .token-card {
+    padding: 20px;
+  }
+  .hero h1 {
+    max-width: 100%;
+    font-size: 42px;
+    line-height: 0.98;
+  }
+  .hero p,
+  .section-lead {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  .hero-actions {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  .hero-action {
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  .hero-brand-card {
+    min-height: 430px;
+    padding: 20px;
+  }
+  .brandbook-logo { width: 250px; }
+  .brandbook-top {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .brandbook-label {
+    align-self: flex-start;
+    font-size: 10px;
+    padding: 7px 10px;
+  }
+  .brandbook-center { min-height: 110px; }
+  .brandbook-center img { width: min(46%, 140px); }
+  .brandbook-principles {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .brandbook-principle {
+    min-height: auto;
+    padding: 10px 12px;
+  }
+  .brandbook-principle strong { font-size: 12px; }
+  .brandbook-principle span { font-size: 10px; line-height: 1.32; }
+  .brandbook-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .section-title {
+    font-size: 38px;
+    line-height: 1;
+  }
+  .section,
+  .panel,
+  .component-card,
+  .brand-card,
+  .case-card,
+  .review-card,
+  .bonus,
+  .guarantee {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
 }
 </style>
 </head>
@@ -1287,6 +1406,12 @@ button { font-family: var(--font-display); }
             <div class="hero-action"><i class="ti ti-palette"></i> кольори</div>
             <div class="hero-action"><i class="ti ti-components"></i> компоненти</div>
             <div class="hero-action"><i class="ti ti-photo"></i> медіа</div>
+          </div>
+          <div class="pdf-download-row">
+            <a class="btn btn-pdf" href="malinovskyi-brandbook.pdf" download>
+              <i class="ti ti-file-download"></i> Завантажити PDF
+            </a>
+            <div class="pdf-note">Файл містить візуальну систему сайту, реклами та контенту в одному документі.</div>
           </div>
         </div>
         <div class="hero-brand-card panel" aria-label="Ключові правила стилю Malinovskyi">

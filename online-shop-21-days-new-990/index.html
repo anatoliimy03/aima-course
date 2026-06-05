@@ -408,7 +408,7 @@ footer { scroll-margin-top: 70px; }
   min-height: 485px;
   border: 1px solid rgba(255,255,255,0.16);
   border-radius: 38px;
-  background: url("hero-photo-anatolii.png") center/cover no-repeat;
+  background: url("hero-photo-anatolii.png") center 34%/cover no-repeat;
   box-shadow: 0 32px 80px rgba(0,0,0,0.46);
 }
 .price-label {
@@ -1396,10 +1396,10 @@ footer { scroll-margin-top: 70px; }
   main[id],
   footer { scroll-margin-top: 62px; }
   .container { width: min(100% - 20px, 1240px); }
-  .section { padding: 46px 0; }
+  .section { padding: 42px 0; }
   .section-head { margin-bottom: 24px; }
   .eyebrow { margin-bottom: 12px; font-size: 11px; }
-  .section-title { font-size: clamp(31px, 8.8vw, 42px); line-height: 1; }
+  .section-title { font-size: clamp(30px, 8.4vw, 40px); line-height: 1; }
   .section-lead { margin-top: 14px; font-size: 16px; line-height: 1.45; }
   .site-header { top: 10px; margin-top: 10px; }
   .nav-shell { min-height: 60px; gap: 10px; padding: 10px 10px 10px 14px; border-radius: 18px; }
@@ -1408,8 +1408,8 @@ footer { scroll-margin-top: 70px; }
   .site-header .brand-wordmark-img { width: 238px; max-width: calc(100vw - 104px); }
   .footer .brand-wordmark-img { width: 238px; max-width: calc(100vw - 40px); }
   .menu-toggle { width: 42px; height: 42px; border-radius: 14px; }
-  .hero { padding: 34px 0 44px; }
-  .hero-grid { display: flex; flex-direction: column; gap: 22px; }
+  .hero { padding: 28px 0 34px; }
+  .hero-grid { display: flex; flex-direction: column; gap: 16px; }
   .hero-copy { display: contents; }
   .hero-copy,
   .hero-visual,
@@ -1419,23 +1419,28 @@ footer { scroll-margin-top: 70px; }
   .hero-visual { order: 3; width: 100%; overflow: hidden; border-radius: 24px; }
   .hero-actions { order: 4; }
   .hero-trust { order: 5; }
-  .hero h1 { font-size: clamp(32px, 10.2vw, 44px); line-height: 0.98; }
-  .hero h1 span { white-space: normal; }
-  .hero-text { margin: 18px 0 22px; font-size: 16.5px; line-height: 1.45; }
+  .hero h1 { font-size: clamp(35px, 10.8vw, 46px); line-height: 0.95; }
+  .hero h1 span { white-space: nowrap; }
+  .hero-text { margin: 14px 0 16px; font-size: 16px; line-height: 1.42; }
   .hero-text { max-width: 100%; }
   .hero-actions { width: 100%; display: grid; }
   .hero-actions .btn { width: 100%; }
   .btn { min-height: 54px; padding: 0 18px; font-size: 15px; }
-  .hero-trust { width: 100%; display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 16px; }
-  .trust-chip { justify-content: center; padding: 10px 12px; }
-  .hero-photo-card { min-height: 360px; border-radius: 24px; background-position: center top; }
+  .hero-trust { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 14px; }
+  .trust-chip { justify-content: center; gap: 4px; padding: 8px 5px; font-size: 11px; line-height: 1.1; white-space: nowrap; }
+  .trust-chip .ti { font-size: 14px; }
+  .hero-photo-card { min-height: 318px; border-radius: 24px; background-position: center 34%; }
   .hero-kicker { top: 12px; right: 12px; max-width: calc(100% - 24px); padding: 8px 10px; font-size: 11px; white-space: nowrap; }
   .card { min-height: auto; padding: 20px; border-radius: 20px; }
-  .audience-grid .card-emoji { width: 56px; height: 56px; margin-bottom: 18px; border-radius: 18px; font-size: 30px; }
+  #audience .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  #audience .card { padding: 16px 14px; }
+  .audience-grid .card-emoji { width: 46px; height: 46px; margin-bottom: 14px; border-radius: 15px; font-size: 25px; }
   .card-title { font-size: 20px; }
+  #audience .card-title { font-size: 17px; line-height: 1.12; }
   .card-text { font-size: 14px; }
+  #audience .card-text { font-size: 13px; line-height: 1.36; }
   .result-showcase { gap: 16px; padding: 16px; border-radius: 22px; }
-  .result-visual { min-height: 0; display: flex; flex-direction: column; align-items: stretch; gap: 14px; padding: 14px; border-radius: 20px; }
+  .result-visual { min-height: 0; display: flex; flex-direction: column; align-items: stretch; gap: 14px; padding: 12px; border-radius: 20px; }
   .store-window { transform: none; border-radius: 18px; }
   .store-window-bar { padding: 9px 10px; }
   .store-screen { aspect-ratio: 2878 / 1734; }
@@ -1463,14 +1468,14 @@ footer { scroll-margin-top: 70px; }
   .module-count { grid-column: 2; width: max-content; font-size: 11px; }
   .module summary > .ti { position: absolute; right: 16px; top: 20px; font-size: 20px; }
   .lesson-list { gap: 7px; padding: 8px 8px 14px; }
-  .lesson-list li { grid-template-columns: 92px minmax(0, 1fr); gap: 10px; padding: 8px; border-radius: 14px; }
+  .lesson-list li { grid-template-columns: 88px minmax(0, 1fr); gap: 10px; padding: 8px; border-radius: 14px; }
   .lesson-preview { min-height: 0; border-radius: 10px; }
   .lesson-preview .ti { width: 42px; height: 30px; }
   .lesson-content { font-size: 14px; line-height: 1.32; }
   .lesson-list strong { font-size: 12px; }
   .grid-3, .grid-4, .bonus-grid, .steps, .brand-row, .program-stats { grid-template-columns: 1fr; }
   .program-stats { grid-template-columns: repeat(3, 1fr); }
-  .telegram-grid { display: flex; flex-direction: column; gap: 22px; padding: 20px; border-radius: 22px; }
+  .telegram-grid { display: flex; flex-direction: column; gap: 18px; padding: 18px; border-radius: 22px; }
   .telegram-grid > div:first-child { display: contents; }
   .telegram-grid > div:first-child > .eyebrow { order: 1; }
   .telegram-grid > div:first-child > .section-title { order: 2; }
@@ -1480,17 +1485,17 @@ footer { scroll-margin-top: 70px; }
   .steps { grid-template-columns: 1fr; gap: 10px; margin-top: 18px; }
   .step { padding: 14px; border-radius: 16px; }
   .step .ti { font-size: 22px; }
-  .iphone { width: min(100%, 236px); border-radius: 38px; }
+  .iphone { width: min(100%, 232px); border-radius: 38px; }
   .tg-video-thumb .ti { width: 50px; height: 35px; }
   .speaker-grid { gap: 18px; }
-  .speaker-copy { padding: 22px; }
+  .speaker-copy { padding: 20px; }
   .speaker-copy h2 { font-size: clamp(32px, 9vw, 42px); }
   .brand-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .brand-card { height: 64px; border-radius: 14px; }
   .speaker-grid > .speaker-photo:not(.speaker-mobile-photo) { display: none; }
   .speaker-mobile-photo {
     display: block;
-    min-height: 360px;
+    min-height: 330px;
     margin: 18px 0 0;
     border-radius: 22px;
     background: linear-gradient(180deg, rgba(0,0,0,0) 48%, rgba(0,0,0,0.8)), url("speaker-stage-mobile.jpg") center/cover no-repeat;
@@ -1498,13 +1503,14 @@ footer { scroll-margin-top: 70px; }
   .quote { margin-top: 18px; padding: 18px; font-size: 16px; line-height: 1.55; }
   .instagram-float { left: 16px; right: 16px; bottom: 16px; min-height: 48px; font-size: 14px; }
   .speaker-photo {
-    min-height: 360px;
+    min-height: 330px;
     background: linear-gradient(180deg, rgba(0,0,0,0) 48%, rgba(0,0,0,0.8)), url("speaker-stage-mobile.jpg") center/cover no-repeat;
   }
   .case-card, .review, .bonus { border-radius: 20px; }
   #cases .grid-3,
   #reviews .grid-3,
   #bonuses .bonus-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .case-img { aspect-ratio: 1 / 0.86; }
   .case-info { padding: 12px; }
   .case-name { font-size: 15px; line-height: 1.15; }
   .case-cat { margin-top: 4px; font-size: 12px; line-height: 1.25; }
@@ -1512,7 +1518,7 @@ footer { scroll-margin-top: 70px; }
   .review-head { display: grid; gap: 8px; margin-bottom: 10px; }
   .review-name { font-size: 14px; line-height: 1.15; }
   .review p { font-size: 13px; line-height: 1.35; }
-  .review img { max-height: 150px; border-radius: 12px; }
+  .review img { max-height: 132px; border-radius: 12px; }
   .review-hint { font-size: 11px; }
   .bonus-free-banner { width: 100%; padding: 12px 14px; border-radius: 16px; text-align: center; font-size: 13px; line-height: 1.25; }
   .bonus { min-height: auto; padding: 16px 14px; }
@@ -1520,16 +1526,15 @@ footer { scroll-margin-top: 70px; }
   .bonus h3 { margin-top: 14px; font-size: 15px; }
   .bonus p { font-size: 13px; line-height: 1.35; }
   .free { margin-top: 12px; }
-  .guarantee { gap: 18px; padding: 18px; border-radius: 24px; }
+  .guarantee { gap: 16px; padding: 18px; border-radius: 24px; }
   .guarantee-mark { width: 58px; height: 58px; }
   .guarantee-mark .ti { font-size: 30px; }
   .guarantee-kicker { margin: 14px 0 10px; font-size: 10px; letter-spacing: 0.06em; }
   .guarantee h2 { font-size: clamp(27px, 7.8vw, 36px); line-height: 1.02; }
   .guarantee h2 span { white-space: nowrap; }
   .guarantee .section-lead { font-size: 15px; line-height: 1.4; }
-  .guarantee-list { gap: 10px; }
-  .guarantee-list { grid-template-columns: repeat(3, 1fr); }
-  .guarantee-item { flex-direction: column; justify-content: center; min-height: 88px; gap: 7px; padding: 12px 8px; border-radius: 16px; font-size: 13px; line-height: 1.18; text-align: center; }
+  .guarantee-list { gap: 10px; grid-template-columns: 1fr; }
+  .guarantee-item { min-height: 68px; gap: 10px; padding: 12px 14px; border-radius: 16px; font-size: 14px; line-height: 1.22; text-align: left; }
   .guarantee-item .ti { font-size: 23px; }
   .guarantee-watermark { right: 14px; top: 14px; font-size: 72px; }
   .cta-panel { padding: 22px 16px 20px; border-radius: 24px; }
@@ -1552,6 +1557,14 @@ footer { scroll-margin-top: 70px; }
   .review-modal-head { padding: 16px; }
   .review-modal-body { padding: 16px; gap: 14px; }
   .review-modal-copy { padding: 16px; }
+}
+@media (max-width: 360px) {
+  .hero h1 { font-size: clamp(30px, 9.6vw, 34px); letter-spacing: -0.085em; }
+  .hero-trust { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-trust .trust-chip:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 340px) {
+  .hero h1 { font-size: 28px; letter-spacing: -0.09em; }
 }
 </style>
 </head>
@@ -1584,9 +1597,9 @@ footer { scroll-margin-top: 70px; }
             <button class="btn" onclick="goToPayment('hero', this)">Записатись за 990 грн. <i class="ti ti-arrow-right"></i></button>
           </div>
           <div class="hero-trust">
-            <div class="trust-chip"><i class="ti ti-brand-telegram"></i> доступ у Telegram</div>
-            <div class="trust-chip"><i class="ti ti-clock"></i> 5-10 хв урок</div>
-            <div class="trust-chip"><i class="ti ti-shield-check"></i> гарантія результату</div>
+            <div class="trust-chip"><i class="ti ti-brand-telegram"></i> Доступ в Telegram</div>
+            <div class="trust-chip"><i class="ti ti-clock"></i> 5-10 хв уроки</div>
+            <div class="trust-chip"><i class="ti ti-shield-check"></i> Гарантія</div>
           </div>
         </div>
         <div class="hero-visual" aria-label="Візуал курсу">
@@ -1695,7 +1708,7 @@ footer { scroll-margin-top: 70px; }
           <h2 class="section-title">Навчаєшся прямо в Telegram</h2>
           <p class="section-lead" style="text-align:left;margin-left:0;">Після оплати переходиш у приватний канал. Уроки, бонуси й чек-листи зібрані в одному місці без зайвих кабінетів.</p>
           <div class="steps">
-            <div class="step"><i class="ti ti-lock-open"></i><div><strong>Отримуєш доступ</strong><span>посилання відкривається одразу після оплати</span></div></div>
+            <div class="step"><i class="ti ti-lock-open"></i><div><strong>Отримуєш доступ</strong><span>посилання одразу після оплати</span></div></div>
             <div class="step"><i class="ti ti-player-play"></i><div><strong>Дивишся короткі уроки</strong><span>5-10 хвилин, без води і складної теорії</span></div></div>
             <div class="step"><i class="ti ti-checklist"></i><div><strong>Робиш конкретні дії</strong><span>налаштовуєш магазин крок за кроком</span></div></div>
             <div class="step"><i class="ti ti-file-text"></i><div><strong>Забираєш бонуси</strong><span>шаблони, інструкції й чек-листи</span></div></div>
@@ -1851,7 +1864,7 @@ footer { scroll-margin-top: 70px; }
         <details><summary>Чи потрібні технічні знання або дизайнерські навички? <i class="ti ti-chevron-down"></i></summary><div>Ні. Уроки показують конкретні дії: як створити магазин, додати товари, налаштувати сторінки, оплату, доставку та базовий візуал.</div></details>
         <details><summary>Скільки часу потрібно на проходження курсу? <i class="ti ti-chevron-down"></i></summary><div>У курсі 21 короткий урок по 5-10 хвилин. Найкраще проходити їх послідовно і одразу виконувати дії в магазині.</div></details>
         <details><summary>Що саме буде готово після курсу? <i class="ti ti-chevron-down"></i></summary><div>У тебе буде створений інтернет-магазин: структура, категорії, товари, головна сторінка, базове оформлення, підключений домен і розуміння перших продажів.</div></details>
-        <details><summary>Як працює гарантія результату? <i class="ti ti-chevron-down"></i></summary><div>Якщо ти пройдеш усі 21 уроки, виконаєш усі дії з курсу і не отримаєш свого інтернет-магазину, повернемо гроші повністю.</div></details>
+        <details><summary>Як працює Гарантія? <i class="ti ti-chevron-down"></i></summary><div>Якщо ти пройдеш усі 21 уроки, виконаєш усі дії з курсу і не отримаєш свого інтернет-магазину, повернемо гроші повністю.</div></details>
       </div>
     </section>
   </main>
