@@ -19,6 +19,20 @@ Netlify picks up the push and deploys within ~1 minute. No build step.
 
 Before finishing future site/content/code changes, ask the user whether to deploy/push them to the live domain. Do not assume deploy is wanted unless the user explicitly asks for it.
 
+## Global tracking
+
+All current and future HTML pages must load the shared Meta Pixel script before `</head>`:
+
+```html
+<script src="/assets/meta-pixel.js"></script>
+```
+
+Also include the matching `noscript` fallback immediately after the opening `<body>` tag:
+
+```html
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=876973185445122&ev=PageView&noscript=1" alt=""></noscript>
+```
+
 ## Design system (CSS variables in `:root`)
 
 **Fonts** (Google Fonts):
