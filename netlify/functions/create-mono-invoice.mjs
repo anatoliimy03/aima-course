@@ -10,6 +10,7 @@ import {
   parseJsonBody,
   sanitizeText
 } from './_notifications.mjs';
+import { savePaymentAttempt } from './_payment-attempts.mjs';
 
 const MONO_CREATE_INVOICE_URL = 'https://api.monobank.ua/api/merchant/invoice/create';
 const COURSE_CODE = 'online-shop-21-days';
@@ -130,6 +131,29 @@ export async function handler(event) {
         error: 'Mono invoice response is incomplete',
         details: monoData
       });
+    }
+
+    try {
+      await savePaymentAttempt({
+        reference,
+        invoiceId: monoData.invoiceId,
+        pageUrl: monoData.pageUrl,
+        pagePath: priceVariant.pagePath,
+        design: priceVariant.design,
+        variantLabel: priceVariant.label,
+        priceUah: priceVariant.priceUah,
+        amountKopiyky: priceVariant.priceKopiyky,
+        location,
+        buttonLabel,
+        customer,
+        status: 'invoice_created',
+        paid: false,
+        reminderSent: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('[payment-attempts] save failed', error);
     }
 
     await notifyTelegram([

@@ -10,6 +10,7 @@ import {
   parseReference,
   sanitizeText
 } from './_notifications.mjs';
+import { updatePaymentAttempt } from './_payment-attempts.mjs';
 
 const MONO_PUBLIC_KEY_URL = 'https://api.monobank.ua/api/merchant/pubkey';
 let cachedPublicKey = null;
@@ -107,6 +108,25 @@ export async function handler(event) {
   const isPaid = isSuccessfulStatus(status);
   const icon = isPaid ? '✅' : 'ℹ️';
   const title = isPaid ? 'Успішна оплата mono' : 'Оновлення статусу mono';
+
+  if (referenceData.reference) {
+    try {
+      await updatePaymentAttempt(referenceData.reference, {
+        status: status || 'unknown',
+        paid: isPaid,
+        paidAt: isPaid ? new Date().toISOString() : undefined,
+        invoiceId: payload.invoiceId || undefined,
+        monoPayload: {
+          status,
+          amount: payload.amount,
+          errCode: payload.errCode || '',
+          failureReason: sanitizeText(payload.failureReason || '', 220)
+        }
+      });
+    } catch (error) {
+      console.error('[payment-attempts] webhook update failed', error);
+    }
+  }
 
   await notifyTelegram([
     `${icon} ${title}`,
