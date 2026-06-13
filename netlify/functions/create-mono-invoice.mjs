@@ -77,6 +77,14 @@ export async function handler(event) {
     name: sanitizeText(body.customer.name || '', 80),
     phone: sanitizeText(body.customer.phone || '', 40)
   } : { name: '', phone: '' };
+  const customerPhoneDigits = customer.phone.replace(/\D/g, '');
+
+  if (customerPhoneDigits.length < 9) {
+    return jsonResponse(event, 400, {
+      error: 'phone_required',
+      message: 'Phone is required before payment'
+    });
+  }
 
   const invoice = {
     amount: priceVariant.priceKopiyky,
