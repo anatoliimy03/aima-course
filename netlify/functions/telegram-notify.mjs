@@ -41,7 +41,7 @@ export async function handler(event) {
   const reference = sanitizeText(body.reference || '', 160);
   const buttonLabel = sanitizeText(body.button_label || 'telegram', 120);
 
-  await notifyTelegram([
+  const notification = await notifyTelegram([
     '✅ ' + getEventTitle(eventName),
     '',
     `Варіант: ${variant.label}`,
@@ -52,5 +52,16 @@ export async function handler(event) {
     `Час: ${formatDateTime()}`
   ].filter(Boolean).join('\n'));
 
-  return json(200, { ok: true });
+  return json(200, {
+    ok: true,
+    notification: {
+      ok: Boolean(notification && notification.ok),
+      skipped: Boolean(notification && notification.skipped),
+      status: notification && notification.status ? notification.status : null,
+      error: notification && notification.error ? notification.error : null,
+      description: notification && notification.details && notification.details.description
+        ? notification.details.description
+        : null
+    }
+  });
 }
