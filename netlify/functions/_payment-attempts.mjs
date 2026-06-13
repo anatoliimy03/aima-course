@@ -1,4 +1,4 @@
-import { getStore } from '@netlify/blobs';
+import { connectLambda, getStore } from '@netlify/blobs';
 
 const STORE_NAME = 'payment-attempts';
 const KEY_PREFIX = 'attempt:';
@@ -9,6 +9,10 @@ function getAttemptKey(reference) {
 
 function getPaymentAttemptsStore() {
   return getStore(STORE_NAME);
+}
+
+export function connectPaymentAttemptsStore(event) {
+  if (event) connectLambda(event);
 }
 
 function normalizeAttemptData(data) {

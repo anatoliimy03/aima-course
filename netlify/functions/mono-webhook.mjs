@@ -10,7 +10,7 @@ import {
   parseReference,
   sanitizeText
 } from './_notifications.mjs';
-import { updatePaymentAttempt } from './_payment-attempts.mjs';
+import { connectPaymentAttemptsStore, updatePaymentAttempt } from './_payment-attempts.mjs';
 
 const MONO_PUBLIC_KEY_URL = 'https://api.monobank.ua/api/merchant/pubkey';
 let cachedPublicKey = null;
@@ -80,6 +80,8 @@ function getStatusLabel(status) {
 }
 
 export async function handler(event) {
+  connectPaymentAttemptsStore(event);
+
   if (event.httpMethod !== 'POST') {
     return json(405, { error: 'Method not allowed' });
   }

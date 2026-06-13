@@ -10,7 +10,7 @@ import {
   parseJsonBody,
   sanitizeText
 } from './_notifications.mjs';
-import { savePaymentAttempt } from './_payment-attempts.mjs';
+import { connectPaymentAttemptsStore, savePaymentAttempt } from './_payment-attempts.mjs';
 
 const MONO_CREATE_INVOICE_URL = 'https://api.monobank.ua/api/merchant/invoice/create';
 const COURSE_CODE = 'online-shop-21-days';
@@ -43,6 +43,8 @@ function makeReference(priceVariant) {
 }
 
 export async function handler(event) {
+  connectPaymentAttemptsStore(event);
+
   if (event.httpMethod === 'OPTIONS') {
     if (!isSameOriginRequest(event)) {
       return jsonResponse(event, 403, { error: 'Origin is not allowed' });

@@ -5,7 +5,7 @@ import {
   notifyTelegram,
   sanitizeText
 } from './_notifications.mjs';
-import { listPaymentAttempts, updatePaymentAttempt } from './_payment-attempts.mjs';
+import { connectPaymentAttemptsStore, listPaymentAttempts, updatePaymentAttempt } from './_payment-attempts.mjs';
 
 export const config = {
   schedule: '* * * * *'
@@ -129,7 +129,9 @@ async function sendUnpaidReminder(attempt, nowMs) {
   });
 }
 
-export async function handler() {
+export async function handler(event) {
+  connectPaymentAttemptsStore(event);
+
   const nowMs = Date.now();
   const summary = {
     checked: 0,
