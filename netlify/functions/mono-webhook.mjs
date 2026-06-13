@@ -117,6 +117,7 @@ export async function handler(event) {
     referenceData.design ? `Дизайн: ${referenceData.design}` : '',
     payload.invoiceId ? `Invoice ID: ${payload.invoiceId}` : '',
     referenceData.reference ? `Reference: ${referenceData.reference}` : '',
+    referenceData.reference ? 'Контакт: шукай попередню спробу оплати з таким самим Reference' : '',
     payload.errCode ? `Код помилки: ${payload.errCode}` : '',
     payload.failureReason ? `Причина: ${sanitizeText(payload.failureReason, 220)}` : '',
     `Час: ${formatDateTime()}`

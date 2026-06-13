@@ -283,6 +283,56 @@
       catch(e) { return ''; }
     }
 
+    function sendTelegramNotificationPayload(payload) {
+      var body = JSON.stringify(payload);
+      try {
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/.netlify/functions/telegram-notify', new Blob([body], { type: 'application/json' }));
+          return;
+        }
+      } catch(e) {}
+      try {
+        fetch('/.netlify/functions/telegram-notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: body,
+          keepalive: true
+        }).catch(function(){});
+      } catch(e) {}
+    }
+
+    function getStoredPaymentLead(reference) {
+      if (!reference) return {};
+      try {
+        return JSON.parse(localStorage.getItem('aima_payment_lead_' + reference) || '{}') || {};
+      } catch(e) {
+        return {};
+      }
+    }
+
+    function notifyThankYouContactView() {
+      var reference = getPaymentReference();
+      if (!reference) return;
+      var sentKey = 'aima_thank_you_contact_sent_' + reference;
+      try {
+        if (sessionStorage.getItem(sentKey)) return;
+        sessionStorage.setItem(sentKey, '1');
+      } catch(e) {}
+      var lead = getStoredPaymentLead(reference);
+      if (!lead.name && !lead.phone) return;
+      sendTelegramNotificationPayload({
+        event_name: 'thank_you_contact_view',
+        page_path: window.location.pathname,
+        reference: reference,
+        name: lead.name || '',
+        phone: lead.phone || '',
+        invoice_id: lead.invoice_id || '',
+        price_uah: lead.price_uah || '',
+        button_label: 'thank_you_page_view'
+      });
+    }
+
+
     function notifyTelegramAccessClick(props) {
       var payload = Object.assign({
         event_name: 'telegram_access_click',
@@ -462,6 +512,8 @@
 
       return { track: track };
     })();
+    notifyThankYouContactView();
+
 
     function trackEvent(eventName, props) {
       return AIMA_ANALYTICS.track(eventName, props);

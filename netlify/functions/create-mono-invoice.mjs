@@ -70,6 +70,10 @@ export async function handler(event) {
   const webHookUrl = `${baseUrl}/.netlify/functions/mono-webhook`;
   const location = sanitizeText(body.location || 'unknown', 80);
   const buttonLabel = sanitizeText(body.button_label || '', 120);
+  const customer = body && typeof body.customer === 'object' && body.customer ? {
+    name: sanitizeText(body.customer.name || '', 80),
+    phone: sanitizeText(body.customer.phone || '', 40)
+  } : { name: '', phone: '' };
 
   const invoice = {
     amount: priceVariant.priceKopiyky,
@@ -136,6 +140,8 @@ export async function handler(event) {
       `Ціна: ${priceVariant.priceUah} грн`,
       `Сторінка: ${priceVariant.pagePath}`,
       `Кнопка: ${location}${buttonLabel ? ` / ${buttonLabel}` : ''}`,
+      customer.name ? `Ім’я: ${customer.name}` : 'Ім’я: не вказано',
+      customer.phone ? `Телефон: ${customer.phone}` : 'Телефон: не вказано',
       `Invoice ID: ${monoData.invoiceId}`,
       `Reference: ${reference}`,
       `Час: ${formatDateTime()}`
@@ -149,7 +155,11 @@ export async function handler(event) {
       currency: 'UAH',
       design: priceVariant.design,
       pagePath: priceVariant.pagePath,
-      location
+      location,
+      customer: {
+        name: customer.name,
+        phone: customer.phone
+      }
     });
   } catch (error) {
     return jsonResponse(event, 502, {

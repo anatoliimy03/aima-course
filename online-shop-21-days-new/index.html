@@ -1278,6 +1278,89 @@ footer { scroll-margin-top: 70px; }
 .menu-offer { margin-top: 14px; padding: 18px; border-radius: 18px; background: rgba(37,99,235,0.14); }
 .menu-offer .btn .ti { font-size: 18px; }
 
+.payment-lead-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 130;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(0,0,0,0.76);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
+}
+.payment-lead-modal.open { opacity: 1; visibility: visible; }
+.payment-lead-dialog {
+  width: min(94vw, 520px);
+  border: 1px solid rgba(110,168,255,0.28);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(37,99,235,0.28), transparent 18rem),
+    linear-gradient(145deg, rgba(21,28,39,0.98), rgba(5,7,10,0.98));
+  box-shadow: 0 40px 120px rgba(0,0,0,0.62);
+  transform: translateY(18px) scale(0.98);
+  transition: transform 0.24s ease;
+}
+.payment-lead-modal.open .payment-lead-dialog { transform: translateY(0) scale(1); }
+.payment-lead-head { display: flex; justify-content: space-between; gap: 16px; padding: 24px 24px 0; }
+.payment-lead-kicker {
+  color: var(--blue-soft);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.payment-lead-title {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.03;
+  letter-spacing: -0.05em;
+}
+.payment-lead-close {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+.payment-lead-body { padding: 16px 24px 24px; }
+.payment-lead-body p { margin: 0 0 18px; color: var(--gray-2); line-height: 1.65; }
+.payment-lead-form { display: grid; gap: 12px; }
+.payment-lead-field label {
+  display: block;
+  margin-bottom: 7px;
+  color: rgba(255,255,255,0.78);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+}
+.payment-lead-field input {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 16px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.07);
+  color: #fff;
+  font: 600 16px var(--font-body);
+  outline: none;
+}
+.payment-lead-field input:focus {
+  border-color: rgba(110,168,255,0.74);
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.18);
+}
+.payment-lead-note { color: rgba(255,255,255,0.45); font-size: 12px; line-height: 1.5; }
+.payment-lead-submit { width: 100%; justify-content: center; margin-top: 4px; }
+
 .review-modal {
   position: fixed;
   inset: 0;
@@ -1907,6 +1990,33 @@ footer { scroll-margin-top: 70px; }
     </div>
   </div>
 
+  <div class="payment-lead-modal" id="payment-lead-modal" aria-hidden="true" onclick="handlePaymentLeadBackdrop(event)">
+    <div class="payment-lead-dialog" role="dialog" aria-modal="true" aria-labelledby="payment-lead-title">
+      <div class="payment-lead-head">
+        <div>
+          <div class="payment-lead-kicker">Перед оплатою</div>
+          <div class="payment-lead-title" id="payment-lead-title">Куди відправити доступ?</div>
+        </div>
+        <button class="payment-lead-close" type="button" aria-label="Закрити форму" onclick="closePaymentLeadModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="payment-lead-body">
+        <p>Залиш ім’я та номер телефону. Після цього відкриється безпечна оплата mono, а після оплати ти отримаєш доступ у Telegram.</p>
+        <form class="payment-lead-form" id="payment-lead-form" onsubmit="submitPaymentLead(event)">
+          <div class="payment-lead-field">
+            <label for="payment-lead-name">Ім’я</label>
+            <input id="payment-lead-name" name="name" type="text" autocomplete="name" placeholder="Наприклад, Анатолій" required>
+          </div>
+          <div class="payment-lead-field">
+            <label for="payment-lead-phone">Телефон</label>
+            <input id="payment-lead-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+380..." required>
+          </div>
+          <div class="payment-lead-note">Це потрібно, щоб я міг швидко допомогти, якщо оплата не пройде або доступ не відкриється.</div>
+          <button class="btn payment-lead-submit" id="payment-lead-submit" type="submit">Перейти до оплати <i class="ti ti-arrow-right"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="review-modal" id="review-modal" aria-hidden="true" onclick="handleReviewBackdrop(event)">
     <div class="review-dialog" role="dialog" aria-modal="true" aria-labelledby="review-modal-title">
       <div class="review-modal-head">
@@ -2087,6 +2197,24 @@ setTimeout(syncHeroCtaWidth, 250);
 function getButtonText(button) {
   return button ? (button.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120) : '';
 }
+function sanitizeLeadValue(value, maxLength) {
+  return (value || '').replace(/\s+/g, ' ').trim().slice(0, maxLength || 120);
+}
+function normalizeLeadPhone(value) {
+  return sanitizeLeadValue(value, 40).replace(/[^\d+() -]/g, '');
+}
+function setPaymentLeadSubmitLoading(loading) {
+  var submit = document.getElementById('payment-lead-submit');
+  if (!submit) return;
+  if (loading) {
+    submit.dataset.originalHtml = submit.dataset.originalHtml || submit.innerHTML;
+    submit.disabled = true;
+    submit.innerHTML = 'Створюємо оплату...';
+    return;
+  }
+  submit.disabled = false;
+  if (submit.dataset.originalHtml) submit.innerHTML = submit.dataset.originalHtml;
+}
 function setButtonLoading(button, loading) {
   if (!button) return;
   if (loading) {
@@ -2098,24 +2226,55 @@ function setButtonLoading(button, loading) {
   button.disabled = false;
   if (button.dataset.originalHtml) button.innerHTML = button.dataset.originalHtml;
 }
-function goToPayment(locationName, button) {
-  var location = locationName || 'unknown';
-  var props = {
-    location: location,
-    button_label: getButtonText(button),
-    price_uah: COURSE_PRICE_UAH,
-    currency: 'UAH'
-  };
-  trackEvent('cta_click', props);
-  closeMenu('cta_click');
-  setButtonLoading(button, true);
+var pendingPaymentContext = null;
+
+function openPaymentLeadModal() {
+  var modal = document.getElementById('payment-lead-modal');
+  var nameInput = document.getElementById('payment-lead-name');
+  if (!modal) return;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function(){ if (nameInput) nameInput.focus(); }, 50);
+}
+function closePaymentLeadModal() {
+  var modal = document.getElementById('payment-lead-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  setPaymentLeadSubmitLoading(false);
+}
+function handlePaymentLeadBackdrop(event) {
+  if (event.target && event.target.id === 'payment-lead-modal') closePaymentLeadModal();
+}
+function savePaymentLead(reference, lead, invoiceData) {
+  if (!reference || !lead) return;
+  try {
+    localStorage.setItem('aima_payment_lead_' + reference, JSON.stringify({
+      name: lead.name,
+      phone: lead.phone,
+      reference: reference,
+      invoice_id: invoiceData && invoiceData.invoiceId ? invoiceData.invoiceId : null,
+      price_uah: COURSE_PRICE_UAH,
+      page_path: window.location.pathname,
+      created_at: new Date().toISOString()
+    }));
+  } catch(e) {}
+}
+function createMonoInvoice(context, lead) {
+  var props = context.props;
+  setPaymentLeadSubmitLoading(true);
+  setButtonLoading(context.button, true);
+
   fetch(MONO_INVOICE_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      location: location,
+      location: context.location,
       button_label: props.button_label,
-      page_path: window.location.pathname
+      page_path: window.location.pathname,
+      customer: lead
     })
   })
     .then(function(response){
@@ -2126,15 +2285,62 @@ function goToPayment(locationName, button) {
     })
     .then(function(data){
       if (!data.pageUrl) throw new Error('payment_page_url_missing');
-      trackEvent('begin_checkout', Object.assign({}, props, { payment_provider: 'monobank', invoice_id: data.invoiceId || null }));
+      savePaymentLead(data.reference, lead, data);
+      trackEvent('payment_lead_submitted', Object.assign({}, props, {
+        has_contact: true
+      }));
+      trackEvent('begin_checkout', Object.assign({}, props, {
+        payment_provider: 'monobank',
+        invoice_id: data.invoiceId || null,
+        reference: data.reference || null
+      }));
       window.location.href = data.pageUrl;
     })
     .catch(function(error){
       console.error('[payment]', error);
       trackEvent('payment_invoice_failed', Object.assign({}, props, { error: error.message || 'unknown' }));
       alert('Не вдалося створити оплату. Спробуй ще раз або напиши мені в Instagram.');
-      setButtonLoading(button, false);
+      setPaymentLeadSubmitLoading(false);
+      setButtonLoading(context.button, false);
     });
+}
+function submitPaymentLead(event) {
+  event.preventDefault();
+  if (!pendingPaymentContext) return;
+  var nameInput = document.getElementById('payment-lead-name');
+  var phoneInput = document.getElementById('payment-lead-phone');
+  var lead = {
+    name: sanitizeLeadValue(nameInput ? nameInput.value : '', 80),
+    phone: normalizeLeadPhone(phoneInput ? phoneInput.value : '')
+  };
+  if (lead.name.length < 2) {
+    alert('Вкажи, будь ласка, ім’я.');
+    if (nameInput) nameInput.focus();
+    return;
+  }
+  if (lead.phone.replace(/\D/g, '').length < 9) {
+    alert('Вкажи, будь ласка, коректний номер телефону.');
+    if (phoneInput) phoneInput.focus();
+    return;
+  }
+  createMonoInvoice(pendingPaymentContext, lead);
+}
+function goToPayment(locationName, button) {
+  var location = locationName || 'unknown';
+  var props = {
+    location: location,
+    button_label: getButtonText(button),
+    price_uah: COURSE_PRICE_UAH,
+    currency: 'UAH'
+  };
+  trackEvent('cta_click', props);
+  closeMenu('cta_click');
+  pendingPaymentContext = {
+    location: location,
+    button: button,
+    props: props
+  };
+  openPaymentLeadModal();
 }
 </script>
 </body>
