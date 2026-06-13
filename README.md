@@ -15,7 +15,7 @@
 - **Хостинг:** Netlify → https://aima-course.netlify.app
 - **Репозиторій:** GitHub → https://github.com/anatoliimy03/aima-course
 - **Оплата:** monobank acquiring через Netlify Function
-- **Telegram бот:** (ще не підключено)
+- **Telegram сповіщення:** Netlify Functions + Telegram Bot API
 
 ---
 
@@ -66,20 +66,20 @@
 ## Оплата
 - Усі CTA кнопки запускають `goToPayment()` і створюють рахунок mono через `/.netlify/functions/create-mono-invoice`
 - Секретний mono token зберігається тільки в Netlify env var `MONOBANK_TOKEN`
-- Return URL mono: `https://malinovskyi.in.ua/online-shop-21-days/thank-you/`
-- Сторінка подяки: `online-shop-21-days/thank-you/index.html`
+- Mono webhook URL передається в інвойс як `/.netlify/functions/mono-webhook`
+- Webhook перевіряє підпис mono через `x-sign` і відкритий ключ з `/api/merchant/pubkey`
+- Підтримуються 6 сторінок покупки: old/new дизайн та ціни 490/990/1390 грн
+- Return URL mono веде на відповідну сторінку `thank-you/` для кожного варіанту
 - Посилання на Telegram-доступ після оплати задається на сторінці подяки у змінній `TELEGRAM_ACCESS_URL`
 - Для стабільного production URL можна додати Netlify env var `PUBLIC_SITE_URL=https://malinovskyi.in.ua`
 
----
-
-## Що ще не зроблено
-- [ ] Додати `MONOBANK_TOKEN` у Netlify environment variables
-- [ ] Вставити реальне посилання на Telegram-доступ у `TELEGRAM_ACCESS_URL`
-- [ ] Telegram бот — після оплати видає посилання на канал
-- [ ] Фото спікера (speaker.jpg)
-- [ ] Фото в hero (photo.jpg)
-- [ ] Фото кейсів (case1-4.jpg)
+### Telegram сповіщення
+- `create-mono-invoice` надсилає сповіщення, коли створено рахунок mono
+- `mono-webhook` надсилає сповіщення, коли mono повертає статус оплати
+- `telegram-notify` надсилає сповіщення, коли людина натиснула Telegram на сторінці подяки
+- Секрети зберігаються тільки в Netlify env vars:
+  - `TELEGRAM_BOT_TOKEN`
+  - `TELEGRAM_CHAT_ID`
 
 ---
 

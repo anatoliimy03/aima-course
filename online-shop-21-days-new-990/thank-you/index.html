@@ -436,6 +436,34 @@
   <script>
     var TELEGRAM_ACCESS_URL = 'https://tg.pulse.is/aimacoursebot?start=69e09581055e43a5180fe05d&utm_source=malinovskyi_site&utm_medium=thank_you&utm_campaign=online_shop_21_days&utm_content=new_990&price=990&design=new';
 
+    function getPaymentReference() {
+      try { return new URLSearchParams(window.location.search).get('reference') || ''; }
+      catch(e) { return ''; }
+    }
+
+    function notifyTelegramAccessClick(props) {
+      var payload = Object.assign({
+        event_name: 'telegram_access_click',
+        page_path: window.location.pathname,
+        reference: getPaymentReference()
+      }, props || {});
+      var body = JSON.stringify(payload);
+      try {
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/.netlify/functions/telegram-notify', new Blob([body], { type: 'application/json' }));
+          return;
+        }
+      } catch(e) {}
+      try {
+        fetch('/.netlify/functions/telegram-notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: body,
+          keepalive: true
+        }).catch(function(){});
+      } catch(e) {}
+    }
+
     function trackEvent(eventName, props) {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push(Object.assign({ event: eventName, page_path: window.location.pathname }, props || {}));
@@ -448,6 +476,7 @@
     function goToTelegramAccess(button) {
       var props = { location: 'thank_you', button_label: button ? button.textContent.trim() : 'telegram' };
       trackEvent('telegram_access_click', props);
+      notifyTelegramAccessClick(props);
       if (!TELEGRAM_ACCESS_URL || TELEGRAM_ACCESS_URL.indexOf('REPLACE_WITH_TELEGRAM_ACCESS_LINK') !== -1) {
         trackEvent('telegram_access_link_missing', props);
         alert('Посилання на Telegram ще потрібно додати. Напиши в Instagram, і я дам доступ вручну.');
