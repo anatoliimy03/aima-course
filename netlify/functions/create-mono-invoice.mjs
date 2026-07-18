@@ -167,17 +167,13 @@ export async function handler(event) {
     }
 
     await notifyTelegram([
-      '🟦 Нова спроба оплати',
+      '🟦 Спроба оплати',
       '',
-      `Курс: ${COURSE_NAME}`,
       `Варіант: ${priceVariant.label}`,
-      `Ціна: ${priceVariant.priceUah} грн`,
-      `Сторінка: ${priceVariant.pagePath}`,
+      `Контакт: ${[customer.name, customer.phone].filter(Boolean).join(' / ') || 'не вказано'}`,
       `Кнопка: ${location}${buttonLabel ? ` / ${buttonLabel}` : ''}`,
-      customer.name ? `Ім’я: ${customer.name}` : 'Ім’я: не вказано',
-      customer.phone ? `Телефон: ${customer.phone}` : 'Телефон: не вказано',
-      `Invoice ID: ${monoData.invoiceId}`,
-      `Reference: ${reference}`,
+      `Invoice: ${monoData.invoiceId}`,
+      `Ref: ${reference}`,
       `Час: ${formatDateTime()}`
     ].join('\n'));
 

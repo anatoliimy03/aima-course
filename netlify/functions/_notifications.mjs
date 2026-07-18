@@ -3,13 +3,13 @@ const TELEGRAM_API_BASE = 'https://api.telegram.org';
 export const COURSE_NAME = 'Курс "Інтернет-магазин за 21 урок"';
 
 export const COURSE_VARIANTS = {
-  '/online-shop-21-days/': { priceUah: 490, design: 'old', label: 'Старий дизайн 490 грн' },
-  '/online-shop-21-days-990/': { priceUah: 990, design: 'old', label: 'Старий дизайн 990 грн' },
+  '/online-shop-21-days/': { priceUah: 1390, design: 'old', label: 'Старий дизайн 1390 грн', pagePath: '/online-shop-21-days-1390/' },
+  '/online-shop-21-days-990/': { priceUah: 1390, design: 'old', label: 'Старий дизайн 1390 грн', pagePath: '/online-shop-21-days-1390/' },
   '/online-shop-21-days-1390/': { priceUah: 1390, design: 'old', label: 'Старий дизайн 1390 грн' },
-  '/online-shop-21-days-new/': { priceUah: 490, design: 'new', label: 'Новий дизайн 490 грн' },
-  '/online-shop-21-days-new-990/': { priceUah: 990, design: 'new', label: 'Новий дизайн 990 грн' },
+  '/online-shop-21-days-new/': { priceUah: 1390, design: 'new', label: 'Новий дизайн 1390 грн', pagePath: '/online-shop-21-days-new-1390/' },
+  '/online-shop-21-days-new-990/': { priceUah: 1390, design: 'new', label: 'Новий дизайн 1390 грн', pagePath: '/online-shop-21-days-new-1390/' },
   '/online-shop-21-days-new-1390/': { priceUah: 1390, design: 'new', label: 'Новий дизайн 1390 грн' },
-  '/online-shop-21-days-new-design/': { priceUah: 490, design: 'new_design', label: 'Новий дизайн чернетка 490 грн' }
+  '/online-shop-21-days-new-design/': { priceUah: 1390, design: 'new', label: 'Новий дизайн 1390 грн', pagePath: '/online-shop-21-days-new-1390/' }
 };
 
 export function normalizePagePath(pagePath) {
@@ -29,9 +29,9 @@ export function normalizePagePath(pagePath) {
 
 export function getCourseVariant(pagePath) {
   const normalizedPath = normalizePagePath(pagePath);
-  const variant = COURSE_VARIANTS[normalizedPath] || COURSE_VARIANTS['/online-shop-21-days/'];
+  const variant = COURSE_VARIANTS[normalizedPath] || COURSE_VARIANTS['/online-shop-21-days-new-1390/'];
   return {
-    pagePath: normalizedPath,
+    pagePath: variant.pagePath || normalizedPath,
     priceUah: variant.priceUah,
     priceKopiyky: variant.priceUah * 100,
     design: variant.design,

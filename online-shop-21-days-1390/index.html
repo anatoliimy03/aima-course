@@ -4,10 +4,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aima — Запусти свій інтернет-магазин за 21 урок</title>
+<meta name="description" content="Практичний онлайн-курс Анатолія Маліновського: 21 короткий урок для запуску інтернет-магазину на платформі Aima.">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
+<link rel="canonical" href="https://malinovskyi.in.ua/online-shop-21-days-1390/">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Onest:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Course",
+      "@id": "https://malinovskyi.in.ua/online-shop-21-days-1390/#course",
+      "name": "Інтернет-магазин за 21 урок",
+      "description": "Практичний онлайн-курс Анатолія Маліновського про запуск інтернет-магазину на платформі Aima.",
+      "url": "https://malinovskyi.in.ua/online-shop-21-days-1390/",
+      "inLanguage": "uk",
+      "provider": {
+        "@type": "Person",
+        "name": "Анатолій Маліновський",
+        "url": "https://malinovskyi.in.ua/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "1390",
+        "priceCurrency": "UAH",
+        "availability": "https://schema.org/InStock",
+        "url": "https://malinovskyi.in.ua/online-shop-21-days-1390/"
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://malinovskyi.in.ua/online-shop-21-days-1390/#product",
+      "name": "Курс «Інтернет-магазин за 21 урок»",
+      "description": "Онлайн-курс із 21 короткого уроку для запуску інтернет-магазину на Aima.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Aima"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "1390",
+        "priceCurrency": "UAH",
+        "availability": "https://schema.org/InStock",
+        "url": "https://malinovskyi.in.ua/online-shop-21-days-1390/"
+      }
+    }
+  ]
+}
+</script>
 <style>
 :root {
   --bg: #F6F7F9;
@@ -3237,6 +3283,40 @@ function sanitizeLeadValue(value, maxLength) {
 function normalizeLeadPhone(value) {
   return sanitizeLeadValue(value, 40).replace(/[^\d+() -]/g, '');
 }
+function sendSiteNotificationPayload(payload) {
+  var body = JSON.stringify(payload);
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/.netlify/functions/telegram-notify', new Blob([body], { type: 'application/json' }));
+      return;
+    }
+  } catch(e) {}
+  try {
+    fetch('/.netlify/functions/telegram-notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: body,
+      keepalive: true
+    }).catch(function(){});
+  } catch(e) {}
+}
+function notifyPaymentFormStarted(nameValue) {
+  if (!pendingPaymentContext || pendingPaymentContext.formStartedSent) return;
+  var name = sanitizeLeadValue(nameValue || '', 80);
+  if (name.length < 2) return;
+  pendingPaymentContext.formStartedSent = true;
+  sendSiteNotificationPayload({
+    event_name: 'payment_form_started',
+    page_path: window.location.pathname,
+    location: pendingPaymentContext.location,
+    button_label: pendingPaymentContext.ctaProps && pendingPaymentContext.ctaProps.button_label ? pendingPaymentContext.ctaProps.button_label : '',
+    name: name,
+    price_uah: COURSE_PRICE_UAH
+  });
+  trackEvent('payment_form_started', Object.assign({}, pendingPaymentContext.ctaProps, {
+    has_name: true
+  }), { keepalive: true });
+}
 function setPaymentLeadSubmitLoading(isLoading) {
   var submit = document.getElementById('payment-lead-submit');
   if (!submit) return;
@@ -3271,6 +3351,12 @@ function openPaymentLeadModal() {
   var modal = document.getElementById('payment-lead-modal');
   var nameInput = document.getElementById('payment-lead-name');
   if (!modal) return;
+  if (nameInput && !nameInput.dataset.formStartListener) {
+    nameInput.dataset.formStartListener = '1';
+    nameInput.addEventListener('input', function(){
+      notifyPaymentFormStarted(nameInput.value);
+    });
+  }
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';

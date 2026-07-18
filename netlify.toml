@@ -1,3 +1,159 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/online-shop-21-days"
+  to = "/online-shop-21-days-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days/"
+  to = "/online-shop-21-days-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days/thank-you"
+  to = "/online-shop-21-days-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days/thank-you/"
+  to = "/online-shop-21-days-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-990"
+  to = "/online-shop-21-days-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-990/"
+  to = "/online-shop-21-days-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-990/thank-you"
+  to = "/online-shop-21-days-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-990/thank-you/"
+  to = "/online-shop-21-days-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new"
+  to = "/online-shop-21-days-new-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new/"
+  to = "/online-shop-21-days-new-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new/thank-you"
+  to = "/online-shop-21-days-new-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new/thank-you/"
+  to = "/online-shop-21-days-new-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new/design-system"
+  to = "/online-shop-21-days-new-1390/design-system/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new/design-system/"
+  to = "/online-shop-21-days-new-1390/design-system/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-990"
+  to = "/online-shop-21-days-new-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-990/"
+  to = "/online-shop-21-days-new-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-990/thank-you"
+  to = "/online-shop-21-days-new-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-990/thank-you/"
+  to = "/online-shop-21-days-new-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-990/design-system"
+  to = "/online-shop-21-days-new-1390/design-system/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-990/design-system/"
+  to = "/online-shop-21-days-new-1390/design-system/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-design"
+  to = "/online-shop-21-days-new-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-design/"
+  to = "/online-shop-21-days-new-1390/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-design/thank-you"
+  to = "/online-shop-21-days-new-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-design/thank-you/"
+  to = "/online-shop-21-days-new-1390/thank-you/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-design/design-system"
+  to = "/online-shop-21-days-new-1390/design-system/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/online-shop-21-days-new-design/design-system/"
+  to = "/online-shop-21-days-new-1390/design-system/"
+  status = 301
+  force = true

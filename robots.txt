@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /.netlify/
+Disallow: /online-shop-21-days-1390/thank-you/
+Disallow: /online-shop-21-days-new-1390/thank-you/
+
+Sitemap: https://malinovskyi.in.ua/sitemap.xml

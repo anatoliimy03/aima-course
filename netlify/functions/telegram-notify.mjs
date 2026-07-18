@@ -10,8 +10,9 @@ import {
 
 function getEventTitle(eventName) {
   const titles = {
-    telegram_access_click: 'Перехід у Telegram після оплати',
-    thank_you_contact_view: 'Контакт відкрив сторінку подяки'
+    payment_form_started: 'Старт заповнення форми',
+    telegram_access_click: 'Перехід у Telegram',
+    thank_you_contact_view: 'Сторінка подяки'
   };
 
   return titles[eventName] || 'Подія на сайті';
@@ -33,7 +34,7 @@ export async function handler(event) {
   const body = parseJsonBody(event);
   const eventName = sanitizeText(body.event_name || '', 80);
 
-  if (!['telegram_access_click', 'thank_you_contact_view'].includes(eventName)) {
+  if (!['payment_form_started', 'telegram_access_click', 'thank_you_contact_view'].includes(eventName)) {
     return json(400, { error: 'Unsupported event' });
   }
 
@@ -41,30 +42,39 @@ export async function handler(event) {
   const variant = getCourseVariant(pagePath);
   const reference = sanitizeText(body.reference || '', 160);
   const buttonLabel = sanitizeText(body.button_label || 'telegram', 120);
+  const location = sanitizeText(body.location || '', 80);
   const customerName = sanitizeText(body.name || '', 80);
   const customerPhone = sanitizeText(body.phone || '', 40);
   const invoiceId = sanitizeText(body.invoice_id || '', 120);
   const submittedPrice = sanitizeText(body.price_uah || '', 20);
 
-  const details = eventName === 'thank_you_contact_view'
-    ? [
-        customerName ? `Ім’я: ${customerName}` : 'Ім’я: не вказано',
-        customerPhone ? `Телефон: ${customerPhone}` : 'Телефон: не вказано',
-        invoiceId ? `Invoice ID: ${invoiceId}` : '',
-        submittedPrice ? `Ціна з форми: ${submittedPrice} грн` : ''
-      ]
-    : [
-        `Кнопка: ${buttonLabel}`
-      ];
+  const detailsByEvent = {
+    payment_form_started: [
+      customerName ? `Ім’я: ${customerName}` : 'Ім’я: почав вводити',
+      location ? `Кнопка: ${location}` : '',
+      buttonLabel ? `Текст: ${buttonLabel}` : ''
+    ],
+    thank_you_contact_view: [
+      customerName || customerPhone ? `Контакт: ${[customerName, customerPhone].filter(Boolean).join(' / ')}` : 'Контакт: не збережено',
+      invoiceId ? `Invoice: ${invoiceId}` : '',
+      submittedPrice ? `Ціна: ${submittedPrice} грн` : ''
+    ],
+    telegram_access_click: [
+      buttonLabel ? `Кнопка: ${buttonLabel}` : ''
+    ]
+  };
+
+  const icon = eventName === 'payment_form_started' ? '📝'
+    : eventName === 'telegram_access_click' ? '🚀'
+      : '✅';
 
   const notification = await notifyTelegram([
-    '✅ ' + getEventTitle(eventName),
+    `${icon} ${getEventTitle(eventName)}`,
     '',
     `Варіант: ${variant.label}`,
-    `Ціна: ${variant.priceUah} грн`,
-    `Сторінка: ${pagePath || variant.pagePath}`,
-    ...details,
-    reference ? `Reference: ${reference}` : '',
+    ...(detailsByEvent[eventName] || []),
+    pagePath ? `Сторінка: ${pagePath}` : '',
+    reference ? `Ref: ${reference}` : '',
     `Час: ${formatDateTime()}`
   ].filter(Boolean).join('\n'));
 

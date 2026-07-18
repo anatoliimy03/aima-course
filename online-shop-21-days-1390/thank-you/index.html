@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Оплату прийнято — Курс Анатолія Маліновського</title>
-  <meta name="description" content="Дякую за оплату курсу Інтернет-магазин за 21 урок." />
+  <title>Перевірка оплати — Курс Анатолія Маліновського</title>
+  <meta name="description" content="Перевіряємо оплату курсу Інтернет-магазин за 21 урок перед видачею доступу." />
+  <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" type="image/png" href="../favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,6 +119,37 @@
       letter-spacing: 0.08em;
       margin-bottom: 18px;
     }
+    .payment-status-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: -6px 0 22px;
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.68);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .payment-status-box i {
+      flex: 0 0 auto;
+      color: var(--sky);
+      font-size: 21px;
+      margin-top: 1px;
+    }
+    .payment-status-box.success {
+      border-color: rgba(99,153,34,0.34);
+      background: rgba(99,153,34,0.14);
+      color: #DDF8BF;
+    }
+    .payment-status-box.success i { color: #B7EA82; }
+    .payment-status-box.error {
+      border-color: rgba(226,75,74,0.36);
+      background: rgba(226,75,74,0.14);
+      color: #FFE1E1;
+    }
+    .payment-status-box.error i { color: #FF8C8C; }
     h1 {
       max-width: 620px;
       font-family: var(--f-display);
@@ -191,6 +223,12 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       cursor: pointer;
     }
+    .btn[disabled] {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+      box-shadow: none;
+    }
     .btn-primary {
       color: #fff;
       background: linear-gradient(135deg, #F45B5A 0%, #D9363E 100%);
@@ -243,9 +281,13 @@
           <div class="brand-name">Курс Анатолія Маліновського</div>
         </div>
 
-        <div class="status"><i class="ti ti-circle-check-filled"></i> Оплата успішна</div>
-        <h1 id="thank-you-title">Перейди в Telegram</h1>
-        <p class="lead">Оплату прийнято. Тепер натисни кнопку нижче — у Telegram ти отримаєш доступ до курсу “Інтернет-магазин за 21 урок” та бонусних матеріалів.</p>
+        <div class="status" id="payment-status-label"><i class="ti ti-loader-2"></i> Перевіряємо оплату</div>
+        <h1 id="thank-you-title">Доступ майже готовий</h1>
+        <p class="lead" id="payment-lead">Зараз перевіряємо статус платежу. Доступ у Telegram відкриється тільки після підтвердженої оплати.</p>
+        <div class="payment-status-box" id="payment-status-box">
+          <i class="ti ti-shield-check"></i>
+          <span id="payment-status-text">Перевіряємо оплату через mono. Це може зайняти кілька секунд.</span>
+        </div>
 
         <div class="steps">
           <div class="step">
@@ -266,21 +308,31 @@
         </div>
 
         <div class="actions">
-          <button class="btn btn-primary btn-telegram" type="button" onclick="goToTelegramAccess(this)">Перейти в Telegram і отримати доступ <i class="ti ti-brand-telegram"></i></button>
+          <button class="btn btn-primary btn-telegram" id="telegram-access-button" type="button" onclick="goToTelegramAccess(this)" disabled>Перейти в Telegram і отримати доступ <i class="ti ti-brand-telegram"></i></button>
           <a class="btn btn-secondary" href="https://www.instagram.com/malinovskyi_anatolii" target="_blank" rel="noopener">Проблема з доступом? Написати <i class="ti ti-brand-instagram"></i></a>
         </div>
 
-        <p class="note">Якщо Telegram не відкривається або доступ не з'явився, напиши мені в Instagram і додай email або скрін оплати.</p>
+        <p class="note">Якщо оплата пройшла, але кнопка ще не активна, зачекай 10–20 секунд або онови сторінку. Якщо mono показав помилку — доступ не відкривається.</p>
       </div>
     </section>
     <div class="footer">© 2026 Усі права захищені</div>
   </main>
   <script>
-    var TELEGRAM_ACCESS_URL = 'https://tg.pulse.is/aimacoursebot?start=69e09581055e43a5180fe05d&utm_source=malinovskyi_site&utm_medium=thank_you&utm_campaign=online_shop_21_days&utm_content=old_1390&price=1390&design=old';
+    var paymentStatusState = {
+      checked: false,
+      paid: false,
+      status: 'checking',
+      accessUrl: ''
+    };
 
     function getPaymentReference() {
       try { return new URLSearchParams(window.location.search).get('reference') || ''; }
       catch(e) { return ''; }
+    }
+
+    function getMetaPurchaseEventId(reference) {
+      var paymentReference = reference || getPaymentReference();
+      return paymentReference ? 'purchase_' + paymentReference : '';
     }
 
     function sendTelegramNotificationPayload(payload) {
@@ -483,12 +535,15 @@
         if (typeof window.fbq === 'function') {
           try {
             if (eventName === 'purchase_success') {
-              window.fbq('track', 'Purchase', Object.assign({
+              var metaEventId = (props && props.meta_event_id) || getMetaPurchaseEventId(props && props.reference) || payload.event_id;
+              var metaProps = Object.assign({
                 content_name: 'Інтернет-магазин за 21 урок',
                 content_category: 'online_course',
                 currency: 'UAH',
                 value: 1390
-              }, props || {}));
+              }, props || {});
+              delete metaProps.meta_event_id;
+              window.fbq('track', 'Purchase', metaProps, { eventID: metaEventId });
             } else if (eventName === 'telegram_access_click') {
               window.fbq('trackCustom', 'Telegram_Access_Click', props || {});
             }
@@ -520,16 +575,113 @@
     }
 
     trackEvent('page_view', { page_type: 'thank_you', title: document.title });
-    trackEvent('purchase_success', {
-      product: 'online_shop_21_lessons',
-      value: 1390,
-      currency: 'UAH',
-      payment_provider: 'monobank'
-    });
 
     function getAnalyticsText(element) {
       if (!element) return '';
       return (element.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+    }
+
+    function trackPurchaseSuccessOnce() {
+      var reference = getPaymentReference();
+      if (!reference) return;
+      var sentKey = 'aima_purchase_success_sent_' + reference;
+      try {
+        if (sessionStorage.getItem(sentKey)) return;
+        sessionStorage.setItem(sentKey, '1');
+      } catch(e) {}
+      trackEvent('purchase_success', {
+        product: 'online_shop_21_lessons',
+        value: 1390,
+        currency: 'UAH',
+        payment_provider: 'monobank',
+        reference: reference,
+        meta_event_id: getMetaPurchaseEventId(reference)
+      });
+    }
+
+    function setPaymentStatusView(type, message) {
+      var box = document.getElementById('payment-status-box');
+      var text = document.getElementById('payment-status-text');
+      var label = document.getElementById('payment-status-label');
+      var title = document.getElementById('thank-you-title');
+      var lead = document.getElementById('payment-lead');
+      var button = document.getElementById('telegram-access-button');
+      if (box) box.className = 'payment-status-box' + (type ? ' ' + type : '');
+      if (text) text.textContent = message;
+      if (button) button.disabled = type !== 'success';
+      if (type === 'success') {
+        if (label) label.innerHTML = '<i class="ti ti-circle-check-filled"></i> Оплату підтверджено';
+        if (title) title.textContent = 'Перейди в Telegram';
+        if (lead) lead.textContent = 'Оплату підтверджено. Тепер натисни кнопку нижче — у Telegram ти отримаєш доступ до курсу та бонусних матеріалів.';
+      } else if (type === 'error') {
+        if (label) label.innerHTML = '<i class="ti ti-alert-circle"></i> Оплату не підтверджено';
+        if (title) title.textContent = 'Доступ ще не відкрито';
+        if (lead) lead.textContent = 'Mono не підтвердив успішну оплату, тому доступ у Telegram заблокований.';
+      }
+    }
+
+    function fetchPaymentStatus() {
+      var reference = getPaymentReference();
+      if (!reference) {
+        return Promise.resolve({ ok: false, error: 'reference_required' });
+      }
+      return fetch('/.netlify/functions/payment-status?reference=' + encodeURIComponent(reference), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-store'
+      }).then(function(response){
+        return response.json().catch(function(){ return {}; }).then(function(payload){
+          payload.http_status = response.status;
+          return payload;
+        });
+      });
+    }
+
+    function verifyPaymentStatus() {
+      setPaymentStatusView('', 'Перевіряємо оплату через mono. Це може зайняти кілька секунд.');
+      return fetchPaymentStatus().then(function(payload){
+        paymentStatusState.checked = true;
+        paymentStatusState.paid = Boolean(payload && payload.paid);
+        paymentStatusState.status = payload && payload.status ? payload.status : 'unknown';
+
+        if (paymentStatusState.paid) {
+          setPaymentStatusView('success', 'Оплату підтверджено. Можеш переходити в Telegram і отримувати доступ.');
+          trackPurchaseSuccessOnce();
+          return true;
+        }
+
+        var message = payload && payload.terminal_unpaid
+          ? 'Оплата не пройшла. Mono повернув статус: ' + paymentStatusState.status + '. Доступ не відкрито.'
+          : 'Оплату ще не підтверджено. Якщо платіж щойно пройшов, онови сторінку через кілька секунд.';
+        setPaymentStatusView('error', message);
+        trackEvent('payment_not_confirmed_view', {
+          reference: getPaymentReference(),
+          payment_status: paymentStatusState.status
+        });
+        return false;
+      }).catch(function(){
+        paymentStatusState.checked = true;
+        paymentStatusState.paid = false;
+        setPaymentStatusView('error', 'Не вдалося перевірити оплату. Доступ не відкрито. Напиши в Instagram, якщо гроші списались.');
+        return false;
+      });
+    }
+
+    function fetchCourseAccess() {
+      var reference = getPaymentReference();
+      if (!reference) {
+        return Promise.resolve({ ok: false, error: 'reference_required' });
+      }
+      return fetch('/.netlify/functions/get-course-access?reference=' + encodeURIComponent(reference), {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-store'
+      }).then(function(response){
+        return response.json().catch(function(){ return {}; }).then(function(payload){
+          payload.http_status = response.status;
+          return payload;
+        });
+      });
     }
 
     function goToTelegramAccess(buttonElement) {
@@ -537,15 +689,40 @@
         location: 'thank_you',
         button_label: getAnalyticsText(buttonElement)
       };
-      trackEvent('telegram_access_click', props);
-      notifyTelegramAccessClick(props);
-      if (!TELEGRAM_ACCESS_URL || TELEGRAM_ACCESS_URL.indexOf('REPLACE_WITH_TELEGRAM_ACCESS_LINK') !== -1) {
-        trackEvent('telegram_access_link_missing', props);
-        alert('Посилання на Telegram-доступ ще не додано. Надішли його, і я вставлю в сайт.');
-        return;
+      if (buttonElement) {
+        buttonElement.disabled = true;
+        buttonElement.dataset.originalText = buttonElement.dataset.originalText || buttonElement.innerHTML;
+        buttonElement.innerHTML = 'Перевіряємо оплату...';
       }
-      trackEvent('telegram_access_redirect', props);
-      window.location.href = TELEGRAM_ACCESS_URL;
+
+      fetchCourseAccess().then(function(payload){
+        if (!payload || !payload.ok || !payload.paid || !payload.access_url) {
+          paymentStatusState.paid = false;
+          setPaymentStatusView('error', 'Оплату не підтверджено. Доступ у Telegram не відкрито.');
+          trackEvent('telegram_access_blocked', Object.assign({}, props, {
+            reference: getPaymentReference(),
+            payment_status: payload && payload.status ? payload.status : 'unknown'
+          }));
+          alert('Оплату ще не підтверджено, тому доступ не відкривається. Якщо гроші списались — напиши в Instagram.');
+          return;
+        }
+
+        paymentStatusState.paid = true;
+        paymentStatusState.accessUrl = payload.access_url;
+        setPaymentStatusView('success', 'Оплату підтверджено. Переходимо в Telegram.');
+        trackEvent('telegram_access_click', props);
+        notifyTelegramAccessClick(props);
+        trackEvent('telegram_access_redirect', props);
+        window.location.href = payload.access_url;
+      }).catch(function(){
+        setPaymentStatusView('error', 'Не вдалося перевірити оплату. Доступ не відкрито.');
+        alert('Не вдалося перевірити оплату. Напиши в Instagram, якщо гроші списались.');
+      }).finally(function(){
+        if (buttonElement) {
+          buttonElement.disabled = !paymentStatusState.paid;
+          if (buttonElement.dataset.originalText) buttonElement.innerHTML = buttonElement.dataset.originalText;
+        }
+      });
     }
 
     document.querySelectorAll('.actions a').forEach(function(link){
@@ -557,6 +734,7 @@
         });
       });
     });
+    verifyPaymentStatus();
   </script>
 </body>
 </html>

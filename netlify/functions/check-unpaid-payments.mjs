@@ -1,5 +1,4 @@
 import {
-  COURSE_NAME,
   formatDateTime,
   json,
   notifyTelegram,
@@ -105,22 +104,17 @@ async function sendUnpaidReminder(attempt, nowMs) {
   const status = sanitizeText(attempt.status || 'invoice_created', 40);
 
   await notifyTelegram([
-    '⏰ Оплата не завершена 10 хв',
+    '⏰ Не оплатив 10 хв',
     '',
     `Набрати: ${phone || 'телефон не вказано'}`,
     name ? `Ім’я: ${name}` : 'Ім’я: не вказано',
-    phone ? `Телефон: ${phone}` : 'Телефон: не вказано',
-    `Курс: ${COURSE_NAME}`,
     `Варіант: ${attempt.variantLabel || `${attempt.design || 'unknown'} ${attempt.priceUah || ''} грн`}`,
-    attempt.priceUah ? `Ціна: ${attempt.priceUah} грн` : '',
-    attempt.pagePath ? `Сторінка: ${attempt.pagePath}` : '',
     `Кнопка: ${attempt.location || 'unknown'}${attempt.buttonLabel ? ` / ${attempt.buttonLabel}` : ''}`,
-    attempt.invoiceId ? `Invoice ID: ${attempt.invoiceId}` : '',
-    `Reference: ${attempt.reference}`,
-    `Статус mono: ${getStatusLabel(status)}`,
+    attempt.invoiceId ? `Invoice: ${attempt.invoiceId}` : '',
+    `Ref: ${attempt.reference}`,
+    `Статус: ${getStatusLabel(status)}`,
     `Минуло: ${getElapsedMinutes(createdAtMs, nowMs)} хв`,
-    createdAtMs ? `Старт оплати: ${formatDateTime(new Date(createdAtMs))}` : '',
-    `Час нагадування: ${formatDateTime()}`
+    `Час: ${formatDateTime()}`
   ].filter(Boolean).join('\n'));
 
   await updatePaymentAttempt(attempt.reference, {

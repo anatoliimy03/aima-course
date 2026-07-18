@@ -1,7 +1,6 @@
 import crypto from 'node:crypto';
 
 import {
-  COURSE_NAME,
   formatDateTime,
   formatMoneyFromKopiyky,
   getHeader,
@@ -109,7 +108,7 @@ export async function handler(event) {
 
   const isPaid = isSuccessfulStatus(status);
   const icon = isPaid ? '✅' : 'ℹ️';
-  const title = isPaid ? 'Успішна оплата mono' : 'Оновлення статусу mono';
+  const title = isPaid ? 'Оплата mono' : 'Статус mono';
 
   if (referenceData.reference) {
     try {
@@ -134,12 +133,10 @@ export async function handler(event) {
     `${icon} ${title}`,
     '',
     `Статус: ${getStatusLabel(status)}`,
-    `Курс: ${COURSE_NAME}`,
     `Сума: ${amountText}`,
     referenceData.design ? `Дизайн: ${referenceData.design}` : '',
-    payload.invoiceId ? `Invoice ID: ${payload.invoiceId}` : '',
-    referenceData.reference ? `Reference: ${referenceData.reference}` : '',
-    referenceData.reference ? 'Контакт: шукай попередню спробу оплати з таким самим Reference' : '',
+    payload.invoiceId ? `Invoice: ${payload.invoiceId}` : '',
+    referenceData.reference ? `Ref: ${referenceData.reference}` : '',
     payload.errCode ? `Код помилки: ${payload.errCode}` : '',
     payload.failureReason ? `Причина: ${sanitizeText(payload.failureReason, 220)}` : '',
     `Час: ${formatDateTime()}`
